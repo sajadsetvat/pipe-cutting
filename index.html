@@ -1,0 +1,4190 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#154a86">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="برش لوله">
+  <meta name="description" content="محاسبه‌گر و بهینه‌ساز پیشرفته برش شاخه‌های لوله و پروفیل با حداقل ضایعات">
+
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+
+  <title>بهینه‌ساز و سفارش برش لوله</title>
+
+  <!-- Prevent FOUC for Dark Mode -->
+  <script>
+    (function() {
+      try {
+        var s = localStorage.getItem('pipe_cut_theme');
+        var d = (s === 'dark') || (!s && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        if (d) document.documentElement.setAttribute('data-theme', 'dark');
+      } catch(e) {}
+    })();
+  </script>
+
+  <!-- Google Font: Vazirmatn -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #154a86;
+      --primary-dark: #0d3460;
+      --primary-light: #eaf1fb;
+      --primary-border: #c2d6f0;
+      --accent: #d97706;
+      --accent-light: #fef3c7;
+      --success: #059669;
+      --success-dark: #047857;
+      --success-light: #d1fae5;
+      --danger: #dc2626;
+      --danger-light: #fee2e2;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --ring: rgba(21, 74, 134, 0.25);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
+      --shadow-md: 0 4px 14px rgba(15, 23, 42, 0.08);
+      --shadow-lg: 0 10px 25px rgba(15, 23, 42, 0.12);
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    html[data-theme="dark"] {
+      --primary: #38bdf8;
+      --primary-dark: #0284c7;
+      --primary-light: #16243a;
+      --primary-border: #223755;
+      --accent: #fbbf24;
+      --accent-light: rgba(251, 191, 36, 0.15);
+      --success: #34d399;
+      --success-dark: #059669;
+      --success-light: rgba(52, 211, 153, 0.15);
+      --danger: #f87171;
+      --danger-light: rgba(248, 113, 113, 0.15);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-light: #64748b;
+      --bg: #0b1120;
+      --card: #131d31;
+      --border: #1e2c47;
+      --ring: rgba(56, 189, 248, 0.25);
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.35);
+      --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.45);
+      --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.55);
+    }
+
+    /* Custom Minimal SVG Icons System */
+    .svg-icon {
+      display: inline-block;
+      width: 1.25em;
+      height: 1.25em;
+      vertical-align: -0.22em;
+      stroke-width: 2;
+      stroke: currentColor;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+      transition: transform 0.15s ease, stroke 0.15s ease;
+    }
+    .svg-icon.sm {
+      width: 1em;
+      height: 1em;
+      vertical-align: -0.15em;
+    }
+    .svg-icon.lg {
+      width: 1.45em;
+      height: 1.45em;
+      vertical-align: -0.28em;
+    }
+    .svg-icon.brand {
+      width: 24px;
+      height: 24px;
+      color: #ffffff;
+      vertical-align: middle;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: text;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      height: 100%;
+    }
+
+    body {
+      font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, sans-serif;
+      background: #cbd5e1;
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100%;
+      display: flex;
+      justify-content: center;
+      padding-top: var(--safe-top);
+      padding-bottom: var(--safe-bottom);
+    }
+
+    @media (max-width: 600px) {
+      body {
+        background: var(--bg);
+        padding: 0;
+      }
+      .app-shell {
+        max-width: 100% !important;
+        box-shadow: none !important;
+        min-height: 100dvh !important;
+      }
+    }
+
+    /* Mobile Container Frame */
+    .app-shell {
+      width: 100%;
+      max-width: 520px;
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: 0 0 35px rgba(15, 23, 42, 0.15);
+    }
+
+    body, .app-shell, .card, .input, .btn, .segmented-control, .segment-btn, .modal-sheet, .stat-tile, .pattern-card, .table-container, .sticky-bottom-bar {
+      transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
+    /* Dark Mode Theme Rules */
+    html[data-theme="dark"] body {
+      background: #060911;
+      color: var(--text);
+    }
+    html[data-theme="dark"] .app-header {
+      background: linear-gradient(135deg, #0e1828, #070e1a);
+      border-bottom: 1px solid var(--border);
+    }
+    html[data-theme="dark"] .segmented-control {
+      background: #0d1524;
+    }
+    html[data-theme="dark"] .segment-btn.active {
+      background: var(--card);
+      color: var(--primary);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+    html[data-theme="dark"] .input {
+      background: #0d1524;
+      color: var(--text);
+      border-color: var(--border);
+    }
+    html[data-theme="dark"] .input:focus {
+      border-color: var(--primary);
+      background: #101c30;
+    }
+    html[data-theme="dark"] .stepper {
+      background: #0d1524;
+      border-color: var(--border);
+    }
+    html[data-theme="dark"] .stepper-btn {
+      background: #111e33;
+      color: var(--primary);
+    }
+    html[data-theme="dark"] .stepper-btn:active {
+      background: #1a2a46;
+    }
+    html[data-theme="dark"] .part-item {
+      background: #0d1626;
+      border-color: var(--border);
+    }
+    html[data-theme="dark"] .part-item:focus-within {
+      background: #111c30;
+      border-color: var(--primary);
+    }
+    html[data-theme="dark"] .btn-secondary {
+      background: var(--card);
+      color: var(--text);
+      border-color: var(--border);
+    }
+    html[data-theme="dark"] .btn-secondary:active {
+      background: #1e293b;
+    }
+    html[data-theme="dark"] .btn-add {
+      background: rgba(56, 189, 248, 0.08);
+      color: var(--primary);
+      border-color: rgba(56, 189, 248, 0.3);
+    }
+    html[data-theme="dark"] .sticky-bottom-bar {
+      background: rgba(14, 23, 40, 0.94);
+      border-color: var(--border);
+    }
+    html[data-theme="dark"] .stat-tile {
+      background: var(--card);
+      border-color: var(--border);
+    }
+    html[data-theme="dark"] .pattern-card {
+      background: var(--card);
+      border-color: var(--border);
+    }
+    html[data-theme="dark"] .pattern-waste-badge {
+      background: rgba(251, 146, 60, 0.15);
+      color: #fb923c;
+      border-color: rgba(251, 146, 60, 0.3);
+    }
+    html[data-theme="dark"] .cut-item-row {
+      background: #0d1626;
+      border-color: var(--border);
+    }
+    html[data-theme="dark"] .table-container {
+      background: var(--card);
+      border-color: var(--border);
+    }
+    html[data-theme="dark"] .data-table th {
+      background: #0d1626;
+      color: var(--primary);
+      border-bottom-color: var(--border);
+    }
+    html[data-theme="dark"] .data-table td {
+      border-bottom-color: var(--border);
+    }
+    html[data-theme="dark"] .workshop-notes {
+      background: rgba(234, 179, 8, 0.12);
+      border-right-color: #eab308;
+      color: #fde047;
+    }
+    html[data-theme="dark"] .modal-sheet {
+      background: var(--card);
+    }
+    html[data-theme="dark"] .modal-body {
+      background: #0b1120;
+    }
+    html[data-theme="dark"] .modal-foot {
+      background: var(--card);
+      border-color: var(--border);
+    }
+    html[data-theme="dark"] .pipe-bar-visual {
+      background: #0b1120;
+      border-color: #334155;
+    }
+    html[data-theme="dark"] .pipe-waste-segment {
+      background: repeating-linear-gradient(
+        45deg,
+        #1e293b,
+        #1e293b 6px,
+        #334155 6px,
+        #334155 12px
+      );
+      color: #94a3b8;
+    }
+
+    /* Top App Bar */
+    .app-header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #ffffff;
+      padding: 16px 16px 14px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: var(--shadow-md);
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .header-title-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      backdrop-filter: blur(4px);
+    }
+
+    .header-text h1 {
+      font-size: 17px;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .header-text p {
+      font-size: 11px;
+      opacity: 0.85;
+      margin-top: 2px;
+      font-weight: 400;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .icon-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      color: #ffffff;
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .icon-btn:active {
+      transform: scale(0.92);
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Mode Switcher Tabs */
+    .mode-nav {
+      padding: 10px 14px 6px;
+      background: var(--bg);
+    }
+
+    .segmented-control {
+      background: #e2e8f0;
+      border-radius: var(--radius-md);
+      padding: 4px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+      position: relative;
+    }
+
+    .segment-btn {
+      border: none;
+      background: transparent;
+      padding: 10px 8px;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .segment-btn.active {
+      background: #ffffff;
+      color: var(--primary);
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+
+    /* Main Content Area */
+    .app-content {
+      flex: 1;
+      padding: 10px 14px 80px;
+    }
+
+    /* Card Component */
+    .card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      margin-bottom: 12px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .card-title span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Form Fields & Grid */
+    .field {
+      margin-bottom: 12px;
+    }
+    .field:last-child {
+      margin-bottom: 0;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 5px;
+    }
+
+    .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input {
+      width: 100%;
+      height: 44px;
+      padding: 0 12px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 15px;
+      color: var(--text);
+      background: #ffffff;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--ring);
+    }
+
+    /* Completely hide native browser number up/down spin buttons */
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"] {
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+
+    .unit-badge {
+      position: absolute;
+      left: 10px;
+      font-size: 11px;
+      color: var(--text-light);
+      pointer-events: none;
+      font-weight: 500;
+    }
+
+    .has-unit {
+      padding-left: 38px;
+    }
+
+    textarea.input {
+      height: auto;
+      padding: 10px 12px;
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    /* Stepper / Number Buttons */
+    .stepper {
+      display: flex;
+      align-items: center;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    .stepper .input {
+      border: none;
+      text-align: center;
+      height: 42px;
+      padding: 0;
+      border-radius: 0;
+      font-weight: 700;
+    }
+
+    .stepper-btn {
+      width: 44px;
+      height: 42px;
+      background: #f8fafc;
+      border: none;
+      color: var(--primary);
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+      flex-shrink: 0;
+    }
+    .stepper-btn:active {
+      background: #e2e8f0;
+    }
+
+    /* Parts List Styles */
+    .part-item {
+      background: #f8fafc;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      margin-bottom: 10px;
+      transition: border-color 0.2s;
+      position: relative;
+    }
+
+    .part-item:focus-within {
+      border-color: var(--primary-border);
+      background: #ffffff;
+    }
+
+    .part-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .part-badge {
+      width: 28px;
+      height: 28px;
+      background: var(--primary);
+      color: #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .part-name-input {
+      flex: 1;
+      height: 38px;
+      font-weight: 600;
+    }
+
+    .part-delete-btn {
+      width: 34px;
+      height: 34px;
+      background: var(--danger-light);
+      color: var(--danger);
+      border: none;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 15px;
+      flex-shrink: 0;
+      transition: background 0.15s;
+    }
+    .part-delete-btn:active {
+      background: #fecaca;
+    }
+
+    .part-bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .hint-subtext {
+      font-size: 10.5px;
+      color: var(--accent);
+      margin-top: 3px;
+      font-weight: 500;
+      display: block;
+    }
+
+    /* Buttons */
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      height: 48px;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.2s, background 0.2s;
+      text-decoration: none;
+    }
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(21, 74, 134, 0.3);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, var(--success), var(--success-dark));
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(5, 150, 105, 0.3);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--primary);
+      border: 1.5px solid var(--border);
+    }
+    .btn-secondary:active {
+      background: #f1f5f9;
+    }
+
+    .btn-outline-danger {
+      background: transparent;
+      color: var(--danger);
+      border: 1px dashed var(--danger);
+      height: 38px;
+      font-size: 13px;
+    }
+
+    .btn-add {
+      background: var(--primary-light);
+      color: var(--primary);
+      border: 1.5px dashed var(--primary-border);
+      height: 42px;
+      font-size: 14px;
+      margin-top: 6px;
+    }
+    .btn-add:active {
+      background: #dbeafe;
+    }
+
+    /* Fixed Sticky Bottom Action Bar */
+    .sticky-bottom-bar {
+      position: sticky;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(8px);
+      border-top: 1px solid var(--border);
+      padding: 10px 14px calc(10px + var(--safe-bottom));
+      box-shadow: 0 -4px 16px rgba(15, 23, 42, 0.08);
+      z-index: 40;
+    }
+
+    /* Results Screen */
+    .result-section {
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Stats Grid */
+    .stat-hero-card {
+      background: linear-gradient(135deg, #065f46, #047857);
+      color: #ffffff;
+      border-radius: var(--radius-lg);
+      padding: 18px 16px;
+      text-align: center;
+      margin-bottom: 12px;
+      box-shadow: 0 6px 18px rgba(5, 150, 105, 0.25);
+    }
+
+    .stat-hero-val {
+      font-size: 42px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -1px;
+    }
+
+    .stat-hero-lbl {
+      font-size: 14px;
+      font-weight: 600;
+      opacity: 0.95;
+      margin-top: 6px;
+    }
+
+    .stats-matrix {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .stat-tile {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stat-tile-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1.2;
+    }
+
+    .stat-tile-lbl {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    .stat-tile.accent .stat-tile-val {
+      color: var(--accent);
+    }
+
+    /* Notification Alerts */
+    .alert-box {
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .alert-box.success {
+      background: var(--success-light);
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
+    .alert-box.danger {
+      background: var(--danger-light);
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    /* Section Subheadings */
+    .subhead {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 18px 2px 10px;
+    }
+
+    /* Visual Pipe Diagram */
+    .pattern-card {
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 14px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .pattern-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .pattern-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pattern-count-badge {
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    .pattern-waste-badge {
+      background: #fff7ed;
+      color: #c2410c;
+      border: 1px solid #fed7aa;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 8px;
+      text-align: left;
+      line-height: 1.3;
+    }
+
+    /* The Realistic Pipe Bar */
+    .pipe-bar-visual {
+      height: 38px;
+      background: #e2e8f0;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      border: 1.5px solid #94a3b8;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+      margin: 12px 0;
+      position: relative;
+    }
+
+    .pipe-segment {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      position: relative;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding: 0 4px;
+      border-left: 1.5px solid #ffffff;
+      transition: filter 0.15s;
+    }
+
+    .pipe-segment:hover {
+      filter: brightness(1.1);
+    }
+
+    .pipe-waste-segment {
+      height: 100%;
+      background: repeating-linear-gradient(
+        45deg,
+        #cbd5e1,
+        #cbd5e1 6px,
+        #94a3b8 6px,
+        #94a3b8 12px
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #1e293b;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 0 4px;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    /* Cuts Summary List inside Pattern */
+    .cut-items-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .cut-item-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f8fafc;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      border: 1px solid #edf2f7;
+    }
+
+    .cut-item-name {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+    }
+
+    .color-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .cut-item-dims {
+      font-weight: 700;
+      color: var(--primary);
+      text-align: left;
+    }
+
+    .cut-item-dims small {
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--text-light);
+      margin-right: 4px;
+    }
+
+    /* Table Styles */
+    .table-container {
+      background: #ffffff;
+      border-radius: var(--radius-md);
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      margin-bottom: 14px;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+      text-align: center;
+    }
+
+    .data-table th {
+      background: var(--primary-light);
+      color: var(--primary);
+      padding: 10px 8px;
+      font-weight: 700;
+      border-bottom: 1.5px solid var(--primary-border);
+      white-space: nowrap;
+    }
+
+    .data-table td {
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .data-table td.name-cell {
+      text-align: right;
+      font-weight: 700;
+      padding-right: 12px;
+    }
+
+    /* Workshop Notes */
+    .workshop-notes {
+      background: #fefce8;
+      border-right: 4px solid #eab308;
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      font-size: 13px;
+      line-height: 1.7;
+      color: #713f12;
+      margin-bottom: 16px;
+    }
+
+    /* Actions Grid in Results */
+    .results-actions-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: calc(85px + var(--safe-bottom));
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(15, 23, 42, 0.95);
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.3);
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Image Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.85);
+      z-index: 999;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s ease;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-sheet {
+      background: #ffffff;
+      width: 100%;
+      max-width: 520px;
+      border-radius: 24px 24px 0 0;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 -8px 30px rgba(0,0,0,0.3);
+      transform: translateY(100%);
+      transition: transform 0.25s cubic-bezier(0.33, 1, 0.68, 1);
+    }
+
+    .modal-overlay.open .modal-sheet {
+      transform: translateY(0);
+    }
+
+    .modal-head {
+      background: var(--primary);
+      color: #ffffff;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .modal-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px;
+      background: #cbd5e1;
+      text-align: center;
+    }
+
+    .modal-body img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: var(--shadow-md);
+      display: inline-block;
+    }
+
+    .modal-foot {
+      padding: 14px 16px calc(14px + var(--safe-bottom));
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Print Styles */
+    @media print {
+      body {
+        background: #ffffff !important;
+        padding: 0 !important;
+      }
+      .app-shell {
+        max-width: 100% !important;
+        box-shadow: none !important;
+      }
+      .app-header, .mode-nav, #inputSection, .sticky-bottom-bar, .results-actions-grid, .modal-overlay, .toast {
+        display: none !important;
+      }
+      .app-content {
+        padding: 0 !important;
+      }
+      .stat-hero-card {
+        background: #047857 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .pipe-bar-visual {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .pattern-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+    }
+
+    /* Invoicing & Sales Card Styles */
+    .invoice-card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      margin-top: 14px;
+      margin-bottom: 14px;
+      border: 1.5px solid #059669;
+      box-shadow: 0 4px 18px rgba(5, 150, 105, 0.12);
+    }
+    html[data-theme="dark"] .invoice-card {
+      background: #0b1523;
+      border-color: #10b981;
+      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.15);
+    }
+    .invoice-card .card-title {
+      color: #059669;
+      border-bottom-color: rgba(5, 150, 105, 0.2);
+    }
+    html[data-theme="dark"] .invoice-card .card-title {
+      color: #34d399;
+    }
+    .invoice-summary-box {
+      background: #f0fdf4;
+      border: 1.5px solid #bbf7d0;
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin: 14px 0;
+    }
+    html[data-theme="dark"] .invoice-summary-box {
+      background: #061e14;
+      border-color: #065f46;
+    }
+    .inv-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      margin-bottom: 7px;
+      color: var(--text);
+    }
+    .inv-row-sub {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+    .inv-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 10px;
+      margin-top: 8px;
+      border-top: 1.5px dashed #86efac;
+      color: #047857;
+    }
+    html[data-theme="dark"] .inv-total-row {
+      color: #34d399;
+      border-top-color: #065f46;
+    }
+    .inv-total-amount {
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+    }
+    .inv-words-box {
+      margin-top: 10px;
+      padding-top: 8px;
+      font-size: 12.5px;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: var(--radius-sm);
+      padding: 8px 10px;
+      line-height: 1.6;
+      border: 1px dashed rgba(5, 150, 105, 0.3);
+    }
+    html[data-theme="dark"] .inv-words-box {
+      background: rgba(0, 0, 0, 0.3);
+      border-color: rgba(52, 211, 153, 0.3);
+    }
+
+    /* Archive Modal & List Styles */
+    .archive-badge {
+      position: absolute;
+      top: -3px;
+      right: -3px;
+      background: #ef4444;
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 800;
+      min-width: 17px;
+      height: 17px;
+      line-height: 17px;
+      border-radius: 9px;
+      padding: 0 4px;
+      text-align: center;
+      border: 1.5px solid var(--primary);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .archive-toolbar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .archive-toolbar .btn {
+      flex: 1;
+      min-width: 140px;
+      font-size: 12px;
+      height: 38px;
+      padding: 0 10px;
+    }
+    .archive-search-box {
+      margin-bottom: 12px;
+      position: relative;
+    }
+    .archive-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 55vh;
+      overflow-y: auto;
+      padding-right: 2px;
+    }
+    .archive-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      box-shadow: var(--shadow-sm);
+      text-align: right;
+    }
+    html[data-theme="dark"] .archive-item {
+      background: #0d1626;
+      border-color: var(--border);
+    }
+    .archive-item-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .archive-item-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    html[data-theme="dark"] .archive-item-title {
+      color: #38bdf8;
+    }
+    .archive-item-date {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .archive-item-info {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      line-height: 1.6;
+    }
+    .archive-item-total {
+      font-size: 16px;
+      font-weight: 800;
+      color: #059669;
+      margin-bottom: 8px;
+    }
+    html[data-theme="dark"] .archive-item-total {
+      color: #34d399;
+    }
+    .archive-item-actions {
+      display: flex;
+      gap: 6px;
+      border-top: 1px solid var(--border);
+      padding-top: 8px;
+      flex-wrap: wrap;
+    }
+    .archive-item-actions .btn {
+      flex: 1;
+      height: 34px;
+      font-size: 11.5px;
+      padding: 0 8px;
+    }
+    .storage-info-banner {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1e40af;
+      border-radius: var(--radius-sm);
+      padding: 8px 10px;
+      font-size: 11.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+    html[data-theme="dark"] .storage-info-banner {
+      background: #0f1d38;
+      border-color: #1e3a8a;
+      color: #93c5fd;
+    }
+
+    /* Print Invoice Styling */
+    #printableInvoiceArea {
+      display: none;
+    }
+    @media print {
+      body.printing-invoice {
+        background: #ffffff !important;
+        color: #000000 !important;
+        padding: 0 !important;
+      }
+      body.printing-invoice #printableInvoiceArea {
+        display: block !important;
+        background: #ffffff !important;
+        padding: 24px !important;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      body.printing-invoice .app-shell,
+      body.printing-invoice .modal-overlay,
+      body.printing-invoice .toast {
+        display: none !important;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="app-shell">
+  <!-- Top App Bar -->
+  <header class="app-header">
+    <div class="header-top">
+      <div class="header-title-box">
+        <button type="button" class="icon-btn" id="headerBackBtn" onclick="backToEdit()" style="display:none;background:rgba(255,255,255,0.25);" title="بازگشت به ویرایش">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+        <div class="header-icon" id="headerIcon">
+          <svg class="svg-icon brand" viewBox="0 0 24 24">
+            <rect x="2" y="7" width="20" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="2"/>
+            <line x1="9" y1="5" x2="9" y2="19" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/>
+            <line x1="16" y1="5" x2="16" y2="19" stroke="#ef4444" stroke-width="2" stroke-dasharray="2 2"/>
+          </svg>
+        </div>
+        <div class="header-text">
+          <h1 id="headerTitle">محاسبه‌گر برش لوله</h1>
+          <p id="headerSubtitle">بهینه‌ساز شاخه‌های ۶ متری و حداقل ضایعات</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button type="button" class="icon-btn" id="archiveInvoicesBtn" onclick="openArchiveModal()" title="بایگانی فاکتورها" style="position:relative;">
+          <svg class="svg-icon" viewBox="0 0 24 24">
+            <polyline points="21 8 21 21 3 21 3 8"/>
+            <rect x="1" y="3" width="22" height="5"/>
+            <line x1="10" y1="12" x2="14" y2="12"/>
+          </svg>
+          <span class="archive-badge" id="archiveBadge" style="display:none;">0</span>
+        </button>
+        <button type="button" class="icon-btn" id="themeToggleBtn" onclick="toggleTheme()" title="تغییر تم"></button>
+        <button type="button" class="icon-btn" id="installAppBtn" onclick="handleInstallApp()" title="نصب روی صفحه گوشی">
+          <svg class="svg-icon" viewBox="0 0 24 24">
+            <rect x="5" y="2" width="14" height="20" rx="3"/>
+            <path d="M12 18h.01"/>
+            <path d="M12 7v5m-2.5-2.5L12 12l2.5-2.5"/>
+          </svg>
+        </button>
+        <button type="button" class="icon-btn" onclick="resetToDefaults()" title="بازنشانی پیش‌فرض">
+          <svg class="svg-icon" viewBox="0 0 24 24">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+            <path d="M3 3v5h5"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mode Switcher -->
+  <div class="mode-nav" id="modeNav">
+    <div class="segmented-control">
+      <button type="button" class="segment-btn active" id="btnModeBranches" onclick="setMode('branches')">
+        <svg class="svg-icon" viewBox="0 0 24 24">
+          <rect x="2" y="6" width="20" height="12" rx="2"/>
+          <path d="M6 6v5M10 6v3M14 6v5M18 6v3"/>
+        </svg>
+        <span>تعداد شاخه دارم</span>
+      </button>
+      <button type="button" class="segment-btn" id="btnModePieces" onclick="setMode('pieces')">
+        <svg class="svg-icon" viewBox="0 0 24 24">
+          <rect x="3" y="3" width="8" height="8" rx="2"/>
+          <rect x="13" y="3" width="8" height="8" rx="2"/>
+          <rect x="8" y="13" width="8" height="8" rx="2"/>
+        </svg>
+        <span>تعداد قطعه دارم</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Body Content -->
+  <main class="app-content">
+
+    <!-- INPUT FORM SECTION -->
+    <div id="inputSection">
+
+      <!-- Project Info Card -->
+      <div class="card">
+        <div class="card-title">
+          <span>
+            <svg class="svg-icon" viewBox="0 0 24 24" style="color:var(--primary);margin-left:6px;">
+              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+              <rect x="8" y="2" width="8" height="4" rx="1"/>
+              <path d="M9 12h6M9 16h4"/>
+            </svg>
+            مشخصات سفارش
+          </span>
+        </div>
+        <div class="field">
+          <label for="projectName">نام پروژه / سفارش‌دهنده</label>
+          <input id="projectName" class="input" value="پروژه پاک ضمیر" placeholder="مثال: درب و حفاظ مهندس رضایی" onchange="autoSave()">
+        </div>
+        <div class="field">
+          <label for="projectDate">تاریخ سفارش</label>
+          <input id="projectDate" class="input" onchange="autoSave()">
+        </div>
+      </div>
+
+      <!-- Stock & Cutting Specifications -->
+      <div class="card">
+        <div class="card-title">
+          <span>
+            <svg class="svg-icon" viewBox="0 0 24 24" style="color:var(--primary);margin-left:6px;">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M12 3v3m0 12v3M3 12h3m12 0h3"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+            مشخصات شاخه و برش
+          </span>
+        </div>
+        
+        <div class="field-row">
+          <div class="field">
+            <label for="stockLen">طول شاخه (mm)</label>
+            <div class="input-wrap">
+              <input id="stockLen" class="input has-unit" type="number" inputmode="decimal" value="6000" step="1" onchange="autoSave()">
+              <span class="unit-badge">mm</span>
+            </div>
+          </div>
+          <div class="field">
+            <label for="kerf">ضخامت تیغه (mm)</label>
+            <div class="input-wrap">
+              <input id="kerf" class="input has-unit" type="number" inputmode="decimal" value="2" step="0.1" onchange="autoSave()">
+              <span class="unit-badge">mm</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="field" id="branchCountField">
+          <label for="branchCount">تعداد شاخه موجود</label>
+          <div class="stepper">
+            <button type="button" class="stepper-btn" onclick="stepVal('branchCount', -1)">−</button>
+            <input id="branchCount" class="input" type="number" inputmode="numeric" value="20" min="1" onchange="autoSave()">
+            <button type="button" class="stepper-btn" onclick="stepVal('branchCount', 1)">+</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Parts Definition Card -->
+      <div class="card">
+        <div class="card-title">
+          <span>
+            <svg class="svg-icon" viewBox="0 0 24 24" style="color:var(--primary);margin-left:6px;">
+              <rect x="3" y="4" width="18" height="4" rx="1"/>
+              <rect x="3" y="10" width="12" height="4" rx="1"/>
+              <rect x="3" y="16" width="15" height="4" rx="1"/>
+            </svg>
+            لیست قطعات برش
+          </span>
+          <button type="button" class="btn-outline-danger" style="border:none;background:transparent;cursor:pointer;font-size:12px;font-family:inherit;display:flex;align-items:center;gap:4px;" onclick="clearAllParts()">
+            <svg class="svg-icon sm" viewBox="0 0 24 24">
+              <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            </svg>
+            پاک‌کردن همه
+          </button>
+        </div>
+
+        <p style="font-size:12px;color:var(--text-muted);margin-bottom:12px;" id="partsHint">
+          طول هر قطعه (به میلی‌متر) و تعداد مورد نیاز در هر ست را وارد کنید:
+        </p>
+
+        <!-- Parts Dynamic List Container -->
+        <div id="partsList"></div>
+
+        <button type="button" class="btn btn-add" onclick="addPartRow()">
+          <svg class="svg-icon" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9"/>
+            <line x1="12" y1="8" x2="12" y2="16"/>
+            <line x1="8" y1="12" x2="16" y2="12"/>
+          </svg>
+          افزودن قطعه جدید
+        </button>
+      </div>
+
+      <!-- Workshop Notes -->
+      <div class="card">
+        <div class="card-title">
+          <span>
+            <svg class="svg-icon" viewBox="0 0 24 24" style="color:var(--primary);margin-left:6px;">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+            یادداشت کارگاه (اختیاری)
+          </span>
+        </div>
+        <textarea id="orderNotes" class="input" rows="2" placeholder="توضیحات تکمیلی برای استادکار یا برشکار..." onchange="autoSave()"></textarea>
+      </div>
+
+      <!-- Calculate Trigger Button -->
+      <button type="button" class="btn btn-primary" id="calcActionBtn" onclick="runOptimization()">
+        <svg class="svg-icon lg" viewBox="0 0 24 24">
+          <rect x="4" y="2" width="16" height="20" rx="3"/>
+          <line x1="8" y1="6" x2="16" y2="6"/>
+          <path d="M16 14v4M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M8 18h.01M12 18h.01"/>
+        </svg>
+        محاسبه هوشمند الگوی برش
+      </button>
+
+    </div>
+
+    <!-- RESULT REPORT SECTION -->
+    <div id="resultSection" class="result-section" style="display:none;">
+      <!-- Dynamic calculation report injected here -->
+      <div id="reportContainer"></div>
+    </div>
+
+  </main>
+
+  <!-- Sticky Actions Bar when in Results Mode -->
+  <div class="sticky-bottom-bar" id="resultBottomBar" style="display:none;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <button type="button" class="btn btn-success" onclick="generateAndShowImage()" id="btnSaveImg">
+        <svg class="svg-icon" viewBox="0 0 24 24">
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+          <circle cx="12" cy="13" r="4"/>
+        </svg>
+        ذخیره عکس
+      </button>
+      <button type="button" class="btn btn-secondary" onclick="backToEdit()">
+        <svg class="svg-icon" viewBox="0 0 24 24">
+          <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+        </svg>
+        ویرایش سفارش
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Message Container -->
+<div class="toast" id="toastMsg">پیام تستی</div>
+
+<!-- Image Modal Sheet -->
+<div class="modal-overlay" id="imgModalOverlay" onclick="closeImgModal(event)">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <span style="display:flex;align-items:center;gap:6px;">
+        <svg class="svg-icon" viewBox="0 0 24 24">
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+          <circle cx="12" cy="13" r="4"/>
+        </svg>
+        تصویر کارگاهی سفارش برش
+      </span>
+      <button type="button" class="icon-btn" onclick="closeImgModal()">
+        <svg class="svg-icon sm" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body" id="modalImgBody">
+      <!-- Injected img -->
+    </div>
+    <div class="modal-foot">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <a id="downloadImgLink" href="#" download="سفارش-برش-لوله.png" class="btn btn-primary" style="text-decoration:none;">
+          <svg class="svg-icon" viewBox="0 0 24 24">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+          </svg>
+          دانلود عکس
+        </a>
+        <button type="button" class="btn btn-secondary" onclick="shareNativeImage()">
+          <svg class="svg-icon" viewBox="0 0 24 24">
+            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+          </svg>
+          ارسال / اشتراک
+        </button>
+      </div>
+      <p style="font-size:11.5px;color:var(--text-muted);text-align:center;line-height:1.5;margin-top:2px;">
+        📱 در گوشی: می‌توانید انگشت خود را روی عکس نگه‌دارید و «ذخیره تصویر» (Save image) را انتخاب کنید.
+      </p>
+      <button type="button" class="btn btn-secondary" onclick="closeImgModal()">
+        بستن
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Install Guide Modal Sheet -->
+<div class="modal-overlay" id="installGuideModal" onclick="closeInstallGuide(event)">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <span style="display:flex;align-items:center;gap:6px;">
+        <svg class="svg-icon" viewBox="0 0 24 24">
+          <rect x="5" y="2" width="14" height="20" rx="3"/>
+          <path d="M12 18h.01"/>
+          <path d="M12 7v5m-2.5-2.5L12 12l2.5-2.5"/>
+        </svg>
+        نصب برنامه روی صفحه اصلی گوشی
+      </span>
+      <button type="button" class="icon-btn" onclick="closeInstallGuide()">
+        <svg class="svg-icon sm" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div style="padding:18px 16px;font-size:13.5px;line-height:1.8;color:var(--text);overflow-y:auto;">
+      <p style="font-weight:700;color:var(--primary);margin-bottom:8px;">
+        برای دسترسی دائمی، سریع و آفلاین در کارگاه:
+      </p>
+
+      <div style="background:#f8fafc;border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:12px;">
+        <b style="color:#0284c7;">📱 در گوشی‌های اندروید (Chrome):</b>
+        <ol style="margin-right:20px;margin-top:6px;">
+          <li>منوی سه‌نقطه در بالای مرورگر را بزنید.</li>
+          <li>گزینه <b>«افزودن به صفحه اصلی» (Add to Home screen)</b> یا <b>«نصب برنامه»</b> را لمس کنید.</li>
+        </ol>
+      </div>
+
+      <div style="background:#f8fafc;border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:12px;">
+        <b style="color:#059669;">🍏 در گوشی‌های آیفون (Safari):</b>
+        <ol style="margin-right:20px;margin-top:6px;">
+          <li>دکمه اشتراک‌گذاری (آیکون مربع با فلش رو به بالا در پایین سافاری) را بزنید.</li>
+          <li>به پایین اسکرول کرده و گزینه <b>«Add to Home Screen»</b> را لمس کنید.</li>
+        </ol>
+      </div>
+
+      <p style="font-size:12px;color:var(--text-muted);text-align:center;">
+        با این کار آیکون برنامه روی گوشی اضافه می‌شود و بدون نوار مرورگر و حتی بدون اینترنت باز خواهد شد!
+      </p>
+    </div>
+    <div class="modal-foot">
+      <button type="button" class="btn btn-primary" onclick="closeInstallGuide()">
+        متوجه شدم 👍
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Archive Modal Sheet -->
+<div class="modal-overlay" id="archiveModalOverlay" onclick="closeArchiveModal(event)">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <span style="display:flex;align-items:center;gap:6px;">
+        <svg class="svg-icon" viewBox="0 0 24 24">
+          <polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/>
+        </svg>
+        بایگانی و مدیریت فاکتورها
+      </span>
+      <button type="button" class="icon-btn" onclick="closeArchiveModal()">
+        <svg class="svg-icon sm" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body" style="background:var(--bg);text-align:right;">
+      <div class="storage-info-banner">
+        <span>🛡️ <b>دیتابیس آفلاین فعال:</b> کلیه فاکتورها به صورت دائمی در حافظه گوشی شما ذخیره می‌شوند و بدون اینترنت همیشه در دسترس هستند.</span>
+      </div>
+
+      <!-- Backup / Restore Actions Toolbar -->
+      <div class="archive-toolbar">
+        <button type="button" class="btn btn-primary" onclick="exportInvoicesBackup()" title="دانلود فایل پشتیبان">
+          <svg class="svg-icon sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          دانلود فایل پشتیبان (JSON)
+        </button>
+        <button type="button" class="btn btn-secondary" onclick="triggerImportBackup()" title="بازیابی فایل پشتیبان">
+          <svg class="svg-icon sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          بازیابی اطلاعات (JSON)
+        </button>
+        <input type="file" id="backupFileInput" accept=".json" onchange="importInvoicesBackup(event)" style="display:none;">
+      </div>
+
+      <!-- Search Input -->
+      <div class="archive-search-box">
+        <input type="search" id="archiveSearchInput" class="input" placeholder="🔍 جستجو بر اساس مشتری، شماره یا تاریخ..." oninput="filterInvoicesArchive(this.value)">
+      </div>
+
+      <!-- Invoices List Container -->
+      <div id="archiveInvoicesList" class="archive-list">
+        <!-- Injected dynamically -->
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button type="button" class="btn btn-secondary" onclick="closeArchiveModal()">
+        بستن بایگانی
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Invoice View Modal Sheet -->
+<div class="modal-overlay" id="invoiceViewModalOverlay" onclick="closeInvoiceViewModal(event)">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <span style="display:flex;align-items:center;gap:6px;" id="invViewModalTitle">
+        <svg class="svg-icon" viewBox="0 0 24 24">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+        </svg>
+        صورتحساب رسمی
+      </span>
+      <button type="button" class="icon-btn" onclick="closeInvoiceViewModal()">
+        <svg class="svg-icon sm" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body" id="invoiceViewModalBody" style="background:var(--bg);text-align:right;">
+      <!-- Injected dynamically -->
+    </div>
+    <div class="modal-foot" id="invoiceViewModalFoot">
+      <!-- Injected actions -->
+    </div>
+  </div>
+</div>
+
+<!-- Hidden Printable Invoice Area (Clean A4 Paper Output) -->
+<div id="printableInvoiceArea"></div>
+
+<script>
+// ==========================================
+// 0. CUSTOM MINIMAL SVG ICONS
+// ==========================================
+const ICONS = {
+  pipeLogo: `<svg class="svg-icon brand" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><line x1="9" y1="5" x2="9" y2="19" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="5" x2="16" y2="19" stroke="#ef4444" stroke-width="2" stroke-dasharray="2 2"/></svg>`,
+  back: `<svg class="svg-icon" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`,
+  mobile: `<svg class="svg-icon" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M12 18h.01"/><path d="M12 7v5m-2.5-2.5L12 12l2.5-2.5"/></svg>`,
+  refresh: `<svg class="svg-icon" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>`,
+  ruler: `<svg class="svg-icon" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 6v5M10 6v3M14 6v5M18 6v3"/></svg>`,
+  pieces: `<svg class="svg-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="8" y="13" width="8" height="8" rx="2"/></svg>`,
+  clipboard: `<svg class="svg-icon" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>`,
+  caliper: `<svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v3m0 12v3M3 12h3m12 0h3"/><circle cx="12" cy="12" r="3"/></svg>`,
+  parts: `<svg class="svg-icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="4" rx="1"/><rect x="3" y="10" width="12" height="4" rx="1"/><rect x="3" y="16" width="15" height="4" rx="1"/></svg>`,
+  plus: `<svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>`,
+  trash: `<svg class="svg-icon sm" viewBox="0 0 24 24"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6"/></svg>`,
+  notes: `<svg class="svg-icon" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`,
+  calculator: `<svg class="svg-icon lg" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="3"/><line x1="8" y1="6" x2="16" y2="6"/><path d="M16 14v4M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M8 18h.01M12 18h.01"/></svg>`,
+  camera: `<svg class="svg-icon" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`,
+  edit: `<svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>`,
+  download: `<svg class="svg-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>`,
+  share: `<svg class="svg-icon" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`,
+  copy: `<svg class="svg-icon" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`,
+  print: `<svg class="svg-icon" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>`,
+  blueprint: `<svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2l4 4-9 9H5v-4l9-9zM19 7l2 2-2 2-2-2 2-2zM3 22h18"/></svg>`,
+  chart: `<svg class="svg-icon" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>`,
+  close: `<svg class="svg-icon sm" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
+  check: `<svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>`,
+  sun: `<svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`,
+  moon: `<svg class="svg-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`,
+  invoice: `<svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`,
+  wallet: `<svg class="svg-icon" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 10h20"/><circle cx="16" cy="14" r="1.5"/></svg>`,
+  archive: `<svg class="svg-icon" viewBox="0 0 24 24"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>`,
+  backup: `<svg class="svg-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`,
+  restore: `<svg class="svg-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>`,
+  search: `<svg class="svg-icon sm" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`
+};
+
+// ==========================================
+// 1. STATE & DEFAULT CONFIGURATION
+// ==========================================
+let currentMode = 'branches'; // 'branches' or 'pieces'
+let currentOptimResult = null;
+let generatedImageBlob = null;
+
+const COLOR_PALETTE = [
+  '#0284c7', // Sky Blue
+  '#059669', // Emerald
+  '#d97706', // Amber
+  '#7c3aed', // Violet
+  '#db2777', // Pink
+  '#0d9488', // Teal
+  '#ea580c', // Orange
+  '#4f46e5', // Indigo
+  '#65a30d', // Lime
+  '#e11d48'  // Rose
+];
+
+const DEFAULT_PARTS_BRANCHES = [
+  { name: 'بلند ۶ خم', len: 2835, qty: 1 },
+  { name: 'دو خم', len: 1336, qty: 1 },
+  { name: 'تک خم کوچک', len: 747.7, qty: 2 },
+  { name: 'تک خم بزرگ', len: 622.6, qty: 2 }
+];
+
+const DEFAULT_PARTS_PIECES = [
+  { name: 'بلند ۶ خم', len: 2835, qty: 20 },
+  { name: 'دو خم', len: 1336, qty: 20 },
+  { name: 'تک خم کوچک', len: 747.7, qty: 40 },
+  { name: 'تک خم بزرگ', len: 622.6, qty: 40 }
+];
+
+// Initialize Persian Date
+function initPersianDate() {
+  try {
+    const now = new Date();
+    const formatter = new Intl.DateTimeFormat('fa-IR', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    });
+    document.getElementById('projectDate').value = formatter.format(now);
+  } catch (e) {
+    document.getElementById('projectDate').value = new Date().toLocaleDateString();
+  }
+}
+
+// Format numbers
+function fmt(n) {
+  const num = parseFloat(n);
+  if (isNaN(num)) return '0';
+  return Number(num.toFixed(1)).toLocaleString('fa-IR');
+}
+
+function fmtEn(n) {
+  const num = parseFloat(n);
+  if (isNaN(num)) return '0';
+  return Number(num.toFixed(1)).toString();
+}
+
+function toCm(mm) {
+  return fmt(parseFloat(mm) / 10);
+}
+
+// Stepper Helper
+function stepVal(id, delta) {
+  const input = document.getElementById(id);
+  if (!input) return;
+  let val = parseInt(input.value) || 0;
+  val = Math.max(1, val + delta);
+  input.value = val;
+  autoSave();
+}
+
+// Toast Helper
+function showToast(text, duration = 2500) {
+  const toast = document.getElementById('toastMsg');
+  toast.textContent = text;
+  toast.classList.add('show');
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, duration);
+}
+
+// ==========================================
+// 2. PARTS DOM MANAGEMENT
+// ==========================================
+function addPartRow(name = '', len = '', qty = '') {
+  const list = document.getElementById('partsList');
+  const div = document.createElement('div');
+  div.className = 'part-item';
+
+  const isPieces = (currentMode === 'pieces');
+  const qtyPlaceholder = isPieces ? 'تعداد کل' : 'تعداد در ست';
+
+  div.innerHTML = `
+    <div class="part-top">
+      <span class="part-badge">1</span>
+      <input class="input part-name-input pname" placeholder="نام قطعه (مثلاً: قید بالا)" value="${name}" oninput="autoSave()">
+      <button type="button" class="part-delete-btn" onclick="removePartRow(this)" title="حذف">
+        ${ICONS.trash}
+      </button>
+    </div>
+    <div class="part-bottom-grid">
+      <div>
+        <label>طول قطعه (mm)</label>
+        <div class="input-wrap">
+          <input class="input plen has-unit" type="number" inputmode="decimal" step="0.1" placeholder="مثلاً: 1250" value="${len}" oninput="updateCmHint(this); autoSave();">
+          <span class="unit-badge">mm</span>
+        </div>
+        <span class="hint-subtext cm-label">${len ? '(' + toCm(len) + ' cm)' : ''}</span>
+      </div>
+      <div>
+        <label class="qty-label">${qtyPlaceholder}</label>
+        <div class="stepper">
+          <button type="button" class="stepper-btn" onclick="stepPartQty(this, -1)">−</button>
+          <input class="input pset" type="number" inputmode="numeric" value="${qty || 1}" min="1" oninput="autoSave()">
+          <button type="button" class="stepper-btn" onclick="stepPartQty(this, 1)">+</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  list.appendChild(div);
+  renumberParts();
+}
+
+function stepPartQty(btn, delta) {
+  const stepper = btn.closest('.stepper');
+  const input = stepper.querySelector('.pset');
+  let val = parseInt(input.value) || 0;
+  val = Math.max(1, val + delta);
+  input.value = val;
+  autoSave();
+}
+
+function updateCmHint(lenInput) {
+  const row = lenInput.closest('.part-item');
+  const cmLabel = row.querySelector('.cm-label');
+  const val = parseFloat(lenInput.value);
+  if (val && !isNaN(val)) {
+    cmLabel.textContent = `(${toCm(val)} سانتی‌متر)`;
+  } else {
+    cmLabel.textContent = '';
+  }
+}
+
+function removePartRow(btn) {
+  const row = btn.closest('.part-item');
+  row.remove();
+  renumberParts();
+  autoSave();
+}
+
+function renumberParts() {
+  const rows = document.querySelectorAll('#partsList .part-item');
+  rows.forEach((row, idx) => {
+    const badge = row.querySelector('.part-badge');
+    if (badge) badge.textContent = (idx + 1).toLocaleString('fa-IR');
+  });
+}
+
+function clearAllParts() {
+  if (confirm('آیا همه قطعات پاک شوند؟')) {
+    document.getElementById('partsList').innerHTML = '';
+    autoSave();
+  }
+}
+
+// Mode Switcher
+function setMode(mode, skipConfirm = false) {
+  if (mode === currentMode) return;
+
+  currentMode = mode;
+  document.getElementById('btnModeBranches').classList.toggle('active', mode === 'branches');
+  document.getElementById('btnModePieces').classList.toggle('active', mode === 'pieces');
+
+  const branchField = document.getElementById('branchCountField');
+  branchField.style.display = (mode === 'branches') ? 'block' : 'none';
+
+  const partsHint = document.getElementById('partsHint');
+  partsHint.textContent = (mode === 'branches')
+    ? 'طول هر قطعه (به میلی‌متر) و تعداد مورد نیاز در هر ست را وارد کنید:'
+    : 'طول هر قطعه (به میلی‌متر) و تعداد کل مورد نیاز از آن قطعه را وارد کنید:';
+
+  const qtyLabels = document.querySelectorAll('.qty-label');
+  qtyLabels.forEach(lbl => {
+    lbl.textContent = (mode === 'branches') ? 'تعداد در ست' : 'تعداد کل';
+  });
+
+  const calcBtn = document.getElementById('calcActionBtn');
+  calcBtn.innerHTML = `${ICONS.calculator} <span>${(mode === 'branches') ? 'محاسبه تعداد ست کامل و برش' : 'محاسبه حداقل شاخه لازم و برش'}</span>`;
+
+  // If parts are empty or defaults, reload appropriate defaults
+  const rows = document.querySelectorAll('#partsList .part-item');
+  if (rows.length === 0) {
+    loadDefaultParts(mode);
+  }
+
+  autoSave();
+}
+
+function loadDefaultParts(mode) {
+  const list = document.getElementById('partsList');
+  list.innerHTML = '';
+  const defs = (mode === 'branches') ? DEFAULT_PARTS_BRANCHES : DEFAULT_PARTS_PIECES;
+  defs.forEach(p => addPartRow(p.name, p.len, p.qty));
+}
+
+function resetToDefaults() {
+  if (confirm('آیا مایل به بازنشانی مقادیر به پروژه پاک‌ضمیر هستید؟')) {
+    localStorage.removeItem('pipe_cut_saved_state');
+    document.getElementById('projectName').value = 'پروژه پاک ضمیر';
+    document.getElementById('stockLen').value = '6000';
+    document.getElementById('kerf').value = '2';
+    document.getElementById('branchCount').value = '20';
+    document.getElementById('orderNotes').value = '';
+    initPersianDate();
+    setMode('branches', true);
+    loadDefaultParts('branches');
+    showToast('تنظیمات پیش‌فرض پاک‌ضمیر بازنشانی شد.');
+  }
+}
+
+// ==========================================
+// 3. PERSISTENCE (LOCAL STORAGE)
+// ==========================================
+function autoSave() {
+  try {
+    const parts = [];
+    const rows = document.querySelectorAll('#partsList .part-item');
+    rows.forEach(r => {
+      const name = r.querySelector('.pname').value.trim();
+      const len = parseFloat(r.querySelector('.plen').value) || 0;
+      const qty = parseInt(r.querySelector('.pset').value) || 0;
+      if (name || len || qty) {
+        parts.push({ name, len, qty });
+      }
+    });
+
+    const state = {
+      mode: currentMode,
+      projectName: document.getElementById('projectName').value,
+      projectDate: document.getElementById('projectDate').value,
+      stockLen: document.getElementById('stockLen').value,
+      kerf: document.getElementById('kerf').value,
+      branchCount: document.getElementById('branchCount').value,
+      orderNotes: document.getElementById('orderNotes').value,
+      parts: parts
+    };
+
+    localStorage.setItem('pipe_cut_saved_state', JSON.stringify(state));
+  } catch (e) {}
+}
+
+function loadSavedState() {
+  try {
+    const saved = localStorage.getItem('pipe_cut_saved_state');
+    if (!saved) {
+      loadDefaultParts('branches');
+      return;
+    }
+    const state = JSON.parse(saved);
+    if (state.projectName) document.getElementById('projectName').value = state.projectName;
+    if (state.projectDate) document.getElementById('projectDate').value = state.projectDate;
+    if (state.stockLen) document.getElementById('stockLen').value = state.stockLen;
+    if (state.kerf) document.getElementById('kerf').value = state.kerf;
+    if (state.branchCount) document.getElementById('branchCount').value = state.branchCount;
+    if (state.orderNotes) document.getElementById('orderNotes').value = state.orderNotes;
+
+    setMode(state.mode || 'branches', true);
+
+    const list = document.getElementById('partsList');
+    list.innerHTML = '';
+    if (state.parts && state.parts.length > 0) {
+      state.parts.forEach(p => addPartRow(p.name, p.len, p.qty));
+    } else {
+      loadDefaultParts(state.mode || 'branches');
+    }
+  } catch (e) {
+    loadDefaultParts('branches');
+  }
+}
+
+// ==========================================
+// 4. CUTTING STOCK OPTIMIZATION ALGORITHM
+// ==========================================
+function optimizeCuttingStock(config) {
+  const { stockLen, kerf, parts, mode, maxBranches } = config;
+
+  // Validation
+  for (let i = 0; i < parts.length; i++) {
+    if (parts[i].len + kerf > stockLen) {
+      return {
+        error: `طول قطعه «${parts[i].name}» به همراه تیغه برش (${fmt(parts[i].len + kerf)} میلی‌متر) بزرگتر از طول شاخه (${fmt(stockLen)} میلی‌متر) است!`
+      };
+    }
+  }
+
+  const n = parts.length;
+
+  // Pattern Generator: generate all non-dominated cutting patterns
+  function getPatterns() {
+    const pats = [];
+    function bt(idx, cur, curLen) {
+      if (idx === n) {
+        const cuts = cur.reduce((a, b) => a + b, 0);
+        if (cuts === 0) return;
+        let canFit = false;
+        for (let j = 0; j < n; j++) {
+          if (curLen + parts[j].len + kerf <= stockLen + 0.001) {
+            canFit = true;
+            break;
+          }
+        }
+        pats.push({
+          counts: cur.slice(),
+          cuts: cuts,
+          used: curLen,
+          waste: stockLen - curLen,
+          isMaximal: !canFit
+        });
+        return;
+      }
+      const maxQ = Math.floor((stockLen - curLen) / (parts[idx].len + kerf));
+      for (let q = maxQ; q >= 0; q--) {
+        cur[idx] = q;
+        bt(idx + 1, cur, curLen + q * (parts[idx].len + kerf));
+      }
+      cur[idx] = 0;
+    }
+    bt(0, new Array(n).fill(0), 0);
+    pats.sort((a, b) => a.waste - b.waste);
+    return pats;
+  }
+
+  // Fast Best-Fit Decreasing (BFD) heuristic fallback
+  function solveBFD(demand) {
+    const items = [];
+    for (let i = 0; i < parts.length; i++) {
+      for (let q = 0; q < demand[i]; q++) {
+        items.push({ idx: i, name: parts[i].name, len: parts[i].len });
+      }
+    }
+    items.sort((a, b) => b.len - a.len);
+
+    const bins = [];
+    for (let it = 0; it < items.length; it++) {
+      const item = items[it];
+      const needed = item.len + kerf;
+      let bestIdx = -1, minRem = stockLen + 1;
+      for (let b = 0; b < bins.length; b++) {
+        if (bins[b].rem >= needed && bins[b].rem - needed < minRem) {
+          minRem = bins[b].rem - needed;
+          bestIdx = b;
+        }
+      }
+      if (bestIdx !== -1) {
+        bins[bestIdx].items.push(item);
+        bins[bestIdx].counts[item.idx]++;
+        bins[bestIdx].rem -= needed;
+      } else {
+        const newCounts = new Array(parts.length).fill(0);
+        newCounts[item.idx] = 1;
+        bins.push({ rem: stockLen - needed, items: [item], counts: newCounts });
+      }
+    }
+    return bins;
+  }
+
+  // Exact Branch & Bound solver using pattern combinations
+  function solveExact(demand, barLimit) {
+    const pats = getPatterns();
+    let bestSol = null;
+    let bestCount = barLimit ? barLimit + 1 : 999999;
+    const startTime = performance.now();
+
+    function lowerBound(rem) {
+      let tot = 0;
+      for (let i = 0; i < n; i++) {
+        if (rem[i] > 0) tot += rem[i] * (parts[i].len + kerf);
+      }
+      return Math.ceil(tot / stockLen);
+    }
+
+    function search(rem, curCount, curUsage) {
+      if (performance.now() - startTime > 1200) return; // 1.2s timeout safety
+      let pivot = -1;
+      for (let i = 0; i < n; i++) {
+        if (rem[i] > 0) { pivot = i; break; }
+      }
+      if (pivot === -1) {
+        if (curCount < bestCount) {
+          bestCount = curCount;
+          bestSol = curUsage.map(u => ({ pattern: u.pattern, count: u.count }));
+        }
+        return;
+      }
+      if (curCount + lowerBound(rem) >= bestCount) return;
+
+      const cands = pats.filter(p => p.counts[pivot] > 0);
+      cands.sort((a, b) => {
+        let sA = 0, sB = 0;
+        for (let j = 0; j < n; j++) {
+          sA += Math.min(a.counts[j], rem[j]) * parts[j].len;
+          sB += Math.min(b.counts[j], rem[j]) * parts[j].len;
+        }
+        if (sB !== sA) return sB - sA;
+        return a.waste - b.waste;
+      });
+
+      for (let c = 0; c < cands.length; c++) {
+        const pat = cands[c];
+        const maxUse = Math.ceil(rem[pivot] / pat.counts[pivot]);
+        for (let u = maxUse; u >= 1; u--) {
+          if (curCount + u >= bestCount) continue;
+          const nextRem = rem.slice();
+          for (let j = 0; j < n; j++) nextRem[j] -= pat.counts[j] * u;
+          curUsage.push({ pattern: pat, count: u });
+          search(nextRem, curCount + u, curUsage);
+          curUsage.pop();
+          if (barLimit && bestCount <= barLimit) return;
+        }
+      }
+    }
+
+    search(demand, 0, []);
+    return bestSol ? { solution: bestSol, bars: bestCount } : null;
+  }
+
+  // Combined Solver
+  function pack(demand, barLimit) {
+    if (parts.length <= 8) {
+      const exact = solveExact(demand, barLimit);
+      if (exact && (!barLimit || exact.bars <= barLimit)) {
+        return exact;
+      }
+    }
+    // Heuristic BFD fallback
+    const bfdBins = solveBFD(demand);
+    if (barLimit && bfdBins.length > barLimit) return null;
+    const patMap = {};
+    for (let b = 0; b < bfdBins.length; b++) {
+      const key = bfdBins[b].counts.join(',');
+      if (!patMap[key]) {
+        const used = stockLen - bfdBins[b].rem;
+        patMap[key] = {
+          count: 0,
+          pattern: { counts: bfdBins[b].counts, used: used, waste: bfdBins[b].rem }
+        };
+      }
+      patMap[key].count++;
+    }
+    return { solution: Object.values(patMap), bars: bfdBins.length };
+  }
+
+  if (mode === 'branches') {
+    let setLen = 0;
+    for (let i = 0; i < parts.length; i++) {
+      setLen += parts[i].qty * (parts[i].len + kerf);
+    }
+    const N_upper = Math.floor((maxBranches * stockLen) / setLen);
+    let bestResult = null;
+    let bestN = 0;
+
+    for (let N = N_upper; N >= 1; N--) {
+      const dem = parts.map(p => p.qty * N);
+      const res = pack(dem, maxBranches);
+      if (res && res.bars <= maxBranches) {
+        bestN = N;
+        bestResult = res;
+        break;
+      }
+    }
+    return {
+      bestN,
+      result: bestResult,
+      parts,
+      stockLen,
+      kerf,
+      maxBranches,
+      mode
+    };
+  } else {
+    const dem = parts.map(p => p.qty);
+    const res = pack(dem, null);
+    return {
+      result: res,
+      parts,
+      stockLen,
+      kerf,
+      mode
+    };
+  }
+}
+
+// ==========================================
+// 5. RUN OPTIMIZATION & RENDER UI
+// ==========================================
+function runOptimization() {
+  const stockLen = parseFloat(document.getElementById('stockLen').value) || 0;
+  const kerf = parseFloat(document.getElementById('kerf').value) || 0;
+  const branchCount = parseInt(document.getElementById('branchCount').value) || 0;
+  const projectName = document.getElementById('projectName').value.trim();
+  const projectDate = document.getElementById('projectDate').value.trim();
+  const notes = document.getElementById('orderNotes').value.trim();
+
+  if (!stockLen || stockLen <= 0) {
+    alert('لطفاً طول شاخه استاندارد را مشخص کنید.');
+    return;
+  }
+
+  if (currentMode === 'branches' && (!branchCount || branchCount <= 0)) {
+    alert('لطفاً تعداد شاخه موجود را مشخص کنید.');
+    return;
+  }
+
+  // Parse parts
+  const parts = [];
+  const rows = document.querySelectorAll('#partsList .part-item');
+  rows.forEach((r, idx) => {
+    const name = r.querySelector('.pname').value.trim() || `قطعه شماره ${idx + 1}`;
+    const len = parseFloat(r.querySelector('.plen').value) || 0;
+    const qty = parseInt(r.querySelector('.pset').value) || 0;
+    if (len > 0 && qty > 0) {
+      parts.push({ id: idx, name, len, qty, color: COLOR_PALETTE[idx % COLOR_PALETTE.length] });
+    }
+  });
+
+  if (parts.length === 0) {
+    alert('حداقل یک قطعه با طول و تعداد مشخص اضافه کنید.');
+    return;
+  }
+
+  const calcBtn = document.getElementById('calcActionBtn');
+  const origText = calcBtn.textContent;
+  calcBtn.textContent = '⏳ در حال بهینه‌سازی برش...';
+  calcBtn.disabled = true;
+
+  setTimeout(() => {
+    try {
+      const outcome = optimizeCuttingStock({
+        stockLen,
+        kerf,
+        parts,
+        mode: currentMode,
+        maxBranches: branchCount
+      });
+
+      calcBtn.textContent = origText;
+      calcBtn.disabled = false;
+
+      if (outcome.error) {
+        alert(outcome.error);
+        return;
+      }
+
+      currentOptimResult = {
+        outcome,
+        projectName,
+        projectDate,
+        notes,
+        stockLen,
+        kerf,
+        parts
+      };
+
+      renderReport(currentOptimResult);
+    } catch (err) {
+      calcBtn.textContent = origText;
+      calcBtn.disabled = false;
+      alert('خطا در محاسبه بهینه‌سازی: ' + err.message);
+    }
+  }, 40);
+}
+
+function renderReport(data) {
+  const { outcome, projectName, projectDate, notes, stockLen, kerf, parts } = data;
+  const { mode, result, bestN, maxBranches } = outcome;
+  const container = document.getElementById('reportContainer');
+
+  if (!result || !result.solution || result.solution.length === 0) {
+    container.innerHTML = `
+      <div class="alert-box danger">
+        <span>با این مشخصات امکان برش حتی یک ست کامل در ${maxBranches} شاخه وجود ندارد. تعداد شاخه را افزایش دهید یا ابعاد را بررسی کنید.</span>
+      </div>
+      <button class="btn btn-secondary" onclick="backToEdit()">${ICONS.edit} <span>بازگشت و تغییر مقادیر</span></button>
+    `;
+    showResultsView();
+    return;
+  }
+
+  const usedBranches = result.bars;
+  const patterns = result.solution;
+
+  // Calculate totals
+  let totalPiecesCut = 0;
+  let totalUsefulLen = 0;
+  let totalWasteLen = 0;
+  let totalCutsCount = 0;
+
+  patterns.forEach(item => {
+    const patCount = item.count;
+    totalWasteLen += item.pattern.waste * patCount;
+    let piecesInPat = 0;
+    for (let i = 0; i < parts.length; i++) {
+      const q = item.pattern.counts[i] || 0;
+      totalPiecesCut += q * patCount;
+      totalUsefulLen += q * patCount * parts[i].len;
+      piecesInPat += q;
+    }
+    totalCutsCount += piecesInPat * patCount;
+  });
+
+  const totalRawLen = usedBranches * stockLen;
+  const efficiency = totalRawLen > 0 ? (totalUsefulLen / totalRawLen) * 100 : 0;
+
+  let html = '';
+
+  // 1. Order Meta Header
+  html += `
+    <div class="card" style="margin-bottom:12px;background:linear-gradient(180deg,#ffffff,#f8fafc);">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+        <h2 style="font-size:16px;font-weight:800;color:var(--primary);">${projectName || 'سفارش برش کارگاهی'}</h2>
+        <span style="font-size:12px;color:var(--text-muted);font-weight:600;display:flex;align-items:center;gap:4px;">
+          ${ICONS.clipboard} ${projectDate}
+        </span>
+      </div>
+      <div style="font-size:12px;color:var(--text-muted);display:flex;gap:14px;flex-wrap:wrap;">
+        <span style="display:flex;align-items:center;gap:4px;">${ICONS.ruler} طول شاخه: <b>${fmt(stockLen)} mm</b></span>
+        <span style="display:flex;align-items:center;gap:4px;">${ICONS.caliper} تیغه برش: <b>${fmt(kerf)} mm</b></span>
+      </div>
+    </div>
+  `;
+
+  // 2. Hero KPI Card
+  if (mode === 'branches') {
+    html += `
+      <div class="stat-hero-card">
+        <div class="stat-hero-val">${bestN.toLocaleString('fa-IR')}</div>
+        <div class="stat-hero-lbl">ست کامل قابل تولید</div>
+      </div>
+    `;
+  }
+
+  // 3. Stats Matrix
+  html += `
+    <div class="stats-matrix">
+      <div class="stat-tile">
+        <div class="stat-tile-val">${usedBranches.toLocaleString('fa-IR')} ${mode === 'branches' ? '<small style="font-size:13px;opacity:0.6;">از ' + maxBranches.toLocaleString('fa-IR') + '</small>' : ''}</div>
+        <div class="stat-tile-lbl">${mode === 'branches' ? 'شاخه مصرفی' : 'حداقل شاخه لازم'}</div>
+      </div>
+      <div class="stat-tile">
+        <div class="stat-tile-val">${efficiency.toFixed(1).toLocaleString('fa-IR')}٪</div>
+        <div class="stat-tile-lbl">درصد بازدهی مفید</div>
+      </div>
+      <div class="stat-tile accent">
+        <div class="stat-tile-val">${fmt(totalWasteLen)} <small style="font-size:11px;">mm</small></div>
+        <div class="stat-tile-lbl">ضایعات کل (${toCm(totalWasteLen)} سانتی‌متر)</div>
+      </div>
+      <div class="stat-tile">
+        <div class="stat-tile-val">${totalPiecesCut.toLocaleString('fa-IR')}</div>
+        <div class="stat-tile-lbl">کل قطعات خروجی</div>
+      </div>
+    </div>
+  `;
+
+  // 4. Success Alert
+  if (mode === 'branches') {
+    const extraBranches = maxBranches - usedBranches;
+    html += `
+      <div class="alert-box success">
+        <span>با ${maxBranches.toLocaleString('fa-IR')} شاخه لوله ${fmt(stockLen)} میلی‌متری، دقیقاً <b>${bestN.toLocaleString('fa-IR')} ست کامل</b> برش می‌خورد.
+        ${extraBranches > 0 ? `<br>💡 <b>${extraBranches.toLocaleString('fa-IR')} شاخه کامل</b> اضافه و بدون برش دست‌نخورده باقی می‌ماند!` : ''}
+        </span>
+      </div>
+    `;
+  } else {
+    html += `
+      <div class="alert-box success">
+        <span>برای تولید این ${totalPiecesCut.toLocaleString('fa-IR')} قطعه، به <b>${usedBranches.toLocaleString('fa-IR')} شاخه</b> لوله ${fmt(stockLen)} میلی‌متری نیاز دارید.</span>
+      </div>
+    `;
+  }
+
+  // 5. Visual Cutting Patterns (دستور کار برشکار)
+  html += `
+    <div class="subhead">
+      <span style="display:flex;align-items:center;gap:6px;">${ICONS.blueprint} دستور کار کارگاه (الگوهای برش)</span>
+    </div>
+    <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">
+      شاخه‌ها را بر اساس هر الگو دسته‌بندی کرده و خط‌کش اره را تنظیم نمایید:
+    </p>
+  `;
+
+  patterns.forEach((patItem, pIdx) => {
+    const pat = patItem.pattern;
+    const repeatCount = patItem.count;
+    const wasteMm = pat.waste;
+
+    html += `
+      <div class="pattern-card">
+        <div class="pattern-header">
+          <div class="pattern-title">
+            <span>الگوی شماره ${(pIdx + 1).toLocaleString('fa-IR')}:</span>
+            <span class="pattern-count-badge">${repeatCount.toLocaleString('fa-IR')} شاخه</span>
+          </div>
+          <div class="pattern-waste-badge">
+            ضایعات: ${fmt(wasteMm)} mm<br>(${toCm(wasteMm)} cm)
+          </div>
+        </div>
+
+        <!-- Realistic Pipe Visual -->
+        <div class="pipe-bar-visual">
+    `;
+
+    // Render pipe segments
+    for (let i = 0; i < parts.length; i++) {
+      const q = pat.counts[i] || 0;
+      if (q > 0) {
+        const segWidthPct = ((parts[i].len / stockLen) * 100).toFixed(2);
+        for (let k = 0; k < q; k++) {
+          html += `
+            <div class="pipe-segment" style="width:${segWidthPct}%;background:${parts[i].color};" title="${parts[i].name} (${fmt(parts[i].len)}mm)">
+              ${parts[i].len > 600 ? fmt(parts[i].len) : ''}
+            </div>
+          `;
+        }
+      }
+    }
+
+    // Waste segment at end
+    const wastePct = ((wasteMm / stockLen) * 100).toFixed(2);
+    if (wasteMm > 0) {
+      html += `
+        <div class="pipe-waste-segment" style="width:${wastePct}%;" title="ضایعات: ${fmt(wasteMm)}mm">
+          ${wasteMm > 400 ? 'ضایعات' : ''}
+        </div>
+      `;
+    }
+
+    html += `
+        </div>
+
+        <!-- Cut Items Details -->
+        <div class="cut-items-list">
+    `;
+
+    for (let i = 0; i < parts.length; i++) {
+      const q = pat.counts[i] || 0;
+      if (q > 0) {
+        html += `
+          <div class="cut-item-row">
+            <div class="cut-item-name">
+              <span class="color-dot" style="background:${parts[i].color};"></span>
+              <span>${parts[i].name}</span>
+            </div>
+            <div class="cut-item-dims">
+              <span><b>${q.toLocaleString('fa-IR')}</b> عدد ×</span>
+              <span>${fmt(parts[i].len)} mm</span>
+              <small>(${toCm(parts[i].len)} cm)</small>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    html += `
+        </div>
+      </div>
+    `;
+  });
+
+  // 6. Parts Breakdown Table
+  html += `
+    <div class="subhead">
+      <span style="display:flex;align-items:center;gap:6px;">${ICONS.chart} جدول تفکیک کل قطعات</span>
+    </div>
+    <div class="table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>نام قطعه</th>
+            <th>طول (mm)</th>
+            <th>${mode === 'branches' ? 'در هر ست' : 'تعداد نیاز'}</th>
+            <th>تولید کل</th>
+            <th>جمع طول (متر)</th>
+          </tr>
+        </thead>
+        <tbody>
+  `;
+
+  parts.forEach(p => {
+    const totalQty = (mode === 'branches') ? p.qty * bestN : p.qty;
+    const totalMeters = (totalQty * p.len) / 1000;
+    html += `
+      <tr>
+        <td class="name-cell">${p.name}</td>
+        <td>${fmt(p.len)} <small style="display:block;color:#94a3b8;font-size:10px;">${toCm(p.len)} cm</small></td>
+        <td>${p.qty.toLocaleString('fa-IR')}</td>
+        <td><b>${totalQty.toLocaleString('fa-IR')}</b></td>
+        <td>${totalMeters.toFixed(2).toLocaleString('fa-IR')} م</td>
+      </tr>
+    `;
+  });
+
+  html += `
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  // 7. Workshop Notes (if any)
+  if (notes) {
+    html += `
+      <div class="subhead">
+        <span style="display:flex;align-items:center;gap:6px;">${ICONS.notes} یادداشت کارگاه</span>
+      </div>
+      <div class="workshop-notes">
+        ${notes.replace(/\n/g, '<br>')}
+      </div>
+    `;
+  }
+
+  // 8. Sales & Invoicing Card (بخش فروش و صدور صورتحساب مشتری)
+  const savedLastPrice = localStorage.getItem('pipe_cut_last_price') || '';
+  const savedLastWage = localStorage.getItem('pipe_cut_last_wage') || '';
+
+  html += `
+    <div class="invoice-card" id="invoiceCard">
+      <div class="card-title">
+        <span>
+          ${ICONS.invoice}
+          صورتحساب و فاکتور فروش (مشتری)
+        </span>
+        <span style="font-size:11px;background:rgba(5,150,105,0.1);color:#059669;padding:2px 8px;border-radius:12px;font-weight:700;">
+          دیتابیس آفلاین
+        </span>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="invCustomerName">نام خریدار / مشتری</label>
+          <input id="invCustomerName" class="input" value="${projectName || ''}" placeholder="نام خریدار..." oninput="updateInvoiceTotals()">
+        </div>
+        <div class="field">
+          <label for="invCustomerPhone">شماره تماس مشتری</label>
+          <input id="invCustomerPhone" class="input" type="tel" inputmode="tel" placeholder="۰۹..." oninput="updateInvoiceTotals()">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="invNumber">شماره فاکتور</label>
+          <input id="invNumber" class="input" value="${getSequentialInvoiceNo()}" oninput="updateInvoiceTotals()">
+        </div>
+        <div class="field">
+          <label for="invDate">تاریخ صدور</label>
+          <input id="invDate" class="input" value="${projectDate}" oninput="updateInvoiceTotals()">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="invPricePerStock">قیمت هر شاخه لوله (تومان)</label>
+          <div class="input-wrap">
+            <input id="invPricePerStock" class="input has-unit" type="text" inputmode="numeric" value="${savedLastPrice ? formatWithCommas(savedLastPrice) : ''}" placeholder="مثال: ۶۵۰,۰۰۰" oninput="handleTomanInput(this)">
+            <span class="unit-badge">تومان</span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="invWagePerCut">اجرت هر برش (تومان)</label>
+          <div class="input-wrap">
+            <input id="invWagePerCut" class="input has-unit" type="text" inputmode="numeric" value="${savedLastWage ? formatWithCommas(savedLastWage) : ''}" placeholder="مثال: ۵,۰۰۰" oninput="handleTomanInput(this)">
+            <span class="unit-badge">تومان</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="invTotalCuts">تعداد برش‌ها (قابل تغییر)</label>
+          <div class="input-wrap">
+            <input id="invTotalCuts" class="input has-unit" type="number" inputmode="numeric" value="${totalCutsCount}" oninput="updateInvoiceTotals()">
+            <span class="unit-badge">برش</span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="invExtraFees">هزینه‌های متفرقه / بارگیری (تومان)</label>
+          <div class="input-wrap">
+            <input id="invExtraFees" class="input has-unit" type="text" inputmode="numeric" placeholder="۰" oninput="handleTomanInput(this)">
+            <span class="unit-badge">تومان</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="invExtraNotes">شرح خدمات متفرقه (اختیاری)</label>
+          <input id="invExtraNotes" class="input" placeholder="مثال: بسته‌بندی، سوراخکاری، کرایه حمل..." oninput="updateInvoiceTotals()">
+        </div>
+        <div class="field">
+          <label for="invDiscount">مبلغ تخفیف (تومان)</label>
+          <div class="input-wrap">
+            <input id="invDiscount" class="input has-unit" type="text" inputmode="numeric" placeholder="۰" oninput="handleTomanInput(this)">
+            <span class="unit-badge">تومان</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Financial Summary Box -->
+      <div class="invoice-summary-box">
+        <div class="inv-row">
+          <span>هزینه شاخه‌های لوله (${usedBranches.toLocaleString('fa-IR')} شاخه):</span>
+          <b id="invSumPipes">۰ تومان</b>
+        </div>
+        <div class="inv-row">
+          <span>اجرت کل برشکاری:</span>
+          <b id="invSumCuts">۰ تومان</b>
+        </div>
+        <div class="inv-row" id="invRowExtras" style="display:none;">
+          <span>خدمات متفرقه و جانبی:</span>
+          <b id="invSumExtras">۰ تومان</b>
+        </div>
+        <div class="inv-row" id="invRowDiscount" style="display:none;color:var(--danger);">
+          <span>کسر تخفیف:</span>
+          <b id="invSumDiscount">۰ تومان</b>
+        </div>
+        <div class="inv-total-row">
+          <span>مبلغ کل قابل پرداخت:</span>
+          <span class="inv-total-amount" id="invGrandTotal">۰ تومان</span>
+        </div>
+        <div class="inv-words-box">
+          <b>مبلغ به حروف:</b> <span id="invGrandTotalWords">صفر تومان</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons for Invoice -->
+      <button type="button" class="btn btn-success" onclick="saveCurrentInvoice()">
+        ${ICONS.check} <span>ذخیره فاکتور در بایگانی</span>
+      </button>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;">
+        <button type="button" class="btn btn-secondary" onclick="generateAndShowInvoiceImage()">
+          ${ICONS.camera} <span>تصویر فاکتور</span>
+        </button>
+        <button type="button" class="btn btn-secondary" onclick="printInvoice()">
+          ${ICONS.print} <span>چاپ فاکتور</span>
+        </button>
+      </div>
+
+      <button type="button" class="btn btn-secondary" style="margin-top:10px;" onclick="copyInvoiceText()">
+        ${ICONS.copy} <span>کپی متن پیش‌فاکتور (جهت ارسال)</span>
+      </button>
+    </div>
+  `;
+
+  // 9. Action Buttons Grid
+  html += `
+    <div class="results-actions-grid">
+      <button type="button" class="btn btn-secondary" onclick="copyWorkshopText()">
+        ${ICONS.copy} <span>کپی دستور کار</span>
+      </button>
+      <button type="button" class="btn btn-secondary" onclick="window.print()">
+        ${ICONS.print} <span>چاپ A4 کارگاه</span>
+      </button>
+    </div>
+  `;
+
+  container.innerHTML = html;
+  updateInvoiceTotals();
+  showResultsView();
+}
+
+function showResultsView(pushHistory = true) {
+  document.getElementById('inputSection').style.display = 'none';
+  document.getElementById('modeNav').style.display = 'none';
+  document.getElementById('resultSection').style.display = 'block';
+  document.getElementById('resultBottomBar').style.display = 'block';
+
+  // Update Header
+  const backBtn = document.getElementById('headerBackBtn');
+  if (backBtn) backBtn.style.display = 'flex';
+  const icon = document.getElementById('headerIcon');
+  if (icon) icon.style.display = 'none';
+  const title = document.getElementById('headerTitle');
+  if (title) title.textContent = 'دستور کار و الگوهای برش';
+  const sub = document.getElementById('headerSubtitle');
+  if (sub) sub.textContent = 'برای تغییر روی دکمه بازگشت یا ویرایش بزنید';
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  if (pushHistory) {
+    try {
+      history.pushState({ view: 'results' }, '');
+    } catch(e) {}
+  }
+}
+
+function backToEdit(popHistory = true) {
+  closeImgModal();
+  closeInstallGuide();
+
+  document.getElementById('resultSection').style.display = 'none';
+  document.getElementById('resultBottomBar').style.display = 'none';
+  document.getElementById('inputSection').style.display = 'block';
+  document.getElementById('modeNav').style.display = 'block';
+
+  // Update Header
+  const backBtn = document.getElementById('headerBackBtn');
+  if (backBtn) backBtn.style.display = 'none';
+  const icon = document.getElementById('headerIcon');
+  if (icon) icon.style.display = 'flex';
+  const title = document.getElementById('headerTitle');
+  if (title) title.textContent = 'محاسبه‌گر برش لوله';
+  const sub = document.getElementById('headerSubtitle');
+  if (sub) sub.textContent = 'بهینه‌ساز شاخه‌های ۶ متری و حداقل ضایعات';
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  if (popHistory && history.state && history.state.view === 'results') {
+    try {
+      history.back();
+    } catch(e) {}
+  }
+}
+
+// Browser & Phone Back Button Handling
+window.addEventListener('popstate', (e) => {
+  const invModal = document.getElementById('invoiceViewModalOverlay');
+  if (invModal && invModal.classList.contains('open')) {
+    invModal.classList.remove('open');
+    return;
+  }
+  const archModal = document.getElementById('archiveModalOverlay');
+  if (archModal && archModal.classList.contains('open')) {
+    archModal.classList.remove('open');
+    return;
+  }
+  const modal = document.getElementById('imgModalOverlay');
+  if (modal && modal.classList.contains('open')) {
+    modal.classList.remove('open');
+    return;
+  }
+  const guide = document.getElementById('installGuideModal');
+  if (guide && guide.classList.contains('open')) {
+    guide.classList.remove('open');
+    return;
+  }
+  const resSec = document.getElementById('resultSection');
+  if (resSec && resSec.style.display !== 'none') {
+    backToEdit(false);
+  }
+});
+
+// PWA Install Prompt & Guide
+let deferredInstallPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+});
+
+function handleInstallApp() {
+  if (deferredInstallPrompt) {
+    deferredInstallPrompt.prompt();
+    deferredInstallPrompt.userChoice.then((choice) => {
+      if (choice.outcome === 'accepted') {
+        showToast('برنامه با موفقیت روی گوشی شما نصب شد 🎉');
+      }
+      deferredInstallPrompt = null;
+    });
+  } else {
+    document.getElementById('installGuideModal').classList.add('open');
+  }
+}
+
+function closeInstallGuide() {
+  const guide = document.getElementById('installGuideModal');
+  if (guide) guide.classList.remove('open');
+}
+
+// ==========================================
+// 6. HIGH-RES NATIVE CANVAS IMAGE GENERATOR
+// ==========================================
+function generateAndShowImage() {
+  const btn = document.getElementById('btnSaveImg');
+  const origText = btn.textContent;
+  btn.textContent = '⏳ ساخت تصویر...';
+  btn.disabled = true;
+
+  setTimeout(() => {
+    try {
+      createReportCanvas(currentOptimResult, (blob) => {
+        btn.textContent = origText;
+        btn.disabled = false;
+
+        generatedImageBlob = blob;
+        const url = URL.createObjectURL(blob);
+
+        const modalBody = document.getElementById('modalImgBody');
+        modalBody.innerHTML = `<img src="${url}" alt="برش-لوله">`;
+
+        const downloadLink = document.getElementById('downloadImgLink');
+        downloadLink.href = url;
+        downloadLink.download = `برش-لوله-${Date.now()}.png`;
+
+        document.getElementById('imgModalOverlay').classList.add('open');
+      });
+    } catch (err) {
+      btn.textContent = origText;
+      btn.disabled = false;
+      alert('خطا در تولید تصویر: ' + err.message);
+    }
+  }, 50);
+}
+
+function closeImgModal(e) {
+  document.getElementById('imgModalOverlay').classList.remove('open');
+}
+
+function shareNativeImage() {
+  if (navigator.share && generatedImageBlob) {
+    const file = new File([generatedImageBlob], 'cutting-order.png', { type: 'image/png' });
+    navigator.share({
+      title: 'سفارش برش لوله',
+      text: 'دستور کار کارگاهی برش شاخه‌های لوله',
+      files: [file]
+    }).catch(() => {});
+  } else {
+    showToast('لطفاً از دکمه دانلود عکس استفاده کنید.');
+  }
+}
+
+// Drawing the complete order sheet directly on Canvas
+function createReportCanvas(data, callback) {
+  const { outcome, projectName, projectDate, notes, stockLen, kerf, parts } = data;
+  const { mode, result, bestN, maxBranches } = outcome;
+  const usedBranches = result.bars;
+  const patterns = result.solution;
+
+  const width = 1080;
+  // Dynamic height calculation
+  let estimatedHeight = 520 + (patterns.length * 150) + (parts.length * 45) + (notes ? 120 : 0);
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = estimatedHeight;
+  const ctx = canvas.getContext('2d');
+
+  // Background
+  ctx.fillStyle = '#f8fafc';
+  ctx.fillRect(0, 0, width, estimatedHeight);
+
+  // Header Banner
+  ctx.fillStyle = '#154a86';
+  ctx.fillRect(0, 0, width, 140);
+
+  // Header texts (RTL)
+  ctx.direction = 'rtl';
+  ctx.textAlign = 'right';
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 34px Vazirmatn, Tahoma, sans-serif';
+  ctx.fillText('دستور کار و بهینه‌سازی برش لوله', width - 95, 58);
+
+  // Minimal vector tube badge on canvas
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = 2.5;
+  roundRect(ctx, width - 80, 26, 42, 38, 8, false, true);
+  ctx.fillStyle = '#f59e0b';
+  ctx.fillRect(width - 62, 26, 4, 38);
+
+  ctx.font = '500 20px Vazirmatn, Tahoma, sans-serif';
+  ctx.fillStyle = '#e2e8f0';
+  ctx.fillText(`پروژه: ${projectName || 'سفارش کارگاهی'}  |  تاریخ: ${projectDate}`, width - 40, 105);
+
+  ctx.textAlign = 'left';
+  ctx.fillText(`شاخه: ${fmtEn(stockLen)}mm | تیغه: ${fmtEn(kerf)}mm`, 40, 105);
+
+  let curY = 175;
+
+  // KPI Metric Cards
+  ctx.textAlign = 'right';
+  const cardW = 230;
+  const cardH = 95;
+  const gap = 20;
+  const startX = width - 40;
+
+  function drawMetricTile(x, y, val, label, isHero) {
+    ctx.fillStyle = isHero ? '#059669' : '#ffffff';
+    ctx.strokeStyle = '#cbd5e1';
+    ctx.lineWidth = 1.5;
+    roundRect(ctx, x - cardW, y, cardW, cardH, 14, true, !isHero);
+
+    ctx.textAlign = 'center';
+    ctx.fillStyle = isHero ? '#ffffff' : '#154a86';
+    ctx.font = 'bold 32px Vazirmatn, Tahoma, sans-serif';
+    ctx.fillText(val, x - (cardW / 2), y + 42);
+
+    ctx.fillStyle = isHero ? '#e6fffa' : '#64748b';
+    ctx.font = '600 15px Vazirmatn, Tahoma, sans-serif';
+    ctx.fillText(label, x - (cardW / 2), y + 75);
+  }
+
+  if (mode === 'branches') {
+    drawMetricTile(startX, curY, `${bestN} ست`, 'ست کامل تولیدی', true);
+    drawMetricTile(startX - (cardW + gap), curY, `${usedBranches} / ${maxBranches}`, 'شاخه مصرفی', false);
+  } else {
+    drawMetricTile(startX, curY, `${usedBranches} شاخه`, 'شاخه لازم', true);
+    drawMetricTile(startX - (cardW + gap), curY, `${fmtEn(stockLen)} mm`, 'طول شاخه', false);
+  }
+
+  // Calculate waste
+  let totalWasteLen = 0;
+  patterns.forEach(item => totalWasteLen += item.pattern.waste * item.count);
+  drawMetricTile(startX - 2 * (cardW + gap), curY, `${(totalWasteLen / 10).toFixed(0)} cm`, 'ضایعات کل', false);
+
+  const eff = ((usedBranches * stockLen - totalWasteLen) / (usedBranches * stockLen) * 100).toFixed(1);
+  drawMetricTile(startX - 3 * (cardW + gap), curY, `${eff}٪`, 'بازدهی مفید', false);
+
+  curY += cardH + 40;
+
+  // Patterns Section Title
+  ctx.textAlign = 'right';
+  ctx.fillStyle = '#0f172a';
+  ctx.font = 'bold 24px Vazirmatn, Tahoma, sans-serif';
+  ctx.fillText('الگوهای برش شاخه‌ها (دستور کار برشکار):', width - 40, curY);
+
+  curY += 20;
+
+  // Draw each pattern
+  patterns.forEach((patItem, idx) => {
+    const pat = patItem.pattern;
+    const patH = 120;
+    const pBoxW = width - 80;
+    const pBoxX = 40;
+
+    // Pattern background card
+    ctx.fillStyle = '#ffffff';
+    ctx.strokeStyle = '#e2e8f0';
+    ctx.lineWidth = 1.5;
+    roundRect(ctx, pBoxX, curY, pBoxW, patH, 16, true, true);
+
+    // Badge
+    ctx.fillStyle = '#154a86';
+    roundRect(ctx, width - 180, curY + 12, 120, 32, 16, true, false);
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 16px Vazirmatn, Tahoma, sans-serif';
+    ctx.fillText(`${patItem.count} شاخه`, width - 120, curY + 34);
+
+    ctx.textAlign = 'right';
+    ctx.fillStyle = '#0f172a';
+    ctx.font = 'bold 18px Vazirmatn, Tahoma, sans-serif';
+    ctx.fillText(`الگوی ${idx + 1}:`, width - 200, curY + 34);
+
+    ctx.textAlign = 'left';
+    ctx.fillStyle = '#c2410c';
+    ctx.font = 'bold 15px Vazirmatn, Tahoma, sans-serif';
+    ctx.fillText(`ضایعات این شاخه: ${fmtEn(pat.waste)}mm (${(pat.waste/10).toFixed(1)}cm)`, 60, curY + 34);
+
+    // Visual Pipe Bar inside canvas
+    const pipeBarY = curY + 54;
+    const pipeBarW = pBoxW - 40;
+    const pipeBarX = pBoxX + 20;
+    const pipeBarH = 34;
+
+    ctx.fillStyle = '#e2e8f0';
+    ctx.strokeStyle = '#94a3b8';
+    roundRect(ctx, pipeBarX, pipeBarY, pipeBarW, pipeBarH, 6, true, true);
+
+    // Draw cut segments
+    let segX = pipeBarX;
+    for (let i = 0; i < parts.length; i++) {
+      const q = pat.counts[i] || 0;
+      if (q > 0) {
+        const segW = (parts[i].len / stockLen) * pipeBarW;
+        for (let k = 0; k < q; k++) {
+          ctx.fillStyle = parts[i].color;
+          ctx.fillRect(segX, pipeBarY, segW, pipeBarH);
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = 1;
+          ctx.strokeRect(segX, pipeBarY, segW, pipeBarH);
+
+          if (segW > 45) {
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 13px Vazirmatn, Tahoma, sans-serif';
+            ctx.fillText(`${fmtEn(parts[i].len)}`, segX + (segW / 2), pipeBarY + 22);
+          }
+          segX += segW;
+        }
+      }
+    }
+
+    // Waste segment
+    const wasteW = (pat.waste / stockLen) * pipeBarW;
+    if (wasteW > 2) {
+      ctx.fillStyle = '#cbd5e1';
+      ctx.fillRect(segX, pipeBarY, wasteW, pipeBarH);
+      if (wasteW > 50) {
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#475569';
+        ctx.font = 'bold 11px Vazirmatn, Tahoma, sans-serif';
+        ctx.fillText('ضایعات', segX + (wasteW / 2), pipeBarY + 22);
+      }
+    }
+
+    // Subtext list of parts
+    let desc = [];
+    for (let i = 0; i < parts.length; i++) {
+      if (pat.counts[i] > 0) {
+        desc.push(`${pat.counts[i]} عدد ${parts[i].name} (${fmtEn(parts[i].len)}mm)`);
+      }
+    }
+    ctx.textAlign = 'right';
+    ctx.fillStyle = '#475569';
+    ctx.font = '500 13px Vazirmatn, Tahoma, sans-serif';
+    ctx.fillText(desc.join('   |   '), width - 60, curY + 104);
+
+    curY += patH + 14;
+  });
+
+  // Footer notes & timestamp
+  if (notes) {
+    curY += 10;
+    ctx.textAlign = 'right';
+    ctx.fillStyle = '#713f12';
+    ctx.font = 'bold 16px Vazirmatn, Tahoma, sans-serif';
+    ctx.fillText('یادداشت کارگاه: ' + notes, width - 40, curY);
+    curY += 25;
+  }
+
+  curY += 25;
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = '13px Vazirmatn, Tahoma, sans-serif';
+  ctx.fillText('تولید شده توسط نرم‌افزار هوشمند محاسبه و بهینه‌سازی برش لوله', width / 2, curY);
+
+  canvas.toBlob(callback, 'image/png');
+}
+
+// Canvas rounded rect helper
+function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
+  if (fill) ctx.fill();
+  if (stroke) ctx.stroke();
+}
+
+// ==========================================
+// 7. COPY PLAIN TEXT FOR WHATSAPP/MESSENGERS
+// ==========================================
+function copyWorkshopText() {
+  if (!currentOptimResult) return;
+  const { outcome, projectName, projectDate, notes, stockLen, kerf, parts } = currentOptimResult;
+  const { mode, result, bestN, maxBranches } = outcome;
+  const usedBranches = result.bars;
+  const patterns = result.solution;
+
+  let text = `📐 *دستور برش لوله - ${projectName || 'سفارش کارگاهی'}*\n`;
+  text += `📅 تاریخ: ${projectDate}\n`;
+  text += `📏 مشخصات شاخه: ${fmtEn(stockLen)} میلی‌متر | تیغه: ${fmtEn(kerf)} میلی‌متر\n`;
+  text += `────────────────────\n`;
+  text += `📊 *خلاصه نتایج:*\n`;
+  if (mode === 'branches') {
+    text += `• ست کامل تولیدی: *${bestN} ست*\n`;
+    text += `• شاخه مصرفی: *${usedBranches} از ${maxBranches} شاخه*\n`;
+  } else {
+    text += `• تعداد شاخه مورد نیاز: *${usedBranches} شاخه*\n`;
+  }
+
+  let totalWasteLen = 0;
+  patterns.forEach(item => totalWasteLen += item.pattern.waste * item.count);
+  text += `• ضایعات کل: *${(totalWasteLen / 10).toFixed(1)} سانتی‌متر*\n`;
+  text += `────────────────────\n`;
+  text += `🔨 *دستور کار برش شاخه‌ها:*\n\n`;
+
+  patterns.forEach((patItem, idx) => {
+    const pat = patItem.pattern;
+    text += `*الگوی ${idx + 1} (${patItem.count} شاخه):*\n`;
+    for (let i = 0; i < parts.length; i++) {
+      if (pat.counts[i] > 0) {
+        text += `  ▫️ ${pat.counts[i]} عدد × ${parts[i].name} (${fmtEn(parts[i].len)} mm)\n`;
+      }
+    }
+    text += `  ⚠️ ضایعات: ${fmtEn(pat.waste)} میلی‌متر (${(pat.waste / 10).toFixed(1)} cm)\n\n`;
+  });
+
+  if (notes) {
+    text += `📝 *یادداشت کارگاه:* ${notes}\n`;
+  }
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => {
+      showToast('📋 متن دستور کار کپی شد (آماده ارسال به واتساپ/ایتا)');
+    }).catch(() => {
+      fallbackCopy(text);
+    });
+  } else {
+    fallbackCopy(text);
+  }
+}
+
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+  showToast('📋 متن دستور کار کپی شد');
+}
+
+// ==========================================
+// 8. THEME MANAGEMENT (DARK / LIGHT MODE)
+// ==========================================
+function initTheme() {
+  const saved = localStorage.getItem('pipe_cut_theme');
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isDark = (saved === 'dark') || (!saved && prefersDark);
+  applyTheme(isDark ? 'dark' : 'light');
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('pipe_cut_theme', theme);
+
+  const metaTheme = document.querySelector('meta[name="theme-color"]');
+  if (metaTheme) {
+    metaTheme.setAttribute('content', theme === 'dark' ? '#0b1120' : '#154a86');
+  }
+
+  const btn = document.getElementById('themeToggleBtn');
+  if (btn) {
+    btn.innerHTML = (theme === 'dark') ? ICONS.sun : ICONS.moon;
+    btn.title = (theme === 'dark') ? 'تغییر به حالت روز' : 'تغییر به حالت شب';
+  }
+}
+
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme') || 'light';
+  const next = (cur === 'dark') ? 'light' : 'dark';
+  applyTheme(next);
+  showToast(next === 'dark' ? 'حالت شب فعال شد 🌙' : 'حالت روز فعال شد ☀️');
+}
+
+// ==========================================
+// 9. SERVICE WORKER REGISTRATION (OFFLINE)
+// ==========================================
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  });
+}
+
+// Boot
+window.addEventListener('DOMContentLoaded', () => {
+  initPersianDate();
+  loadSavedState();
+  initTheme();
+  enablePersistentStorage();
+  updateArchiveBadge();
+});
+
+// ==========================================
+// 10. SALES, INVOICING & PERSISTENT ARCHIVE
+// ==========================================
+
+function numToPersianWords(num) {
+  num = Math.floor(Math.abs(Number(num) || 0));
+  if (num === 0) return 'صفر تومان';
+
+  const yekan = ['', 'یک', 'دو', 'سه', 'چهار', 'پنج', 'شش', 'هفت', 'هشت', 'نه'];
+  const dahgan = ['', '', 'بیست', 'سی', 'چهل', 'پنجاه', 'شصت', 'هفتاد', 'هشتاد', 'نود'];
+  const dahha = ['ده', 'یازده', 'دوازده', 'سیزده', 'چهارده', 'پانزده', 'شانزده', 'هفده', 'هجده', 'نوزده'];
+  const sadgan = ['', 'یکصد', 'دویست', 'سیصد', 'چهارصد', 'پانصد', 'ششصد', 'هفتصد', 'هشتصد', 'نهصد'];
+  const bakhshha = ['', 'هزار', 'میلیون', 'میلیارد', 'تریلیون'];
+
+  function threeDigitsToWords(n) {
+    let s = Math.floor(n / 100);
+    let d = Math.floor((n % 100) / 10);
+    let y = n % 10;
+    let parts = [];
+
+    if (s > 0) parts.push(sadgan[s]);
+
+    if (d === 1) {
+      parts.push(dahha[y]);
+    } else {
+      if (d > 1) parts.push(dahgan[d]);
+      if (y > 0) parts.push(yekan[y]);
+    }
+    return parts.join(' و ');
+  }
+
+  let chunks = [];
+  let temp = num;
+  while (temp > 0) {
+    chunks.push(temp % 1000);
+    temp = Math.floor(temp / 1000);
+  }
+
+  let wordParts = [];
+  for (let i = chunks.length - 1; i >= 0; i--) {
+    let val = chunks[i];
+    if (val > 0) {
+      let chunkStr = threeDigitsToWords(val);
+      if (bakhshha[i]) chunkStr += ' ' + bakhshha[i];
+      wordParts.push(chunkStr);
+    }
+  }
+
+  return wordParts.join(' و ') + ' تومان';
+}
+
+function parseToman(val) {
+  if (typeof val === 'number') return val;
+  if (!val) return 0;
+  const normalized = String(val)
+    .replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d))
+    .replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d))
+    .replace(/[^\d]/g, '');
+  return parseInt(normalized, 10) || 0;
+}
+
+function formatWithCommas(n) {
+  const val = parseToman(n);
+  if (!val) return '';
+  return val.toLocaleString('fa-IR');
+}
+
+function handleTomanInput(input) {
+  const val = parseToman(input.value);
+  if (val === 0 && input.value.trim() === '') {
+    input.value = '';
+  } else {
+    input.value = val ? val.toLocaleString('fa-IR') : '';
+  }
+  updateInvoiceTotals();
+}
+
+function getSavedInvoices() {
+  try {
+    const raw = localStorage.getItem('pipe_cut_invoices_archive');
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function setSavedInvoices(list) {
+  try {
+    localStorage.setItem('pipe_cut_invoices_archive', JSON.stringify(list));
+    updateArchiveBadge();
+  } catch (e) {
+    alert('فضای حافظه مرورگر کافی نیست یا دسترسی ذخیره‌سازی محدود است.');
+  }
+}
+
+function updateArchiveBadge() {
+  const badge = document.getElementById('archiveBadge');
+  if (!badge) return;
+  const list = getSavedInvoices();
+  if (list && list.length > 0) {
+    badge.textContent = list.length.toLocaleString('fa-IR');
+    badge.style.display = 'block';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+function getSequentialInvoiceNo() {
+  try {
+    const list = getSavedInvoices();
+    return (list.length + 1).toString().padStart(3, '0');
+  } catch(e) {
+    return '001';
+  }
+}
+
+function enablePersistentStorage() {
+  if (navigator.storage && navigator.storage.persist) {
+    navigator.storage.persist().catch(() => {});
+  }
+}
+
+function getCurrentInvoiceObject() {
+  if (!currentOptimResult) return null;
+  const { outcome, projectName, projectDate, notes, stockLen, kerf, parts } = currentOptimResult;
+  const { mode, result, bestN, maxBranches } = outcome;
+  const usedBranches = result.bars;
+  const patterns = result.solution;
+
+  const customerName = (document.getElementById('invCustomerName') ? document.getElementById('invCustomerName').value.trim() : '') || projectName || 'مشتری محترم';
+  const customerPhone = document.getElementById('invCustomerPhone') ? document.getElementById('invCustomerPhone').value.trim() : '';
+  const invoiceNo = (document.getElementById('invNumber') ? document.getElementById('invNumber').value.trim() : '') || getSequentialInvoiceNo();
+  const date = (document.getElementById('invDate') ? document.getElementById('invDate').value.trim() : '') || projectDate;
+
+  const pricePerStock = parseToman(document.getElementById('invPricePerStock') ? document.getElementById('invPricePerStock').value : 0);
+  const wagePerCut = parseToman(document.getElementById('invWagePerCut') ? document.getElementById('invWagePerCut').value : 0);
+  const totalCuts = parseInt(document.getElementById('invTotalCuts') ? document.getElementById('invTotalCuts').value : 0) || 0;
+  const extraFees = parseToman(document.getElementById('invExtraFees') ? document.getElementById('invExtraFees').value : 0);
+  const extraNotes = document.getElementById('invExtraNotes') ? document.getElementById('invExtraNotes').value.trim() : '';
+  const discount = parseToman(document.getElementById('invDiscount') ? document.getElementById('invDiscount').value : 0);
+
+  const subtotalPipes = usedBranches * pricePerStock;
+  const subtotalCuts = totalCuts * wagePerCut;
+  const finalTotal = Math.max(0, subtotalPipes + subtotalCuts + extraFees - discount);
+  const totalWords = numToPersianWords(finalTotal);
+
+  let totalPiecesCut = 0;
+  patterns.forEach(item => {
+    for (let i = 0; i < parts.length; i++) {
+      totalPiecesCut += (item.pattern.counts[i] || 0) * item.count;
+    }
+  });
+
+  return {
+    id: 'inv_' + Date.now(),
+    invoiceNo,
+    date,
+    customerName,
+    customerPhone,
+    projectName,
+    stockLen,
+    kerf,
+    usedBranches,
+    bestN,
+    totalCuts,
+    totalPiecesCut,
+    pricePerStock,
+    wagePerCut,
+    extraFees,
+    extraNotes,
+    discount,
+    subtotalPipes,
+    subtotalCuts,
+    finalTotal,
+    totalWords,
+    notes,
+    parts,
+    patterns
+  };
+}
+
+function updateInvoiceTotals() {
+  const inv = getCurrentInvoiceObject();
+  if (!inv) return;
+
+  const sumPipesEl = document.getElementById('invSumPipes');
+  if (sumPipesEl) sumPipesEl.textContent = fmt(inv.subtotalPipes) + ' تومان';
+
+  const sumCutsEl = document.getElementById('invSumCuts');
+  if (sumCutsEl) sumCutsEl.textContent = fmt(inv.subtotalCuts) + ' تومان';
+
+  const rowExtras = document.getElementById('invRowExtras');
+  const sumExtrasEl = document.getElementById('invSumExtras');
+  if (rowExtras && sumExtrasEl) {
+    if (inv.extraFees > 0) {
+      rowExtras.style.display = 'flex';
+      sumExtrasEl.textContent = fmt(inv.extraFees) + ' تومان';
+    } else {
+      rowExtras.style.display = 'none';
+    }
+  }
+
+  const rowDisc = document.getElementById('invRowDiscount');
+  const sumDiscEl = document.getElementById('invSumDiscount');
+  if (rowDisc && sumDiscEl) {
+    if (inv.discount > 0) {
+      rowDisc.style.display = 'flex';
+      sumDiscEl.textContent = '-' + fmt(inv.discount) + ' تومان';
+    } else {
+      rowDisc.style.display = 'none';
+    }
+  }
+
+  const grandTotalEl = document.getElementById('invGrandTotal');
+  if (grandTotalEl) grandTotalEl.textContent = fmt(inv.finalTotal) + ' تومان';
+
+  const wordsEl = document.getElementById('invGrandTotalWords');
+  if (wordsEl) wordsEl.textContent = inv.totalWords;
+}
+
+function saveCurrentInvoice() {
+  const inv = getCurrentInvoiceObject();
+  if (!inv) {
+    showToast('خطا در دریافت اطلاعات فاکتور');
+    return;
+  }
+
+  // Persist last used price & wage for convenience
+  if (inv.pricePerStock > 0) localStorage.setItem('pipe_cut_last_price', inv.pricePerStock);
+  if (inv.wagePerCut > 0) localStorage.setItem('pipe_cut_last_wage', inv.wagePerCut);
+
+  const list = getSavedInvoices();
+  const existingIdx = list.findIndex(item => item.invoiceNo === inv.invoiceNo);
+  if (existingIdx >= 0) {
+    list[existingIdx] = inv;
+  } else {
+    list.unshift(inv);
+  }
+
+  setSavedInvoices(list);
+  showToast(`✅ فاکتور شماره ${inv.invoiceNo} در بایگانی ذخیره شد 💾`);
+}
+
+function openArchiveModal() {
+  renderArchiveList();
+  document.getElementById('archiveModalOverlay').classList.add('open');
+}
+
+function closeArchiveModal(e) {
+  document.getElementById('archiveModalOverlay').classList.remove('open');
+}
+
+function filterInvoicesArchive(query) {
+  renderArchiveList(query);
+}
+
+function renderArchiveList(query = '') {
+  const container = document.getElementById('archiveInvoicesList');
+  if (!container) return;
+
+  const list = getSavedInvoices();
+  const q = (query || '').trim().toLowerCase();
+
+  const filtered = list.filter(item => {
+    if (!q) return true;
+    const matchCust = (item.customerName || '').toLowerCase().includes(q);
+    const matchProj = (item.projectName || '').toLowerCase().includes(q);
+    const matchNo = (item.invoiceNo || '').toLowerCase().includes(q);
+    const matchDate = (item.date || '').toLowerCase().includes(q);
+    return matchCust || matchProj || matchNo || matchDate;
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div style="text-align:center;padding:32px 14px;color:var(--text-muted);">
+        <div style="font-size:32px;margin-bottom:8px;">📂</div>
+        <p style="font-size:13.5px;font-weight:600;">${q ? 'فاکتوری با این مشخصات یافت نشد.' : 'هنوز هیچ فاکتوری ذخیره نشده است.'}</p>
+        <p style="font-size:11.5px;margin-top:4px;">پس از محاسبه بهینه‌سازی، در کارت صدور فاکتور می‌توانید آن را ذخیره کنید.</p>
+      </div>
+    `;
+    return;
+  }
+
+  let html = '';
+  filtered.forEach(item => {
+    html += `
+      <div class="archive-item">
+        <div class="archive-item-head">
+          <span class="archive-item-title">فاکتور #${item.invoiceNo} - ${item.customerName || item.projectName}</span>
+          <span class="archive-item-date">${item.date}</span>
+        </div>
+        <div class="archive-item-info">
+          <span>شاخه‌ها: <b>${(item.usedBranches || 0).toLocaleString('fa-IR')}</b> | برش‌ها: <b>${(item.totalCuts || 0).toLocaleString('fa-IR')}</b></span>
+          ${item.customerPhone ? `<span style="margin-right:10px;">تلفن: ${item.customerPhone}</span>` : ''}
+        </div>
+        <div class="archive-item-total">
+          مبلغ: ${(item.finalTotal || 0).toLocaleString('fa-IR')} تومان
+        </div>
+        <div class="archive-item-actions">
+          <button type="button" class="btn btn-secondary" onclick="viewInvoiceDetails('${item.id}')">
+            ${ICONS.invoice} <span>مشاهده و چاپ</span>
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="loadInvoiceIntoForm('${item.id}')">
+            ${ICONS.refresh} <span>بارگذاری در فرم</span>
+          </button>
+          <button type="button" class="btn btn-outline-danger" style="flex:0 0 38px;padding:0;" onclick="deleteInvoice('${item.id}')" title="حذف فاکتور">
+            ${ICONS.trash}
+          </button>
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
+function deleteInvoice(id) {
+  if (!confirm('آیا از حذف این فاکتور اطمینان دارید؟')) return;
+  const list = getSavedInvoices();
+  const updated = list.filter(item => item.id !== id);
+  setSavedInvoices(updated);
+  renderArchiveList(document.getElementById('archiveSearchInput')?.value || '');
+  showToast('فاکتور با موفقیت حذف شد');
+}
+
+function loadInvoiceIntoForm(id) {
+  const list = getSavedInvoices();
+  const inv = list.find(item => item.id === id);
+  if (!inv) return;
+
+  if (inv.projectName) document.getElementById('projectName').value = inv.projectName;
+  if (inv.date) document.getElementById('projectDate').value = inv.date;
+  if (inv.stockLen) document.getElementById('stockLen').value = inv.stockLen;
+  if (inv.kerf) document.getElementById('kerf').value = inv.kerf;
+  if (inv.notes && document.getElementById('orderNotes')) document.getElementById('orderNotes').value = inv.notes;
+
+  if (inv.parts && Array.isArray(inv.parts) && inv.parts.length > 0) {
+    const container = document.getElementById('partsList');
+    container.innerHTML = '';
+    inv.parts.forEach(p => {
+      addPartRow(p.name, p.len, p.qty);
+    });
+  }
+
+  closeArchiveModal();
+  closeInvoiceViewModal();
+  backToEdit();
+  showToast(`اطلاعات فاکتور #${inv.invoiceNo} در فرم بارگذاری شد 🔄`);
+}
+
+function exportInvoicesBackup() {
+  const list = getSavedInvoices();
+  if (!list || list.length === 0) {
+    alert('هیچ فاکتوری برای تهیه پشتیبان وجود ندارد.');
+    return;
+  }
+
+  const jsonStr = JSON.stringify(list, null, 2);
+  const blob = new Blob([jsonStr], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `lole-invoices-backup-${Date.now()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('فایل پشتیبان دانلود شد 📥');
+}
+
+function triggerImportBackup() {
+  const input = document.getElementById('backupFileInput');
+  if (input) input.click();
+}
+
+function importInvoicesBackup(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!Array.isArray(data)) {
+        throw new Error('فرمت فایل نامعتبر است.');
+      }
+
+      const existing = getSavedInvoices();
+      const existingMap = new Map();
+      existing.forEach(item => existingMap.set(item.id || item.invoiceNo, item));
+      data.forEach(item => existingMap.set(item.id || item.invoiceNo, item));
+
+      const merged = Array.from(existingMap.values());
+      setSavedInvoices(merged);
+      renderArchiveList();
+      showToast(`✅ تعداد ${data.length} فاکتور بازیابی و ذخیره شد 🎉`);
+    } catch (err) {
+      alert('خطا در خواندن فایل پشتیبان: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+let activeViewInvoice = null;
+
+function viewInvoiceDetails(id) {
+  const list = getSavedInvoices();
+  const inv = list.find(item => item.id === id);
+  if (!inv) return;
+
+  activeViewInvoice = inv;
+  const titleEl = document.getElementById('invViewModalTitle');
+  if (titleEl) titleEl.textContent = `فاکتور فروش #${inv.invoiceNo}`;
+
+  const bodyEl = document.getElementById('invoiceViewModalBody');
+  if (bodyEl) {
+    bodyEl.innerHTML = `
+      <div class="card" style="margin-bottom:12px;background:var(--card);border:1px solid var(--border);padding:14px;border-radius:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <b style="font-size:15px;color:var(--primary);">${inv.customerName || inv.projectName}</b>
+          <span style="font-size:12px;color:var(--text-muted);">${inv.date}</span>
+        </div>
+        <div style="font-size:12px;color:var(--text-muted);display:flex;gap:14px;flex-wrap:wrap;line-height:1.6;">
+          ${inv.customerPhone ? `<span>تلفن: ${inv.customerPhone}</span>` : ''}
+          <span>طول شاخه: ${fmt(inv.stockLen)} mm</span>
+          <span>شاخه‌ها: ${inv.usedBranches}</span>
+          <span>برش‌ها: ${inv.totalCuts}</span>
+        </div>
+      </div>
+
+      <div class="table-container" style="margin-bottom:12px;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>شرح</th>
+              <th>تعداد</th>
+              <th>قیمت واحد</th>
+              <th>جمع کل</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="name-cell">لوله خام</td>
+              <td>${inv.usedBranches} شاخه</td>
+              <td>${fmt(inv.pricePerStock)}</td>
+              <td>${fmt(inv.subtotalPipes)}</td>
+            </tr>
+            <tr>
+              <td class="name-cell">اجرت برشکاری</td>
+              <td>${inv.totalCuts} برش</td>
+              <td>${fmt(inv.wagePerCut)}</td>
+              <td>${fmt(inv.subtotalCuts)}</td>
+            </tr>
+            ${inv.extraFees > 0 ? `
+              <tr>
+                <td class="name-cell">خدمات جانبی (${inv.extraNotes || 'متفرقه'})</td>
+                <td>۱</td>
+                <td>${fmt(inv.extraFees)}</td>
+                <td>${fmt(inv.extraFees)}</td>
+              </tr>
+            ` : ''}
+            ${inv.discount > 0 ? `
+              <tr style="color:var(--danger);">
+                <td class="name-cell">کسر تخفیف</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-${fmt(inv.discount)}</td>
+              </tr>
+            ` : ''}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="invoice-summary-box" style="margin-top:0;">
+        <div class="inv-total-row" style="border-top:none;padding-top:0;margin-top:0;">
+          <span>مبلغ قابل پرداخت:</span>
+          <span class="inv-total-amount">${fmt(inv.finalTotal)} تومان</span>
+        </div>
+        <div class="inv-words-box">
+          <b>به حروف:</b> ${inv.totalWords}
+        </div>
+      </div>
+    `;
+  }
+
+  const footEl = document.getElementById('invoiceViewModalFoot');
+  if (footEl) {
+    footEl.innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <button type="button" class="btn btn-primary" onclick="generateAndShowInvoiceImage(activeViewInvoice)">
+          ${ICONS.camera} تصویر فاکتور
+        </button>
+        <button type="button" class="btn btn-secondary" onclick="printInvoice(activeViewInvoice)">
+          ${ICONS.print} چاپ رسمی A4
+        </button>
+      </div>
+      <button type="button" class="btn btn-secondary" onclick="loadInvoiceIntoForm('${inv.id}')">
+        ${ICONS.refresh} بارگذاری قطعات در فرم
+      </button>
+      <button type="button" class="btn btn-secondary" onclick="closeInvoiceViewModal()">
+        بستن
+      </button>
+    `;
+  }
+
+  document.getElementById('invoiceViewModalOverlay').classList.add('open');
+}
+
+function closeInvoiceViewModal(e) {
+  document.getElementById('invoiceViewModalOverlay').classList.remove('open');
+}
+
+function printInvoice(invData) {
+  const inv = invData || getCurrentInvoiceObject();
+  if (!inv) return;
+
+  const printArea = document.getElementById('printableInvoiceArea');
+  if (!printArea) return;
+
+  printArea.innerHTML = `
+    <div style="font-family:'Vazirmatn', Tahoma, sans-serif;direction:rtl;color:#0f172a;line-height:1.6;border:2px solid #0f172a;padding:24px;border-radius:12px;">
+      
+      <!-- Invoice Header -->
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #0f172a;padding-bottom:16px;margin-bottom:18px;">
+        <div>
+          <h1 style="font-size:20px;font-weight:900;margin:0 0 4px;color:#1e3a8a;">پیش‌فاکتور / فاکتور فروش لوله و خدمات برش</h1>
+          <p style="font-size:12px;margin:0;color:#64748b;">کارگاه تخصصی بهینه‌سازی و برشکاری لوله و پروفیل</p>
+        </div>
+        <div style="text-align:left;font-size:12px;line-height:1.8;">
+          <div><b>شماره فاکتور:</b> ${inv.invoiceNo}</div>
+          <div><b>تاریخ صدور:</b> ${inv.date}</div>
+        </div>
+      </div>
+
+      <!-- Customer & Specs Grid -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;background:#f8fafc;border:1px solid #e2e8f0;padding:12px 16px;border-radius:8px;margin-bottom:18px;font-size:13px;">
+        <div>
+          <div><b>نام خریدار:</b> ${inv.customerName || inv.projectName}</div>
+          <div><b>شماره تماس:</b> ${inv.customerPhone || '---'}</div>
+          <div><b>عنوان سفارش:</b> ${inv.projectName || 'سفارش متفرقه'}</div>
+        </div>
+        <div>
+          <div><b>مشخصات شاخه:</b> ${fmt(inv.stockLen)} میلی‌متر</div>
+          <div><b>ضخامت تیغه برش:</b> ${fmt(inv.kerf)} میلی‌متر</div>
+          <div><b>تعداد شاخه مصرفی:</b> ${fmt(inv.usedBranches)} شاخه</div>
+        </div>
+      </div>
+
+      <!-- Items Table -->
+      <table style="width:100%;border-collapse:collapse;margin-bottom:18px;font-size:12.5px;text-align:center;">
+        <thead>
+          <tr style="background:#1e3a8a;color:#ffffff;">
+            <th style="padding:8px;border:1px solid #1e3a8a;">ردیف</th>
+            <th style="padding:8px;border:1px solid #1e3a8a;text-align:right;">شرح کالا و خدمات</th>
+            <th style="padding:8px;border:1px solid #1e3a8a;">مقدار / تعداد</th>
+            <th style="padding:8px;border:1px solid #1e3a8a;">واحد</th>
+            <th style="padding:8px;border:1px solid #1e3a8a;">قیمت واحد (تومان)</th>
+            <th style="padding:8px;border:1px solid #1e3a8a;">مبلغ کل (تومان)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:8px;border:1px solid #cbd5e1;">۱</td>
+            <td style="padding:8px;border:1px solid #cbd5e1;text-align:right;font-weight:600;">لوله خام استاندارد (${fmt(inv.stockLen)} mm)</td>
+            <td style="padding:8px;border:1px solid #cbd5e1;">${fmt(inv.usedBranches)}</td>
+            <td style="padding:8px;border:1px solid #cbd5e1;">شاخه</td>
+            <td style="padding:8px;border:1px solid #cbd5e1;">${fmt(inv.pricePerStock)}</td>
+            <td style="padding:8px;border:1px solid #cbd5e1;font-weight:700;">${fmt(inv.subtotalPipes)}</td>
+          </tr>
+          <tr>
+            <td style="padding:8px;border:1px solid #cbd5e1;">۲</td>
+            <td style="padding:8px;border:1px solid #cbd5e1;text-align:right;font-weight:600;">اجرت برشکاری دقیق با اره</td>
+            <td style="padding:8px;border:1px solid #cbd5e1;">${fmt(inv.totalCuts)}</td>
+            <td style="padding:8px;border:1px solid #cbd5e1;">برش</td>
+            <td style="padding:8px;border:1px solid #cbd5e1;">${fmt(inv.wagePerCut)}</td>
+            <td style="padding:8px;border:1px solid #cbd5e1;font-weight:700;">${fmt(inv.subtotalCuts)}</td>
+          </tr>
+          ${inv.extraFees > 0 ? `
+            <tr>
+              <td style="padding:8px;border:1px solid #cbd5e1;">۳</td>
+              <td style="padding:8px;border:1px solid #cbd5e1;text-align:right;font-weight:600;">خدمات جانبی (${inv.extraNotes || 'متفرقه'})</td>
+              <td style="padding:8px;border:1px solid #cbd5e1;">۱</td>
+              <td style="padding:8px;border:1px solid #cbd5e1;">مورد</td>
+              <td style="padding:8px;border:1px solid #cbd5e1;">${fmt(inv.extraFees)}</td>
+              <td style="padding:8px;border:1px solid #cbd5e1;font-weight:700;">${fmt(inv.extraFees)}</td>
+            </tr>
+          ` : ''}
+          ${inv.discount > 0 ? `
+            <tr style="color:#b91c1c;">
+              <td style="padding:8px;border:1px solid #cbd5e1;">-</td>
+              <td style="padding:8px;border:1px solid #cbd5e1;text-align:right;font-weight:600;">تخفیف همکاری</td>
+              <td style="padding:8px;border:1px solid #cbd5e1;">-</td>
+              <td style="padding:8px;border:1px solid #cbd5e1;">-</td>
+              <td style="padding:8px;border:1px solid #cbd5e1;">-</td>
+              <td style="padding:8px;border:1px solid #cbd5e1;font-weight:700;">-${fmt(inv.discount)}</td>
+            </tr>
+          ` : ''}
+        </tbody>
+      </table>
+
+      <!-- Grand Total Box -->
+      <div style="background:#f0fdf4;border:1.5px solid #86efac;padding:14px 18px;border-radius:8px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-size:16px;font-weight:900;color:#047857;">مبلغ کل نهایی: ${fmt(inv.finalTotal)} تومان</div>
+          <div style="font-size:12px;color:#166534;margin-top:4px;"><b>به حروف:</b> ${inv.totalWords}</div>
+        </div>
+      </div>
+
+      <!-- Terms & Signatures -->
+      <div style="margin-top:28px;display:grid;grid-template-columns:1fr 1fr;gap:20px;padding-top:20px;">
+        <div style="border:1px dashed #94a3b8;border-radius:8px;padding:16px;text-align:center;min-height:90px;">
+          <span style="font-size:12px;color:#475569;font-weight:600;">مهر و امضای فروشگاه / کارگاه</span>
+        </div>
+        <div style="border:1px dashed #94a3b8;border-radius:8px;padding:16px;text-align:center;min-height:90px;">
+          <span style="font-size:12px;color:#475569;font-weight:600;">امضای خریدار و تایید تحویل کالا</span>
+        </div>
+      </div>
+
+      <div style="margin-top:16px;font-size:10.5px;color:#94a3b8;text-align:center;">
+        تولید شده توسط نرم‌افزار بهینه‌ساز برش لوله
+      </div>
+
+    </div>
+  `;
+
+  document.body.classList.add('printing-invoice');
+  window.print();
+  setTimeout(() => {
+    document.body.classList.remove('printing-invoice');
+  }, 1000);
+}
+
+function generateAndShowInvoiceImage(invoiceData) {
+  const inv = invoiceData || getCurrentInvoiceObject();
+  if (!inv) return;
+
+  createInvoiceCanvas(inv, (blob) => {
+    generatedImageBlob = blob;
+    const url = URL.createObjectURL(blob);
+
+    const modalBody = document.getElementById('modalImgBody');
+    if (modalBody) modalBody.innerHTML = `<img src="${url}" alt="فاکتور-فروش">`;
+
+    const downloadLink = document.getElementById('downloadImgLink');
+    if (downloadLink) {
+      downloadLink.href = url;
+      downloadLink.download = `فاکتور-فروش-${inv.invoiceNo}.png`;
+    }
+
+    document.getElementById('imgModalOverlay').classList.add('open');
+  });
+}
+
+function createInvoiceCanvas(inv, callback) {
+  const width = 1080;
+  const height = 1450;
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext('2d');
+
+  // Background
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, width, height);
+
+  // Border Frame
+  ctx.strokeStyle = '#154a86';
+  ctx.lineWidth = 6;
+  ctx.strokeRect(20, 20, width - 40, height - 40);
+
+  ctx.strokeStyle = '#e2e8f0';
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(28, 28, width - 56, height - 56);
+
+  // Header Banner
+  ctx.fillStyle = '#154a86';
+  ctx.fillRect(30, 30, width - 60, 130);
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 30px Vazirmatn, Tahoma, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('پیش‌فاکتور / فاکتور فروش لوله و خدمات برش', width / 2, 85);
+
+  ctx.fillStyle = '#bfdbfe';
+  ctx.font = '16px Vazirmatn, Tahoma, sans-serif';
+  ctx.fillText('کارگاه تخصصی بهینه‌سازی برشکاری لوله و پروفیل', width / 2, 125);
+
+  // Meta Box (Customer & Invoice)
+  const metaY = 180;
+  const metaH = 130;
+  ctx.fillStyle = '#f8fafc';
+  ctx.fillRect(50, metaY, width - 100, metaH);
+  ctx.strokeStyle = '#cbd5e1';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(50, metaY, width - 100, metaH);
+
+  ctx.fillStyle = '#0f172a';
+  ctx.font = 'bold 17px Vazirmatn, Tahoma, sans-serif';
+  ctx.textAlign = 'right';
+  ctx.fillText(`خریدار: ${inv.customerName || inv.projectName || 'مشتری محترم'}`, width - 80, metaY + 40);
+  ctx.font = '15px Vazirmatn, Tahoma, sans-serif';
+  ctx.fillStyle = '#475569';
+  ctx.fillText(`شماره تماس: ${inv.customerPhone || '---'}`, width - 80, metaY + 75);
+  ctx.fillText(`عنوان سفارش: ${inv.projectName || 'سفارش متفرقه'}`, width - 80, metaY + 105);
+
+  ctx.fillStyle = '#0f172a';
+  ctx.font = 'bold 16px Vazirmatn, Tahoma, sans-serif';
+  ctx.fillText(`شماره فاکتور: ${inv.invoiceNo}`, 380, metaY + 40);
+  ctx.font = '15px Vazirmatn, Tahoma, sans-serif';
+  ctx.fillStyle = '#475569';
+  ctx.fillText(`تاریخ: ${inv.date}`, 380, metaY + 75);
+  ctx.fillText(`مشخصات شاخه: ${fmtEn(inv.stockLen)} mm | تیغه ${fmtEn(inv.kerf)} mm`, 380, metaY + 105);
+
+  // Table Headers
+  const tableY = 335;
+  const tableH = 46;
+  ctx.fillStyle = '#1e3a8a';
+  ctx.fillRect(50, tableY, width - 100, tableH);
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 15px Vazirmatn, Tahoma, sans-serif';
+  ctx.textAlign = 'center';
+
+  ctx.fillText('ردیف', width - 85, tableY + 29);
+  ctx.fillText('شرح کالا و خدمات', width - 300, tableY + 29);
+  ctx.fillText('تعداد', width - 560, tableY + 29);
+  ctx.fillText('واحد', width - 660, tableY + 29);
+  ctx.fillText('نرخ واحد (تومان)', width - 780, tableY + 29);
+  ctx.fillText('مبلغ کل (تومان)', width - 930, tableY + 29);
+
+  let currentY = tableY + tableH;
+  const rows = [
+    {
+      idx: '۱',
+      desc: `لوله خام ۶ متری (${fmt(inv.stockLen)} mm)`,
+      qty: `${fmt(inv.usedBranches)}`,
+      unit: 'شاخه',
+      unitPrice: fmt(inv.pricePerStock),
+      total: fmt(inv.subtotalPipes)
+    },
+    {
+      idx: '۲',
+      desc: 'اجرت برشکاری دقیق با اره',
+      qty: `${fmt(inv.totalCuts)}`,
+      unit: 'برش',
+      unitPrice: fmt(inv.wagePerCut),
+      total: fmt(inv.subtotalCuts)
+    }
+  ];
+
+  if (inv.extraFees > 0) {
+    rows.push({
+      idx: '۳',
+      desc: `خدمات جانبی (${inv.extraNotes || 'متفرقه'})`,
+      qty: '۱',
+      unit: 'مورد',
+      unitPrice: fmt(inv.extraFees),
+      total: fmt(inv.extraFees)
+    });
+  }
+
+  if (inv.discount > 0) {
+    rows.push({
+      idx: '-',
+      desc: 'کسر تخفیف همکاری',
+      qty: '-',
+      unit: '-',
+      unitPrice: '-',
+      total: `-${fmt(inv.discount)}`
+    });
+  }
+
+  const rowH = 48;
+  rows.forEach((r, rIdx) => {
+    ctx.fillStyle = (rIdx % 2 === 0) ? '#ffffff' : '#f8fafc';
+    ctx.fillRect(50, currentY, width - 100, rowH);
+    ctx.strokeStyle = '#e2e8f0';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(50, currentY, width - 100, rowH);
+
+    ctx.fillStyle = r.idx === '-' ? '#b91c1c' : '#0f172a';
+    ctx.font = '15px Vazirmatn, Tahoma, sans-serif';
+    ctx.textAlign = 'center';
+
+    ctx.fillText(r.idx, width - 85, currentY + 30);
+    ctx.textAlign = 'right';
+    ctx.fillText(r.desc, width - 130, currentY + 30);
+    ctx.textAlign = 'center';
+    ctx.fillText(r.qty, width - 560, currentY + 30);
+    ctx.fillText(r.unit, width - 660, currentY + 30);
+    ctx.fillText(r.unitPrice, width - 780, currentY + 30);
+    ctx.font = 'bold 15px Vazirmatn, Tahoma, sans-serif';
+    ctx.fillText(r.total, width - 930, currentY + 30);
+
+    currentY += rowH;
+  });
+
+  // Financial Grand Total Box
+  currentY += 24;
+  const sumBoxH = 135;
+  ctx.fillStyle = '#f0fdf4';
+  ctx.fillRect(50, currentY, width - 100, sumBoxH);
+  ctx.strokeStyle = '#86efac';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(50, currentY, width - 100, sumBoxH);
+
+  ctx.fillStyle = '#047857';
+  ctx.font = 'bold 26px Vazirmatn, Tahoma, sans-serif';
+  ctx.textAlign = 'right';
+  ctx.fillText(`مبلغ کل قابل پرداخت: ${fmt(inv.finalTotal)} تومان`, width - 80, currentY + 50);
+
+  ctx.fillStyle = '#1e293b';
+  ctx.font = '16px Vazirmatn, Tahoma, sans-serif';
+  ctx.fillText(`مبلغ به حروف: ${inv.totalWords}`, width - 80, currentY + 95);
+
+  // Technical Breakdown Summary
+  currentY += sumBoxH + 24;
+  const techH = 75;
+  ctx.fillStyle = '#f1f5f9';
+  ctx.fillRect(50, currentY, width - 100, techH);
+  ctx.strokeStyle = '#cbd5e1';
+  ctx.strokeRect(50, currentY, width - 100, techH);
+
+  ctx.fillStyle = '#334155';
+  ctx.font = '14px Vazirmatn, Tahoma, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(`شاخه مصرفی: ${fmt(inv.usedBranches)} شاخه | کل قطعات خروجی: ${inv.totalPiecesCut ? fmt(inv.totalPiecesCut) : '---'} قطعه | ست کامل: ${inv.bestN ? fmt(inv.bestN) : '---'} ست`, width / 2, currentY + 32);
+  ctx.font = '12.5px Vazirmatn, Tahoma, sans-serif';
+  ctx.fillStyle = '#64748b';
+  ctx.fillText('کلیه قطعات طبق نقشه‌های بهینه‌سازی برش داده شده و ابعاد آن کنترل گردیده است.', width / 2, currentY + 58);
+
+  // Signatures
+  currentY += techH + 35;
+  const sigW = (width - 130) / 2;
+  const sigH = 130;
+
+  // Workshop Sig
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(50, currentY, sigW, sigH);
+  ctx.strokeStyle = '#cbd5e1';
+  ctx.setLineDash([5, 5]);
+  ctx.strokeRect(50, currentY, sigW, sigH);
+
+  ctx.fillStyle = '#475569';
+  ctx.font = '14px Vazirmatn, Tahoma, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('مهر و امضای فروشگاه / کارگاه', 50 + (sigW / 2), currentY + 35);
+
+  // Customer Sig
+  ctx.fillRect(width - 50 - sigW, currentY, sigW, sigH);
+  ctx.strokeRect(width - 50 - sigW, currentY, sigW, sigH);
+  ctx.setLineDash([]);
+
+  ctx.fillText('امضای خریدار و تایید تحویل', (width - 50 - sigW) + (sigW / 2), currentY + 35);
+
+  // Footer Watermark
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = '12px Vazirmatn, Tahoma, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('صادر شده توسط نرم‌افزار بهینه‌ساز برش لوله - ۱۰۰٪ آفلاین و دائمی', width / 2, height - 35);
+
+  canvas.toBlob(callback, 'image/png');
+}
+
+function copyInvoiceText(invoiceData) {
+  const inv = invoiceData || getCurrentInvoiceObject();
+  if (!inv) return;
+
+  let text = `🧾 *پیش‌فاکتور فروش و برشکاری - شماره ${inv.invoiceNo}*\n`;
+  text += `📅 تاریخ: ${inv.date}\n`;
+  text += `👤 خریدار: ${inv.customerName || inv.projectName}\n`;
+  if (inv.customerPhone) text += `📞 شماره تماس: ${inv.customerPhone}\n`;
+  text += `────────────────────\n`;
+  text += `1️⃣ لوله خام (${fmt(inv.stockLen)} mm): *${fmt(inv.usedBranches)} شاخه* × ${fmt(inv.pricePerStock)} = *${fmt(inv.subtotalPipes)} تومان*\n`;
+  text += `2️⃣ اجرت برشکاری اره: *${fmt(inv.totalCuts)} برش* × ${fmt(inv.wagePerCut)} = *${fmt(inv.subtotalCuts)} تومان*\n`;
+  if (inv.extraFees > 0) {
+    text += `3️⃣ خدمات جانبی (${inv.extraNotes || 'متفرقه'}): *${fmt(inv.extraFees)} تومان*\n`;
+  }
+  if (inv.discount > 0) {
+    text += `➖ کسر تخفیف: *-${fmt(inv.discount)} تومان*\n`;
+  }
+  text += `────────────────────\n`;
+  text += `💰 *مبلغ کل قابل پرداخت: ${fmt(inv.finalTotal)} تومان*\n`;
+  text += `🔤 *حروف:* ${inv.totalWords}\n`;
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => {
+      showToast('📋 متن پیش‌فاکتور کپی شد (آماده ارسال به مشتری)');
+    }).catch(() => {
+      fallbackCopy(text);
+    });
+  } else {
+    fallbackCopy(text);
+  }
+}
+
+</script>
+
+</body>
+</html>
