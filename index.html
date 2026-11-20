@@ -926,14 +926,23 @@
     .report-meta-details b {
       color: var(--text);
     }
+    .print-only-stat {
+      display: none;
+    }
 
     /* Visual Cutting Pattern Cards */
+    .patterns-container {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
     .pattern-card {
       background: #ffffff;
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       padding: 16px;
-      margin-bottom: 16px;
+      margin-bottom: 0;
       box-shadow: var(--shadow-sm);
     }
     html[data-theme="dark"] .pattern-card {
@@ -1408,11 +1417,15 @@
 
     /* Print Styles - High-Contrast Black & White Workshop Mode */
     @media print {
+      @page {
+        size: A4 portrait;
+        margin: 6mm 8mm;
+      }
       body {
         background: #ffffff !important;
         color: #000000 !important;
         padding: 0 !important;
-        font-size: 14px !important;
+        font-size: 13px !important;
       }
       .app-shell {
         max-width: 100% !important;
@@ -1422,7 +1435,7 @@
         display: none !important;
       }
       .app-content {
-        padding: 6px !important;
+        padding: 0 !important;
       }
       .card:first-child {
         border: 2px solid #000000 !important;
@@ -1432,163 +1445,127 @@
       }
       .card:first-child h2 {
         color: #000000 !important;
-        font-size: 18px !important;
+        font-size: 16px !important;
       }
-      .stat-hero-card {
-        background: #ffffff !important;
-        border: 2.5px solid #000000 !important;
-        color: #000000 !important;
-        box-shadow: none !important;
-        padding: 10px !important;
-        margin-bottom: 12px !important;
-      }
-      .stat-hero-val {
-        color: #000000 !important;
-        font-size: 36px !important;
-      }
-      .stat-hero-lbl {
-        color: #000000 !important;
-        font-size: 15px !important;
-        font-weight: 900 !important;
-      }
-      .stats-matrix {
-        gap: 8px !important;
-        margin-bottom: 12px !important;
-      }
-      .stat-tile {
-        background: #ffffff !important;
-        border: 2px solid #000000 !important;
-        color: #000000 !important;
-        box-shadow: none !important;
-        padding: 8px !important;
-      }
-      .stat-tile-val {
-        color: #000000 !important;
-        font-weight: 900 !important;
-      }
-      .stat-tile-lbl {
-        color: #000000 !important;
-        font-weight: 800 !important;
+      /* Hide bulky KPI blocks in workshop print mode to save paper and focus on patterns */
+      .stat-hero-card,
+      .stats-matrix,
+      .alert-box,
+      .results-subhead-section {
+        display: none !important;
       }
       .report-meta-card {
         background: #ffffff !important;
-        border: 2.5px solid #000000 !important;
-        border-radius: 8px !important;
+        border: 1.5px solid #000000 !important;
+        border-radius: 6px !important;
         color: #000000 !important;
         box-shadow: none !important;
-        padding: 12px 14px !important;
-        margin-bottom: 14px !important;
+        padding: 6px 10px !important;
+        margin-bottom: 8px !important;
+        page-break-inside: avoid;
+        break-inside: avoid;
       }
       .report-meta-card h2 {
         color: #000000 !important;
+        font-size: 14px !important;
+        font-weight: 800 !important;
+      }
+      .report-meta-details {
+        font-size: 11px !important;
+        color: #111111 !important;
+        gap: 4px 14px !important;
+        margin-top: 4px !important;
       }
       .report-meta-details b {
         color: #000000 !important;
-      }
-      .alert-box {
-        border: 2px solid #000000 !important;
-        background: #ffffff !important;
-        color: #000000 !important;
         font-weight: 800 !important;
       }
-      .alert-box b {
-        color: #000000 !important;
+      .print-only-stat {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 4px !important;
+      }
+      /* 2-Column Grid for Workshop Pattern Cards (Compact Square Tiles) */
+      .patterns-container {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 6px 8px !important;
+        margin-bottom: 6px !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
       }
       .pattern-card {
-        border: 2.5px solid #000000 !important;
+        border: 1.5px solid #000000 !important;
         background: #ffffff !important;
         color: #000000 !important;
         box-shadow: none !important;
-        padding: 12px 14px !important;
-        margin-bottom: 16px !important;
+        padding: 6px 8px !important;
+        margin-bottom: 0 !important;
         break-inside: avoid;
         page-break-inside: avoid;
-        border-radius: 8px !important;
+        border-radius: 6px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
       }
       .pattern-header {
-        border-bottom: 2px solid #000000 !important;
-        padding-bottom: 8px !important;
-        margin-bottom: 8px !important;
+        border-bottom: 1.5px solid #000000 !important;
+        padding-bottom: 4px !important;
+        margin-bottom: 5px !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
       }
       .pattern-title {
         color: #000000 !important;
-        font-size: 17px !important;
+        font-size: 13px !important;
         font-weight: 900 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 5px !important;
       }
       .pattern-count-badge {
         background: #000000 !important;
         color: #ffffff !important;
-        font-size: 16px !important;
+        font-size: 12px !important;
         font-weight: 900 !important;
-        padding: 3px 12px !important;
-        border-radius: 6px !important;
+        padding: 1px 6px !important;
+        border-radius: 4px !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
       .pattern-waste-badge {
         background: #ffffff !important;
-        border: 2px solid #000000 !important;
+        border: 1px solid #000000 !important;
         color: #000000 !important;
-        font-size: 13px !important;
-        padding: 4px 10px !important;
-        border-radius: 6px !important;
+        font-size: 10.5px !important;
+        padding: 1px 5px !important;
+        border-radius: 4px !important;
       }
       .pattern-waste-badge b,
       .pattern-waste-badge .waste-cm-val {
         color: #000000 !important;
-        font-size: 15px !important;
+        font-size: 11px !important;
       }
+      /* Remove pipe illustration in print */
       .pipe-bar-visual {
-        background: #ffffff !important;
-        border: 2.5px solid #000000 !important;
-        height: 44px !important;
-        border-radius: 6px !important;
-        box-shadow: none !important;
-        margin: 10px 0 12px !important;
+        display: none !important;
       }
-      .pipe-segment {
-        background: #ffffff !important;
-        color: #000000 !important;
-        border-left: 2.5px solid #000000 !important;
-        font-weight: 900 !important;
-      }
-      .pipe-segment .pipe-seg-val {
-        color: #000000 !important;
-        font-size: 14px !important;
-        font-weight: 900 !important;
-        text-shadow: none !important;
-      }
-      .pipe-segment .pipe-seg-unit {
-        color: #000000 !important;
-        font-size: 10px !important;
-        font-weight: 800 !important;
-        text-shadow: none !important;
-      }
-      .pipe-waste-segment {
-        background: repeating-linear-gradient(
-          45deg,
-          #000000,
-          #000000 2px,
-          #ffffff 2px,
-          #ffffff 7px
-        ) !important;
-        color: #000000 !important;
-        border-left: 2.5px solid #000000 !important;
-        font-weight: 900 !important;
-        font-size: 12px !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+      .cut-items-list {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 3px !important;
       }
       .cut-item-row {
         background: #ffffff !important;
-        border: 2px solid #000000 !important;
+        border: 1px solid #555555 !important;
         color: #000000 !important;
-        border-radius: 6px !important;
-        padding: 8px 12px !important;
-        margin-bottom: 6px !important;
-        font-size: 15px !important;
+        border-radius: 4px !important;
+        padding: 3px 6px !important;
+        margin-bottom: 0 !important;
+        font-size: 11.5px !important;
         display: grid !important;
-        grid-template-columns: 1fr 75px 125px !important;
+        grid-template-columns: 1fr 44px 96px !important;
         align-items: center !important;
       }
       .color-dot {
@@ -1596,19 +1573,23 @@
       }
       .print-check-box {
         display: inline-block !important;
-        width: 22px !important;
-        height: 22px !important;
-        border: 2.5px solid #000000 !important;
-        border-radius: 4px !important;
-        margin-left: 8px !important;
+        width: 13px !important;
+        height: 13px !important;
+        border: 1.5px solid #000000 !important;
+        border-radius: 3px !important;
+        margin-left: 5px !important;
         vertical-align: middle !important;
         flex-shrink: 0;
       }
       .cut-item-name {
         color: #000000 !important;
-        font-size: 16px !important;
-        font-weight: 900 !important;
+        font-size: 11.5px !important;
+        font-weight: 800 !important;
+        display: flex !important;
+        align-items: center !important;
         overflow: hidden !important;
+        white-space: nowrap !important;
+        text-overflow: ellipsis !important;
       }
       .cut-item-qty-wrap {
         display: flex !important;
@@ -1618,13 +1599,14 @@
       }
       .cut-item-qty-badge {
         background: #ffffff !important;
-        border: 1.5px solid #000000 !important;
+        border: 1px solid #000000 !important;
         color: #000000 !important;
-        font-size: 15px !important;
-        font-weight: 900 !important;
-        padding: 2px 0 !important;
-        width: 68px !important;
+        font-size: 11px !important;
+        font-weight: 800 !important;
+        padding: 1px 3px !important;
+        border-radius: 3px !important;
         text-align: center !important;
+        width: 100% !important;
       }
       .cut-item-dims {
         display: flex !important;
@@ -1632,34 +1614,50 @@
         align-items: flex-end !important;
         justify-content: center !important;
         text-align: left !important;
-        width: 100% !important;
+        line-height: 1.2 !important;
       }
       .dim-cm {
         color: #000000 !important;
-        font-size: 18px !important;
-        font-weight: 900 !important;
+        font-size: 12px !important;
+        font-weight: 800 !important;
       }
       .dim-mm {
+        color: #333333 !important;
+        font-size: 9.5px !important;
+        font-weight: 600 !important;
+      }
+      .subhead {
+        font-size: 12.5px !important;
+        margin: 6px 0 4px !important;
+        font-weight: 800 !important;
         color: #000000 !important;
-        font-size: 13px !important;
-        font-weight: 700 !important;
       }
       .table-container {
-        border: 2px solid #000000 !important;
+        border: 1.5px solid #000000 !important;
+        border-radius: 6px !important;
+        overflow: hidden !important;
+        margin-bottom: 4px !important;
         break-inside: avoid;
         page-break-inside: avoid;
+      }
+      .data-table {
+        font-size: 10.5px !important;
       }
       .data-table th {
         background: #000000 !important;
         color: #ffffff !important;
         border: 1px solid #000000 !important;
+        padding: 3px 6px !important;
+        font-size: 10.5px !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
       .data-table td {
         border: 1px solid #000000 !important;
         color: #000000 !important;
-        font-weight: 800 !important;
+        padding: 3px 6px !important;
+        font-weight: 700 !important;
+        font-size: 10.5px !important;
       }
     }
 
@@ -2020,7 +2018,7 @@
         </div>
         <div class="field">
           <label for="projectName">نام پروژه / سفارش‌دهنده</label>
-          <input id="projectName" class="input" value="پروژه پاک ضمیر" placeholder="مثال: درب و حفاظ مهندس رضایی" onchange="autoSave()">
+          <input id="projectName" class="input" value="" placeholder="مثال: درب و حفاظ مهندس رضایی" onchange="autoSave()">
         </div>
         <div class="field">
           <label for="projectDate">تاریخ سفارش</label>
@@ -2045,14 +2043,14 @@
           <div class="field">
             <label for="stockLen">طول شاخه (میلی‌متر)</label>
             <div class="input-wrap">
-              <input id="stockLen" class="input has-unit" type="number" inputmode="decimal" value="6000" step="1" onchange="autoSave()">
+              <input id="stockLen" class="input has-unit" type="number" inputmode="decimal" value="" placeholder="مثال: ۶۰۰۰" step="1" onchange="autoSave()">
               <span class="unit-badge">میلی‌متر</span>
             </div>
           </div>
           <div class="field">
             <label for="kerf">ضخامت تیغه (میلی‌متر)</label>
             <div class="input-wrap">
-              <input id="kerf" class="input has-unit" type="number" inputmode="decimal" value="2" step="0.1" onchange="autoSave()">
+              <input id="kerf" class="input has-unit" type="number" inputmode="decimal" value="" placeholder="مثال: ۲" step="0.1" onchange="autoSave()">
               <span class="unit-badge">میلی‌متر</span>
             </div>
           </div>
@@ -2062,7 +2060,7 @@
           <label for="branchCount">تعداد شاخه موجود</label>
           <div class="stepper">
             <button type="button" class="stepper-btn" onclick="stepVal('branchCount', -1)">−</button>
-            <input id="branchCount" class="input" type="number" inputmode="numeric" value="20" min="1" onchange="autoSave()">
+            <input id="branchCount" class="input" type="number" inputmode="numeric" value="" placeholder="مثال: ۲۰" min="1" onchange="autoSave()">
             <button type="button" class="stepper-btn" onclick="stepVal('branchCount', 1)">+</button>
           </div>
         </div>
@@ -2422,8 +2420,36 @@ const DEFAULT_PARTS_PIECES = [
   { name: 'تک خم بزرگ', len: 622.6, qty: 40 }
 ];
 
-// Initialize Persian Date
+// Mathematical Gregorian to Jalali converter
+function gregorianToJalali(gy, gm, gd) {
+  const g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+  let jy = (gy <= 1600) ? 0 : 979;
+  gy -= (gy <= 1600) ? 621 : 1600;
+  let gy2 = (gm > 2) ? (gy + 1) : gy;
+  let days = (365 * gy) + parseInt((gy2 + 3) / 4) - parseInt((gy2 + 99) / 100) + parseInt((gy2 + 399) / 400) - 80 + gd + g_d_m[gm - 1];
+  jy += 33 * parseInt(days / 12053);
+  days %= 12053;
+  jy += 4 * parseInt(days / 1461);
+  days %= 1461;
+  jy += parseInt((days - 1) / 365);
+  if (days > 0) days = (days - 1) % 365;
+  let jm, jd;
+  if (days < 186) {
+    jm = 1 + parseInt(days / 31);
+    jd = 1 + (days % 31);
+  } else {
+    jm = 7 + parseInt((days - 186) / 30);
+    jd = 1 + ((days - 186) % 30);
+  }
+  const pad = n => (n < 10 ? '0' + n : '' + n);
+  const toFa = str => str.replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+  return toFa(`${jy}/${pad(jm)}/${pad(jd)}`);
+}
+
+// Initialize Persian Date dynamically to today's date
 function initPersianDate() {
+  const dateInput = document.getElementById('projectDate');
+  if (!dateInput) return;
   try {
     const now = new Date();
     const formatter = new Intl.DateTimeFormat('fa-IR', {
@@ -2431,9 +2457,10 @@ function initPersianDate() {
       month: '2-digit',
       day: '2-digit'
     });
-    document.getElementById('projectDate').value = formatter.format(now);
+    dateInput.value = formatter.format(now);
   } catch (e) {
-    document.getElementById('projectDate').value = new Date().toLocaleDateString();
+    const now = new Date();
+    dateInput.value = gregorianToJalali(now.getFullYear(), now.getMonth() + 1, now.getDate());
   }
 }
 
@@ -2488,7 +2515,7 @@ function addPartRow(name = '', len = '', qty = '') {
   div.innerHTML = `
     <div class="part-top">
       <span class="part-badge">1</span>
-      <input class="input part-name-input pname" placeholder="نام قطعه (مثلاً: قید بالا)" value="${name}" oninput="autoSave()">
+      <input class="input part-name-input pname" placeholder="نام قطعه (مثلاً: قید بالا)" value="${name || ''}" oninput="autoSave()">
       <button type="button" class="part-delete-btn" onclick="removePartRow(this)" title="حذف">
         ${ICONS.trash}
       </button>
@@ -2497,7 +2524,7 @@ function addPartRow(name = '', len = '', qty = '') {
       <div>
         <label>طول قطعه (میلی‌متر)</label>
         <div class="input-wrap">
-          <input class="input plen has-unit" type="number" inputmode="decimal" step="0.1" placeholder="مثلاً: 1250" value="${len}" oninput="updateCmHint(this); autoSave();">
+          <input class="input plen has-unit" type="number" inputmode="decimal" step="0.1" placeholder="مثلاً: 1250" value="${len !== undefined && len !== null ? len : ''}" oninput="updateCmHint(this); autoSave();">
           <span class="unit-badge">میلی‌متر</span>
         </div>
         <span class="hint-subtext cm-label">${len ? '(' + toCm(len) + ' سانتی‌متر)' : ''}</span>
@@ -2506,7 +2533,7 @@ function addPartRow(name = '', len = '', qty = '') {
         <label class="qty-label">${qtyPlaceholder}</label>
         <div class="stepper">
           <button type="button" class="stepper-btn" onclick="stepPartQty(this, -1)">−</button>
-          <input class="input pset" type="number" inputmode="numeric" value="${qty || 1}" min="1" oninput="autoSave()">
+          <input class="input pset" type="number" inputmode="numeric" placeholder="مثال: ۱" value="${qty !== undefined && qty !== null ? qty : ''}" min="1" oninput="autoSave()">
           <button type="button" class="stepper-btn" onclick="stepPartQty(this, 1)">+</button>
         </div>
       </div>
@@ -2555,6 +2582,7 @@ function renumberParts() {
 function clearAllParts() {
   if (confirm('آیا همه قطعات پاک شوند؟')) {
     document.getElementById('partsList').innerHTML = '';
+    addPartRow('', '', '');
     autoSave();
   }
 }
@@ -2595,22 +2623,22 @@ function setMode(mode, skipConfirm = false) {
 function loadDefaultParts(mode) {
   const list = document.getElementById('partsList');
   list.innerHTML = '';
-  const defs = (mode === 'branches') ? DEFAULT_PARTS_BRANCHES : DEFAULT_PARTS_PIECES;
-  defs.forEach(p => addPartRow(p.name, p.len, p.qty));
+  // Start with 1 clean empty row ready for user input
+  addPartRow('', '', '');
 }
 
 function resetToDefaults() {
-  if (confirm('آیا مایل به بازنشانی مقادیر به پروژه پاک‌ضمیر هستید؟')) {
+  if (confirm('آیا مایل به پاک‌کردن فرم و شروع سفارش جدید هستید؟')) {
     localStorage.removeItem('pipe_cut_saved_state');
-    document.getElementById('projectName').value = 'پروژه پاک ضمیر';
-    document.getElementById('stockLen').value = '6000';
-    document.getElementById('kerf').value = '2';
-    document.getElementById('branchCount').value = '20';
+    document.getElementById('projectName').value = '';
+    document.getElementById('stockLen').value = '';
+    document.getElementById('kerf').value = '';
+    document.getElementById('branchCount').value = '';
     document.getElementById('orderNotes').value = '';
     initPersianDate();
     setMode('branches', true);
     loadDefaultParts('branches');
-    showToast('تنظیمات پیش‌فرض پاک‌ضمیر بازنشانی شد.');
+    showToast('فرم پاک شد و آماده ورود اطلاعات است.');
   }
 }
 
@@ -2653,8 +2681,14 @@ function loadSavedState() {
       return;
     }
     const state = JSON.parse(saved);
-    if (state.projectName) document.getElementById('projectName').value = state.projectName;
-    if (state.projectDate) document.getElementById('projectDate').value = state.projectDate;
+    if (state.projectName && state.projectName !== 'پروژه پاک ضمیر') {
+      document.getElementById('projectName').value = state.projectName;
+    } else {
+      document.getElementById('projectName').value = '';
+    }
+    // Always keep dynamic today's date
+    initPersianDate();
+
     if (state.stockLen) document.getElementById('stockLen').value = state.stockLen;
     if (state.kerf) document.getElementById('kerf').value = state.kerf;
     if (state.branchCount) document.getElementById('branchCount').value = state.branchCount;
@@ -2664,7 +2698,8 @@ function loadSavedState() {
 
     const list = document.getElementById('partsList');
     list.innerHTML = '';
-    if (state.parts && state.parts.length > 0) {
+    const isOldDemo = state.parts && state.parts.length === 4 && state.parts[0].name === 'بلند ۶ خم' && state.projectName === 'پروژه پاک ضمیر';
+    if (state.parts && state.parts.length > 0 && !isOldDemo) {
       state.parts.forEach(p => addPartRow(p.name, p.len, p.qty));
     } else {
       loadDefaultParts(state.mode || 'branches');
@@ -3050,7 +3085,7 @@ function renderReport(data) {
 
   let html = '';
 
-  // 1. Order Meta Header
+  // 1. Order Meta Header (Includes compact print summary for workshop)
   html += `
     <div class="report-meta-card">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
@@ -3062,6 +3097,10 @@ function renderReport(data) {
       <div class="report-meta-details">
         <span style="display:flex;align-items:center;gap:5px;">${ICONS.ruler} طول شاخه: <b>${fmt(stockLen)} میلی‌متر</b></span>
         <span style="display:flex;align-items:center;gap:5px;">${ICONS.caliper} ضخامت تیغه: <b>${fmt(kerf)} میلی‌متر</b></span>
+        <span class="print-only-stat">تعداد شاخه: <b>${usedBranches.toLocaleString('fa-IR')} ${mode === 'branches' ? 'از ' + maxBranches.toLocaleString('fa-IR') : ''} شاخه</b></span>
+        <span class="print-only-stat">${mode === 'branches' ? `ست تولیدی: <b>${bestN.toLocaleString('fa-IR')} ست</b>` : `کل قطعات: <b>${totalPiecesCut.toLocaleString('fa-IR')} عدد</b>`}</span>
+        <span class="print-only-stat">ضایعات کل: <b>${toCm(totalWasteLen)} سانتی‌متر (${fmt(totalWasteLen)} میلی‌متر)</b></span>
+        <span class="print-only-stat">بازدهی: <b>${efficiency.toFixed(1).toLocaleString('fa-IR')}٪</b></span>
       </div>
     </div>
   `;
@@ -3118,13 +3157,17 @@ function renderReport(data) {
 
   // 5. Visual Cutting Patterns (دستور کار برشکار)
   html += `
-    <div class="subhead">
-      <span style="display:flex;align-items:center;gap:6px;">${ICONS.blueprint} دستور کار کارگاه (الگوهای برش)</span>
+    <div class="results-subhead-section">
+      <div class="subhead">
+        <span style="display:flex;align-items:center;gap:6px;">${ICONS.blueprint} دستور کار کارگاه (الگوهای برش)</span>
+      </div>
+      <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">
+        شاخه‌ها را بر اساس هر الگو دسته‌بندی کرده و خط‌کش اره را تنظیم نمایید:
+      </p>
     </div>
-    <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">
-      شاخه‌ها را بر اساس هر الگو دسته‌بندی کرده و خط‌کش اره را تنظیم نمایید:
-    </p>
   `;
+
+  html += `<div class="patterns-container">`;
 
   patterns.forEach((patItem, pIdx) => {
     const pat = patItem.pattern;
@@ -3220,6 +3263,8 @@ function renderReport(data) {
       </div>
     `;
   });
+
+  html += `</div>`;
 
   // 6. Parts Breakdown Table
   html += `
