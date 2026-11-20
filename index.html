@@ -169,6 +169,65 @@
       transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
     }
 
+    /* Custom Modern Sleek Scrollbar System (Completely Eliminates Chunky OS/Browser Scrollbars) */
+    ::-webkit-scrollbar,
+    *::-webkit-scrollbar {
+      width: 6px !important;
+      height: 6px !important;
+    }
+    ::-webkit-scrollbar-track,
+    *::-webkit-scrollbar-track {
+      background: transparent !important;
+    }
+    ::-webkit-scrollbar-thumb,
+    *::-webkit-scrollbar-thumb {
+      background: rgba(100, 116, 139, 0.4) !important;
+      border-radius: 9999px !important;
+      transition: background-color 0.2s ease;
+    }
+    ::-webkit-scrollbar-thumb:hover,
+    *::-webkit-scrollbar-thumb:hover {
+      background: rgba(100, 116, 139, 0.65) !important;
+    }
+    ::-webkit-scrollbar-thumb:active,
+    *::-webkit-scrollbar-thumb:active {
+      background: var(--primary) !important;
+    }
+    ::-webkit-scrollbar-button,
+    *::-webkit-scrollbar-button {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
+    }
+    ::-webkit-scrollbar-corner,
+    *::-webkit-scrollbar-corner {
+      background: transparent !important;
+    }
+
+    html[data-theme="dark"] ::-webkit-scrollbar-thumb,
+    html[data-theme="dark"] *::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.32) !important;
+    }
+    html[data-theme="dark"] ::-webkit-scrollbar-thumb:hover,
+    html[data-theme="dark"] *::-webkit-scrollbar-thumb:hover {
+      background: rgba(148, 163, 184, 0.6) !important;
+    }
+    html[data-theme="dark"] ::-webkit-scrollbar-thumb:active,
+    html[data-theme="dark"] *::-webkit-scrollbar-thumb:active {
+      background: var(--primary) !important;
+    }
+
+    /* Firefox Only: sleek thin scrollbar without interfering with webkit */
+    @supports (-moz-appearance: none) {
+      * {
+        scrollbar-width: thin !important;
+        scrollbar-color: rgba(148, 163, 184, 0.4) transparent !important;
+      }
+      html[data-theme="dark"] * {
+        scrollbar-color: rgba(148, 163, 184, 0.28) transparent !important;
+      }
+    }
+
     /* Dark Mode Theme Rules */
     html[data-theme="dark"] body {
       background: #060911;
@@ -506,7 +565,7 @@
     }
 
     .has-unit {
-      padding-left: 38px;
+      padding-left: 65px;
     }
 
     textarea.input {
@@ -788,15 +847,39 @@
     }
 
     .alert-box.success {
-      background: var(--success-light);
+      background: #ecfdf5;
       color: #065f46;
       border: 1px solid #a7f3d0;
     }
+    .alert-box.success b {
+      color: #047857;
+      font-weight: 800;
+    }
+    html[data-theme="dark"] .alert-box.success {
+      background: rgba(16, 185, 129, 0.15);
+      color: #a7f3d0;
+      border: 1px solid rgba(52, 211, 153, 0.35);
+    }
+    html[data-theme="dark"] .alert-box.success b {
+      color: #ffffff;
+    }
 
     .alert-box.danger {
-      background: var(--danger-light);
+      background: #fef2f2;
       color: #991b1b;
       border: 1px solid #fecaca;
+    }
+    .alert-box.danger b {
+      color: #7f1d1d;
+      font-weight: 800;
+    }
+    html[data-theme="dark"] .alert-box.danger {
+      background: rgba(239, 68, 68, 0.15);
+      color: #fca5a5;
+      border: 1px solid rgba(248, 113, 113, 0.35);
+    }
+    html[data-theme="dark"] .alert-box.danger b {
+      color: #ffffff;
     }
 
     /* Section Subheadings */
@@ -810,85 +893,177 @@
       margin: 18px 2px 10px;
     }
 
-    /* Visual Pipe Diagram */
+    /* Order Meta Header Card */
+    .report-meta-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+    html[data-theme="dark"] .report-meta-card {
+      background: #111a2d;
+      border-color: #1e2c47;
+    }
+    .report-meta-card h2 {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--primary);
+      margin: 0;
+    }
+    html[data-theme="dark"] .report-meta-card h2 {
+      color: #38bdf8 !important;
+    }
+    .report-meta-details {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .report-meta-details b {
+      color: var(--text);
+    }
+
+    /* Visual Cutting Pattern Cards */
     .pattern-card {
       background: #ffffff;
-      border: 1.5px solid var(--border);
+      border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 14px;
-      margin-bottom: 14px;
+      padding: 16px;
+      margin-bottom: 16px;
       box-shadow: var(--shadow-sm);
+    }
+    html[data-theme="dark"] .pattern-card {
+      background: #111a2d;
+      border-color: #1e2c47;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
     }
 
     .pattern-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 10px;
+      gap: 8px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 12px;
+    }
+    html[data-theme="dark"] .pattern-header {
+      border-color: #1e2c47;
     }
 
     .pattern-title {
-      font-size: 14px;
+      font-size: 14.5px;
       font-weight: 800;
       color: var(--text);
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 7px;
+      white-space: nowrap;
     }
 
     .pattern-count-badge {
-      background: var(--primary);
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: #ffffff;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 800;
-      padding: 4px 10px;
+      padding: 3px 10px;
       border-radius: 20px;
+      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
+    }
+    html[data-theme="dark"] .pattern-count-badge {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
     }
 
     .pattern-waste-badge {
       background: #fff7ed;
       color: #c2410c;
       border: 1px solid #fed7aa;
-      font-size: 11px;
+      font-size: 11.5px;
       font-weight: 600;
-      padding: 4px 8px;
-      border-radius: 8px;
-      text-align: left;
-      line-height: 1.3;
+      padding: 4px 9px;
+      border-radius: 7px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    html[data-theme="dark"] .pattern-waste-badge {
+      background: rgba(251, 146, 60, 0.12);
+      color: #fdba74;
+      border-color: rgba(251, 146, 60, 0.3);
+    }
+    .pattern-waste-badge .waste-tag {
+      font-size: 11px;
+      opacity: 0.85;
+    }
+    .pattern-waste-badge .waste-cm-val {
+      font-weight: 800;
+      font-size: 12.5px;
+      color: inherit;
+    }
+    .pattern-waste-badge .waste-mm-val {
+      font-size: 11px;
+      opacity: 0.8;
     }
 
     /* The Realistic Pipe Bar */
     .pipe-bar-visual {
-      height: 38px;
+      height: 44px;
       background: #e2e8f0;
-      border-radius: 8px;
+      border-radius: 9px;
       overflow: hidden;
       display: flex;
-      border: 1.5px solid #94a3b8;
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
-      margin: 12px 0;
+      border: 1.5px solid #cbd5e1;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+      margin: 12px 0 14px;
       position: relative;
+    }
+    html[data-theme="dark"] .pipe-bar-visual {
+      background: #090e1a;
+      border-color: #1e2c47;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
     }
 
     .pipe-segment {
       height: 100%;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       color: #ffffff;
-      font-size: 11px;
-      font-weight: 700;
       position: relative;
       overflow: hidden;
-      text-overflow: ellipsis;
       white-space: nowrap;
-      padding: 0 4px;
-      border-left: 1.5px solid #ffffff;
+      padding: 0 2px;
+      border-left: 1.5px solid rgba(255, 255, 255, 0.7);
       transition: filter 0.15s;
+      line-height: 1.15;
     }
-
+    .pipe-segment:last-child {
+      border-left: none;
+    }
     .pipe-segment:hover {
       filter: brightness(1.1);
+    }
+    .pipe-seg-val {
+      font-size: 13px;
+      font-weight: 900;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+      line-height: 1.15;
+    }
+    .pipe-seg-unit {
+      font-size: 9.5px;
+      font-weight: 700;
+      opacity: 0.95;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+      line-height: 1.1;
     }
 
     .pipe-waste-segment {
@@ -901,59 +1076,144 @@
         #94a3b8 12px
       );
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       color: #1e293b;
-      font-size: 10px;
-      font-weight: 700;
-      padding: 0 4px;
+      font-size: 10.5px;
+      font-weight: 800;
+      padding: 0 2px;
       white-space: nowrap;
       overflow: hidden;
+      line-height: 1.15;
+    }
+    .pipe-waste-segment .pipe-seg-val {
+      font-size: 12px;
+      color: inherit;
+    }
+    .pipe-waste-segment .pipe-seg-unit {
+      font-size: 9px;
+      color: inherit;
+    }
+    html[data-theme="dark"] .pipe-waste-segment {
+      background: repeating-linear-gradient(
+        45deg,
+        #1e293b,
+        #1e293b 6px,
+        #334155 6px,
+        #334155 12px
+      );
+      color: #fdba74;
     }
 
     /* Cuts Summary List inside Pattern */
     .cut-items-list {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 7px;
     }
 
     .cut-item-row {
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr 75px 125px;
       align-items: center;
-      justify-content: space-between;
+      gap: 8px;
       background: #f8fafc;
-      padding: 8px 12px;
+      padding: 10px 14px;
       border-radius: 10px;
-      font-size: 13px;
-      border: 1px solid #edf2f7;
+      border: 1.5px solid #e2e8f0;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    html[data-theme="dark"] .cut-item-row {
+      background: #090e1a;
+      border-color: #1e2c47;
+    }
+    .cut-item-row:hover {
+      border-color: #cbd5e1;
+    }
+    html[data-theme="dark"] .cut-item-row:hover {
+      border-color: #334155;
     }
 
     .cut-item-name {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-weight: 600;
+      gap: 10px;
+      font-weight: 700;
+      color: var(--text);
+      min-width: 0;
+      overflow: hidden;
     }
-
+    .cut-name-text {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
     .color-dot {
-      width: 10px;
-      height: 10px;
+      width: 11px;
+      height: 11px;
       border-radius: 50%;
       flex-shrink: 0;
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.2);
+    }
+    .print-check-box {
+      display: none;
+    }
+
+    .cut-item-qty-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+    .cut-item-qty-badge {
+      background: rgba(14, 165, 233, 0.12);
+      color: var(--primary);
+      padding: 4px 0;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 800;
+      width: 68px;
+      text-align: center;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 3px;
+      white-space: nowrap;
+    }
+    html[data-theme="dark"] .cut-item-qty-badge {
+      background: rgba(56, 189, 248, 0.18);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.25);
     }
 
     .cut-item-dims {
-      font-weight: 700;
-      color: var(--primary);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
       text-align: left;
+      gap: 2px;
+      width: 100%;
+      white-space: nowrap;
     }
-
-    .cut-item-dims small {
-      font-size: 10px;
-      font-weight: 400;
-      color: var(--text-light);
-      margin-right: 4px;
+    .dim-cm {
+      font-size: 16px;
+      font-weight: 900;
+      color: #0284c7;
+      letter-spacing: -0.3px;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+    html[data-theme="dark"] .dim-cm {
+      color: #38bdf8;
+    }
+    .dim-mm {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      line-height: 1.2;
+      white-space: nowrap;
     }
 
     /* Table Styles */
@@ -1014,7 +1274,14 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
-      margin-bottom: 12px;
+      margin: 16px 0 24px;
+    }
+    .results-actions-grid .btn {
+      white-space: nowrap;
+      padding: 11px 8px;
+      font-size: 13px;
+      font-weight: 700;
+      justify-content: center;
     }
 
     /* Toast Notification */
@@ -1101,6 +1368,8 @@
       padding: 14px;
       background: #cbd5e1;
       text-align: center;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
     }
 
     .modal-body img {
@@ -1120,34 +1389,277 @@
       border-top: 1px solid var(--border);
     }
 
-    /* Print Styles */
+    .telegram-tip-box {
+      background: rgba(2, 132, 199, 0.08);
+      border: 1px solid rgba(2, 132, 199, 0.25);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin: 6px 0;
+      font-size: 11.5px;
+      line-height: 1.6;
+      color: var(--text);
+      text-align: right;
+    }
+    html[data-theme="dark"] .telegram-tip-box {
+      background: rgba(2, 132, 199, 0.12);
+      border-color: rgba(56, 189, 248, 0.35);
+      color: #e2e8f0;
+    }
+
+    /* Print Styles - High-Contrast Black & White Workshop Mode */
     @media print {
       body {
         background: #ffffff !important;
+        color: #000000 !important;
         padding: 0 !important;
+        font-size: 14px !important;
       }
       .app-shell {
         max-width: 100% !important;
         box-shadow: none !important;
       }
-      .app-header, .mode-nav, #inputSection, .sticky-bottom-bar, .results-actions-grid, .modal-overlay, .toast {
+      .app-header, .mode-nav, #inputSection, .sticky-bottom-bar, .results-actions-grid, .modal-overlay, .toast, .invoice-card, #themeToggleBtn {
         display: none !important;
       }
       .app-content {
-        padding: 0 !important;
+        padding: 6px !important;
+      }
+      .card:first-child {
+        border: 2px solid #000000 !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+        box-shadow: none !important;
+      }
+      .card:first-child h2 {
+        color: #000000 !important;
+        font-size: 18px !important;
       }
       .stat-hero-card {
-        background: #047857 !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+        background: #ffffff !important;
+        border: 2.5px solid #000000 !important;
+        color: #000000 !important;
+        box-shadow: none !important;
+        padding: 10px !important;
+        margin-bottom: 12px !important;
       }
-      .pipe-bar-visual {
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+      .stat-hero-val {
+        color: #000000 !important;
+        font-size: 36px !important;
+      }
+      .stat-hero-lbl {
+        color: #000000 !important;
+        font-size: 15px !important;
+        font-weight: 900 !important;
+      }
+      .stats-matrix {
+        gap: 8px !important;
+        margin-bottom: 12px !important;
+      }
+      .stat-tile {
+        background: #ffffff !important;
+        border: 2px solid #000000 !important;
+        color: #000000 !important;
+        box-shadow: none !important;
+        padding: 8px !important;
+      }
+      .stat-tile-val {
+        color: #000000 !important;
+        font-weight: 900 !important;
+      }
+      .stat-tile-lbl {
+        color: #000000 !important;
+        font-weight: 800 !important;
+      }
+      .report-meta-card {
+        background: #ffffff !important;
+        border: 2.5px solid #000000 !important;
+        border-radius: 8px !important;
+        color: #000000 !important;
+        box-shadow: none !important;
+        padding: 12px 14px !important;
+        margin-bottom: 14px !important;
+      }
+      .report-meta-card h2 {
+        color: #000000 !important;
+      }
+      .report-meta-details b {
+        color: #000000 !important;
+      }
+      .alert-box {
+        border: 2px solid #000000 !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+        font-weight: 800 !important;
+      }
+      .alert-box b {
+        color: #000000 !important;
       }
       .pattern-card {
+        border: 2.5px solid #000000 !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+        box-shadow: none !important;
+        padding: 12px 14px !important;
+        margin-bottom: 16px !important;
         break-inside: avoid;
         page-break-inside: avoid;
+        border-radius: 8px !important;
+      }
+      .pattern-header {
+        border-bottom: 2px solid #000000 !important;
+        padding-bottom: 8px !important;
+        margin-bottom: 8px !important;
+      }
+      .pattern-title {
+        color: #000000 !important;
+        font-size: 17px !important;
+        font-weight: 900 !important;
+      }
+      .pattern-count-badge {
+        background: #000000 !important;
+        color: #ffffff !important;
+        font-size: 16px !important;
+        font-weight: 900 !important;
+        padding: 3px 12px !important;
+        border-radius: 6px !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .pattern-waste-badge {
+        background: #ffffff !important;
+        border: 2px solid #000000 !important;
+        color: #000000 !important;
+        font-size: 13px !important;
+        padding: 4px 10px !important;
+        border-radius: 6px !important;
+      }
+      .pattern-waste-badge b,
+      .pattern-waste-badge .waste-cm-val {
+        color: #000000 !important;
+        font-size: 15px !important;
+      }
+      .pipe-bar-visual {
+        background: #ffffff !important;
+        border: 2.5px solid #000000 !important;
+        height: 44px !important;
+        border-radius: 6px !important;
+        box-shadow: none !important;
+        margin: 10px 0 12px !important;
+      }
+      .pipe-segment {
+        background: #ffffff !important;
+        color: #000000 !important;
+        border-left: 2.5px solid #000000 !important;
+        font-weight: 900 !important;
+      }
+      .pipe-segment .pipe-seg-val {
+        color: #000000 !important;
+        font-size: 14px !important;
+        font-weight: 900 !important;
+        text-shadow: none !important;
+      }
+      .pipe-segment .pipe-seg-unit {
+        color: #000000 !important;
+        font-size: 10px !important;
+        font-weight: 800 !important;
+        text-shadow: none !important;
+      }
+      .pipe-waste-segment {
+        background: repeating-linear-gradient(
+          45deg,
+          #000000,
+          #000000 2px,
+          #ffffff 2px,
+          #ffffff 7px
+        ) !important;
+        color: #000000 !important;
+        border-left: 2.5px solid #000000 !important;
+        font-weight: 900 !important;
+        font-size: 12px !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .cut-item-row {
+        background: #ffffff !important;
+        border: 2px solid #000000 !important;
+        color: #000000 !important;
+        border-radius: 6px !important;
+        padding: 8px 12px !important;
+        margin-bottom: 6px !important;
+        font-size: 15px !important;
+        display: grid !important;
+        grid-template-columns: 1fr 75px 125px !important;
+        align-items: center !important;
+      }
+      .color-dot {
+        display: none !important;
+      }
+      .print-check-box {
+        display: inline-block !important;
+        width: 22px !important;
+        height: 22px !important;
+        border: 2.5px solid #000000 !important;
+        border-radius: 4px !important;
+        margin-left: 8px !important;
+        vertical-align: middle !important;
+        flex-shrink: 0;
+      }
+      .cut-item-name {
+        color: #000000 !important;
+        font-size: 16px !important;
+        font-weight: 900 !important;
+        overflow: hidden !important;
+      }
+      .cut-item-qty-wrap {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        width: 100% !important;
+      }
+      .cut-item-qty-badge {
+        background: #ffffff !important;
+        border: 1.5px solid #000000 !important;
+        color: #000000 !important;
+        font-size: 15px !important;
+        font-weight: 900 !important;
+        padding: 2px 0 !important;
+        width: 68px !important;
+        text-align: center !important;
+      }
+      .cut-item-dims {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-end !important;
+        justify-content: center !important;
+        text-align: left !important;
+        width: 100% !important;
+      }
+      .dim-cm {
+        color: #000000 !important;
+        font-size: 18px !important;
+        font-weight: 900 !important;
+      }
+      .dim-mm {
+        color: #000000 !important;
+        font-size: 13px !important;
+        font-weight: 700 !important;
+      }
+      .table-container {
+        border: 2px solid #000000 !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      .data-table th {
+        background: #000000 !important;
+        color: #ffffff !important;
+        border: 1px solid #000000 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .data-table td {
+        border: 1px solid #000000 !important;
+        color: #000000 !important;
+        font-weight: 800 !important;
       }
     }
 
@@ -1156,40 +1668,62 @@
       background: var(--card);
       border-radius: var(--radius-lg);
       padding: 16px;
-      margin-top: 14px;
-      margin-bottom: 14px;
-      border: 1.5px solid #059669;
-      box-shadow: 0 4px 18px rgba(5, 150, 105, 0.12);
+      margin-top: 18px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
     }
     html[data-theme="dark"] .invoice-card {
-      background: #0b1523;
-      border-color: #10b981;
-      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.15);
+      background: #10192a;
+      border-color: #1e2c47;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
     }
     .invoice-card .card-title {
-      color: #059669;
-      border-bottom-color: rgba(5, 150, 105, 0.2);
+      color: var(--text);
+      font-weight: 800;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border);
     }
     html[data-theme="dark"] .invoice-card .card-title {
-      color: #34d399;
+      border-color: #1e2c47;
     }
+    .badge-offline {
+      font-size: 11px;
+      background: rgba(16, 185, 129, 0.1);
+      color: #059669;
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+    html[data-theme="dark"] .badge-offline {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border-color: rgba(52, 211, 153, 0.3);
+    }
+
     .invoice-summary-box {
-      background: #f0fdf4;
-      border: 1.5px solid #bbf7d0;
-      border-radius: var(--radius-md);
-      padding: 14px;
-      margin: 14px 0;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin: 16px 0;
     }
     html[data-theme="dark"] .invoice-summary-box {
-      background: #061e14;
-      border-color: #065f46;
+      background: #090e1a;
+      border-color: #1e2c47;
     }
     .inv-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 13px;
-      margin-bottom: 7px;
+      margin-bottom: 8px;
       color: var(--text);
     }
     .inv-row-sub {
@@ -1202,32 +1736,52 @@
       align-items: center;
       padding-top: 10px;
       margin-top: 8px;
-      border-top: 1.5px dashed #86efac;
-      color: #047857;
+      border-top: 1px dashed var(--border);
+      color: var(--text);
+      font-weight: 800;
     }
     html[data-theme="dark"] .inv-total-row {
-      color: #34d399;
-      border-top-color: #065f46;
+      border-top-color: #1e2c47;
     }
     .inv-total-amount {
       font-size: 20px;
       font-weight: 900;
+      color: #059669;
       letter-spacing: -0.5px;
+    }
+    html[data-theme="dark"] .inv-total-amount {
+      color: #34d399;
     }
     .inv-words-box {
       margin-top: 10px;
-      padding-top: 8px;
-      font-size: 12.5px;
-      color: var(--text);
-      background: rgba(255, 255, 255, 0.6);
-      border-radius: var(--radius-sm);
-      padding: 8px 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+      background: rgba(15, 23, 42, 0.03);
+      border-radius: 8px;
+      padding: 8px 12px;
       line-height: 1.6;
-      border: 1px dashed rgba(5, 150, 105, 0.3);
+      border: 1px solid var(--border);
     }
     html[data-theme="dark"] .inv-words-box {
-      background: rgba(0, 0, 0, 0.3);
-      border-color: rgba(52, 211, 153, 0.3);
+      background: rgba(255, 255, 255, 0.03);
+      border-color: #1e2c47;
+    }
+    .inv-words-box b {
+      color: var(--text);
+    }
+
+    .invoice-actions-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .invoice-actions-grid .btn {
+      white-space: nowrap;
+      padding: 10px 8px;
+      font-size: 13px;
+      font-weight: 700;
+      justify-content: center;
     }
 
     /* Archive Modal & List Styles */
@@ -1489,17 +2043,17 @@
         
         <div class="field-row">
           <div class="field">
-            <label for="stockLen">طول شاخه (mm)</label>
+            <label for="stockLen">طول شاخه (میلی‌متر)</label>
             <div class="input-wrap">
               <input id="stockLen" class="input has-unit" type="number" inputmode="decimal" value="6000" step="1" onchange="autoSave()">
-              <span class="unit-badge">mm</span>
+              <span class="unit-badge">میلی‌متر</span>
             </div>
           </div>
           <div class="field">
-            <label for="kerf">ضخامت تیغه (mm)</label>
+            <label for="kerf">ضخامت تیغه (میلی‌متر)</label>
             <div class="input-wrap">
               <input id="kerf" class="input has-unit" type="number" inputmode="decimal" value="2" step="0.1" onchange="autoSave()">
-              <span class="unit-badge">mm</span>
+              <span class="unit-badge">میلی‌متر</span>
             </div>
           </div>
         </div>
@@ -1616,7 +2170,7 @@
           <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
           <circle cx="12" cy="13" r="4"/>
         </svg>
-        تصویر کارگاهی سفارش برش
+        <span id="modalImgTitleText">تصویر کارگاهی سفارش برش (Ultra HD)</span>
       </span>
       <button type="button" class="icon-btn" onclick="closeImgModal()">
         <svg class="svg-icon sm" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -1626,13 +2180,36 @@
       <!-- Injected img -->
     </div>
     <div class="modal-foot">
+      <div class="telegram-tip-box">
+        <div style="display:flex;align-items:center;gap:6px;font-weight:800;color:#0284c7;margin-bottom:3px;">
+          <span>💡</span> <span>راهنمای ارسال بدون افت کیفیت در تلگرام و واتساپ:</span>
+        </div>
+        <div>
+          این تصویر با کیفیت فوق‌العاده <b>Ultra HD (کیفیت ۲ برابر)</b> تولید شده است. برای جلوگیری از تار شدن عکس توسط پیام‌رسان‌ها:
+          <ul style="margin:4px 18px 0;padding:0;">
+            <li>در <b>تلگرام</b>: عکس را به صورت <b>فایل (Send as File / بدون فشرده‌سازی)</b> بفرستید.</li>
+            <li>در <b>واتساپ</b>: گزینه ارسال به صورت <b>سند (Document)</b> یا دکمه <b>HD</b> را بزنید.</li>
+          </ul>
+        </div>
+      </div>
+
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-        <a id="downloadImgLink" href="#" download="سفارش-برش-لوله.png" class="btn btn-primary" style="text-decoration:none;">
+        <a id="downloadImgLink" href="#" download="سفارش-برش-لوله.png" class="btn btn-primary" style="text-decoration:none;justify-content:center;">
           <svg class="svg-icon" viewBox="0 0 24 24">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
           </svg>
-          دانلود عکس
+          دانلود تصویر (Ultra HD)
         </a>
+        <button type="button" class="btn btn-secondary" onclick="copyImageToClipboard()">
+          <svg class="svg-icon" viewBox="0 0 24 24">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+          کپی عکس در کلیپ‌بورد
+        </button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
         <button type="button" class="btn btn-secondary" onclick="shareNativeImage()">
           <svg class="svg-icon" viewBox="0 0 24 24">
             <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
@@ -1640,13 +2217,10 @@
           </svg>
           ارسال / اشتراک
         </button>
+        <button type="button" class="btn btn-secondary" onclick="closeImgModal()">
+          بستن
+        </button>
       </div>
-      <p style="font-size:11.5px;color:var(--text-muted);text-align:center;line-height:1.5;margin-top:2px;">
-        📱 در گوشی: می‌توانید انگشت خود را روی عکس نگه‌دارید و «ذخیره تصویر» (Save image) را انتخاب کنید.
-      </p>
-      <button type="button" class="btn btn-secondary" onclick="closeImgModal()">
-        بستن
-      </button>
     </div>
   </div>
 </div>
@@ -1921,12 +2495,12 @@ function addPartRow(name = '', len = '', qty = '') {
     </div>
     <div class="part-bottom-grid">
       <div>
-        <label>طول قطعه (mm)</label>
+        <label>طول قطعه (میلی‌متر)</label>
         <div class="input-wrap">
           <input class="input plen has-unit" type="number" inputmode="decimal" step="0.1" placeholder="مثلاً: 1250" value="${len}" oninput="updateCmHint(this); autoSave();">
-          <span class="unit-badge">mm</span>
+          <span class="unit-badge">میلی‌متر</span>
         </div>
-        <span class="hint-subtext cm-label">${len ? '(' + toCm(len) + ' cm)' : ''}</span>
+        <span class="hint-subtext cm-label">${len ? '(' + toCm(len) + ' سانتی‌متر)' : ''}</span>
       </div>
       <div>
         <label class="qty-label">${qtyPlaceholder}</label>
@@ -2103,6 +2677,34 @@ function loadSavedState() {
 // ==========================================
 // 4. CUTTING STOCK OPTIMIZATION ALGORITHM
 // ==========================================
+// Consolidate identical patterns and sort descending by branch count (از بیشترین به کمترین تعداد شاخه)
+function consolidateAndSortSolution(rawSolution) {
+  if (!rawSolution || !Array.isArray(rawSolution) || rawSolution.length === 0) return [];
+  const map = new Map();
+  rawSolution.forEach(item => {
+    if (!item || !item.pattern || !item.pattern.counts) return;
+    const key = item.pattern.counts.join(',');
+    if (!map.has(key)) {
+      map.set(key, {
+        pattern: { ...item.pattern },
+        count: item.count
+      });
+    } else {
+      map.get(key).count += item.count;
+    }
+  });
+  const consolidated = Array.from(map.values());
+  // Sort from most branches to least branches (تعداد زیاد شاخه به تعداد کم جهت چاپ و سهولت کارگاه)
+  consolidated.sort((a, b) => {
+    if (b.count !== a.count) {
+      return b.count - a.count; // Higher branch count first
+    }
+    // Tie breaker: lowest waste first
+    return (a.pattern.waste || 0) - (b.pattern.waste || 0);
+  });
+  return consolidated;
+}
+
 function optimizeCuttingStock(config) {
   const { stockLen, kerf, parts, mode, maxBranches } = config;
 
@@ -2251,7 +2853,10 @@ function optimizeCuttingStock(config) {
     if (parts.length <= 8) {
       const exact = solveExact(demand, barLimit);
       if (exact && (!barLimit || exact.bars <= barLimit)) {
-        return exact;
+        return {
+          solution: consolidateAndSortSolution(exact.solution),
+          bars: exact.bars
+        };
       }
     }
     // Heuristic BFD fallback
@@ -2269,7 +2874,10 @@ function optimizeCuttingStock(config) {
       }
       patMap[key].count++;
     }
-    return { solution: Object.values(patMap), bars: bfdBins.length };
+    return {
+      solution: consolidateAndSortSolution(Object.values(patMap)),
+      bars: bfdBins.length
+    };
   }
 
   if (mode === 'branches') {
@@ -2290,6 +2898,9 @@ function optimizeCuttingStock(config) {
         break;
       }
     }
+    if (bestResult && bestResult.solution) {
+      bestResult.solution = consolidateAndSortSolution(bestResult.solution);
+    }
     return {
       bestN,
       result: bestResult,
@@ -2302,6 +2913,9 @@ function optimizeCuttingStock(config) {
   } else {
     const dem = parts.map(p => p.qty);
     const res = pack(dem, null);
+    if (res && res.solution) {
+      res.solution = consolidateAndSortSolution(res.solution);
+    }
     return {
       result: res,
       parts,
@@ -2409,7 +3023,8 @@ function renderReport(data) {
   }
 
   const usedBranches = result.bars;
-  const patterns = result.solution;
+  const patterns = consolidateAndSortSolution(result.solution);
+  result.solution = patterns;
 
   // Calculate totals
   let totalPiecesCut = 0;
@@ -2437,16 +3052,16 @@ function renderReport(data) {
 
   // 1. Order Meta Header
   html += `
-    <div class="card" style="margin-bottom:12px;background:linear-gradient(180deg,#ffffff,#f8fafc);">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
-        <h2 style="font-size:16px;font-weight:800;color:var(--primary);">${projectName || 'سفارش برش کارگاهی'}</h2>
+    <div class="report-meta-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+        <h2>${projectName || 'سفارش برش کارگاهی'}</h2>
         <span style="font-size:12px;color:var(--text-muted);font-weight:600;display:flex;align-items:center;gap:4px;">
           ${ICONS.clipboard} ${projectDate}
         </span>
       </div>
-      <div style="font-size:12px;color:var(--text-muted);display:flex;gap:14px;flex-wrap:wrap;">
-        <span style="display:flex;align-items:center;gap:4px;">${ICONS.ruler} طول شاخه: <b>${fmt(stockLen)} mm</b></span>
-        <span style="display:flex;align-items:center;gap:4px;">${ICONS.caliper} تیغه برش: <b>${fmt(kerf)} mm</b></span>
+      <div class="report-meta-details">
+        <span style="display:flex;align-items:center;gap:5px;">${ICONS.ruler} طول شاخه: <b>${fmt(stockLen)} میلی‌متر</b></span>
+        <span style="display:flex;align-items:center;gap:5px;">${ICONS.caliper} ضخامت تیغه: <b>${fmt(kerf)} میلی‌متر</b></span>
       </div>
     </div>
   `;
@@ -2473,7 +3088,7 @@ function renderReport(data) {
         <div class="stat-tile-lbl">درصد بازدهی مفید</div>
       </div>
       <div class="stat-tile accent">
-        <div class="stat-tile-val">${fmt(totalWasteLen)} <small style="font-size:11px;">mm</small></div>
+        <div class="stat-tile-val">${fmt(totalWasteLen)} <small style="font-size:11px;">میلی‌متر</small></div>
         <div class="stat-tile-lbl">ضایعات کل (${toCm(totalWasteLen)} سانتی‌متر)</div>
       </div>
       <div class="stat-tile">
@@ -2488,7 +3103,7 @@ function renderReport(data) {
     const extraBranches = maxBranches - usedBranches;
     html += `
       <div class="alert-box success">
-        <span>با ${maxBranches.toLocaleString('fa-IR')} شاخه لوله ${fmt(stockLen)} میلی‌متری، دقیقاً <b>${bestN.toLocaleString('fa-IR')} ست کامل</b> برش می‌خورد.
+        <span>با <b>${maxBranches.toLocaleString('fa-IR')} شاخه</b> لوله ${fmt(stockLen)} میلی‌متری، دقیقاً <b>${bestN.toLocaleString('fa-IR')} ست کامل</b> برش می‌خورد.
         ${extraBranches > 0 ? `<br>💡 <b>${extraBranches.toLocaleString('fa-IR')} شاخه کامل</b> اضافه و بدون برش دست‌نخورده باقی می‌ماند!` : ''}
         </span>
       </div>
@@ -2496,7 +3111,7 @@ function renderReport(data) {
   } else {
     html += `
       <div class="alert-box success">
-        <span>برای تولید این ${totalPiecesCut.toLocaleString('fa-IR')} قطعه، به <b>${usedBranches.toLocaleString('fa-IR')} شاخه</b> لوله ${fmt(stockLen)} میلی‌متری نیاز دارید.</span>
+        <span>برای تولید این <b>${totalPiecesCut.toLocaleString('fa-IR')} قطعه</b>، به <b>${usedBranches.toLocaleString('fa-IR')} شاخه</b> لوله ${fmt(stockLen)} میلی‌متری نیاز دارید.</span>
       </div>
     `;
   }
@@ -2524,7 +3139,9 @@ function renderReport(data) {
             <span class="pattern-count-badge">${repeatCount.toLocaleString('fa-IR')} شاخه</span>
           </div>
           <div class="pattern-waste-badge">
-            ضایعات: ${fmt(wasteMm)} mm<br>(${toCm(wasteMm)} cm)
+            <span class="waste-tag">ضایعات:</span>
+            <b class="waste-cm-val">${toCm(wasteMm)} سانتی‌متر</b>
+            <span class="waste-mm-val">(${fmt(wasteMm)} میلی‌متر)</span>
           </div>
         </div>
 
@@ -2532,27 +3149,39 @@ function renderReport(data) {
         <div class="pipe-bar-visual">
     `;
 
-    // Render pipe segments
+    // Render pipe segments with unified two-line labels (Number + سانت) on the exact same baseline
     for (let i = 0; i < parts.length; i++) {
       const q = pat.counts[i] || 0;
       if (q > 0) {
         const segWidthPct = ((parts[i].len / stockLen) * 100).toFixed(2);
         for (let k = 0; k < q; k++) {
+          let segContent = '';
+          if (segWidthPct >= 6) {
+            segContent = `
+              <span class="pipe-seg-val" dir="ltr">${toCm(parts[i].len)}</span>
+              <span class="pipe-seg-unit">سانت</span>
+            `;
+          }
+
           html += `
-            <div class="pipe-segment" style="width:${segWidthPct}%;background:${parts[i].color};" title="${parts[i].name} (${fmt(parts[i].len)}mm)">
-              ${parts[i].len > 600 ? fmt(parts[i].len) : ''}
+            <div class="pipe-segment" style="width:${segWidthPct}%;background:${parts[i].color};" title="${parts[i].name}: ${toCm(parts[i].len)} سانتی‌متر (${fmt(parts[i].len)} میلی‌متر)">
+              ${segContent}
             </div>
           `;
         }
       }
     }
 
-    // Waste segment at end
+    // Waste segment at end (only show text if width is at least 14% to prevent any clipped text)
     const wastePct = ((wasteMm / stockLen) * 100).toFixed(2);
     if (wasteMm > 0) {
+      const showWasteText = wastePct >= 14;
       html += `
-        <div class="pipe-waste-segment" style="width:${wastePct}%;" title="ضایعات: ${fmt(wasteMm)}mm">
-          ${wasteMm > 400 ? 'ضایعات' : ''}
+        <div class="pipe-waste-segment" style="width:${wastePct}%;" title="ضایعات: ${toCm(wasteMm)} سانتی‌متر (${fmt(wasteMm)} میلی‌متر)">
+          ${showWasteText ? `
+            <span class="pipe-seg-val" dir="ltr">${toCm(wasteMm)}</span>
+            <span class="pipe-seg-unit">سانت</span>
+          ` : ''}
         </div>
       `;
     }
@@ -2560,7 +3189,7 @@ function renderReport(data) {
     html += `
         </div>
 
-        <!-- Cut Items Details -->
+        <!-- Cut Items Details with Clean Aligned Grid -->
         <div class="cut-items-list">
     `;
 
@@ -2570,13 +3199,16 @@ function renderReport(data) {
         html += `
           <div class="cut-item-row">
             <div class="cut-item-name">
+              <span class="print-check-box" title="چک‌باکس مخصوص پرینت کارگاه"></span>
               <span class="color-dot" style="background:${parts[i].color};"></span>
-              <span>${parts[i].name}</span>
+              <span class="cut-name-text">${parts[i].name}</span>
+            </div>
+            <div class="cut-item-qty-wrap">
+              <span class="cut-item-qty-badge"><b>${q.toLocaleString('fa-IR')}</b>&nbsp;<span>عدد</span></span>
             </div>
             <div class="cut-item-dims">
-              <span><b>${q.toLocaleString('fa-IR')}</b> عدد ×</span>
-              <span>${fmt(parts[i].len)} mm</span>
-              <small>(${toCm(parts[i].len)} cm)</small>
+              <span class="dim-cm"><b>${toCm(parts[i].len)}</b> سانتی‌متر</span>
+              <span class="dim-mm">(${fmt(parts[i].len)} میلی‌متر)</span>
             </div>
           </div>
         `;
@@ -2599,7 +3231,7 @@ function renderReport(data) {
         <thead>
           <tr>
             <th>نام قطعه</th>
-            <th>طول (mm)</th>
+            <th>طول (میلی‌متر)</th>
             <th>${mode === 'branches' ? 'در هر ست' : 'تعداد نیاز'}</th>
             <th>تولید کل</th>
             <th>جمع طول (متر)</th>
@@ -2614,7 +3246,7 @@ function renderReport(data) {
     html += `
       <tr>
         <td class="name-cell">${p.name}</td>
-        <td>${fmt(p.len)} <small style="display:block;color:#94a3b8;font-size:10px;">${toCm(p.len)} cm</small></td>
+        <td>${fmt(p.len)} <small style="display:block;color:#94a3b8;font-size:10px;">${toCm(p.len)} سانتی‌متر</small></td>
         <td>${p.qty.toLocaleString('fa-IR')}</td>
         <td><b>${totalQty.toLocaleString('fa-IR')}</b></td>
         <td>${totalMeters.toFixed(2).toLocaleString('fa-IR')} م</td>
@@ -2647,11 +3279,11 @@ function renderReport(data) {
   html += `
     <div class="invoice-card" id="invoiceCard">
       <div class="card-title">
-        <span>
+        <span style="display:flex;align-items:center;gap:6px;">
           ${ICONS.invoice}
           صورتحساب و فاکتور فروش (مشتری)
         </span>
-        <span style="font-size:11px;background:rgba(5,150,105,0.1);color:#059669;padding:2px 8px;border-radius:12px;font-weight:700;">
+        <span class="badge-offline">
           دیتابیس آفلاین
         </span>
       </div>
@@ -2687,7 +3319,7 @@ function renderReport(data) {
           </div>
         </div>
         <div class="field">
-          <label for="invWagePerCut">اجرت هر برش (تومان)</label>
+          <label for="invWagePerCut">اجرت هر برش اره (تومان)</label>
           <div class="input-wrap">
             <input id="invWagePerCut" class="input has-unit" type="text" inputmode="numeric" value="${savedLastWage ? formatWithCommas(savedLastWage) : ''}" placeholder="مثال: ۵,۰۰۰" oninput="handleTomanInput(this)">
             <span class="unit-badge">تومان</span>
@@ -2697,16 +3329,16 @@ function renderReport(data) {
 
       <div class="field-row">
         <div class="field">
-          <label for="invTotalCuts">تعداد برش‌ها (قابل تغییر)</label>
+          <label for="invTotalCuts">تعداد کل برش‌ها</label>
           <div class="input-wrap">
-            <input id="invTotalCuts" class="input has-unit" type="number" inputmode="numeric" value="${totalCutsCount}" oninput="updateInvoiceTotals()">
+            <input id="invTotalCuts" class="input has-unit" type="text" inputmode="numeric" value="${totalCutsCount.toLocaleString('fa-IR')}" oninput="handleTomanInput(this)">
             <span class="unit-badge">برش</span>
           </div>
         </div>
         <div class="field">
-          <label for="invExtraFees">هزینه‌های متفرقه / بارگیری (تومان)</label>
+          <label for="invDiscount">مبلغ تخفیف (تومان)</label>
           <div class="input-wrap">
-            <input id="invExtraFees" class="input has-unit" type="text" inputmode="numeric" placeholder="۰" oninput="handleTomanInput(this)">
+            <input id="invDiscount" class="input has-unit" type="text" inputmode="numeric" placeholder="۰" oninput="handleTomanInput(this)">
             <span class="unit-badge">تومان</span>
           </div>
         </div>
@@ -2714,13 +3346,13 @@ function renderReport(data) {
 
       <div class="field-row">
         <div class="field">
-          <label for="invExtraNotes">شرح خدمات متفرقه (اختیاری)</label>
-          <input id="invExtraNotes" class="input" placeholder="مثال: بسته‌بندی، سوراخکاری، کرایه حمل..." oninput="updateInvoiceTotals()">
+          <label for="invExtraNotes">شرح خدمات جانبی (اختیاری)</label>
+          <input id="invExtraNotes" class="input" placeholder="مثال: بسته‌بندی، سوراخکاری، حمل..." oninput="updateInvoiceTotals()">
         </div>
         <div class="field">
-          <label for="invDiscount">مبلغ تخفیف (تومان)</label>
+          <label for="invExtraFees">هزینه خدمات جانبی (تومان)</label>
           <div class="input-wrap">
-            <input id="invDiscount" class="input has-unit" type="text" inputmode="numeric" placeholder="۰" oninput="handleTomanInput(this)">
+            <input id="invExtraFees" class="input has-unit" type="text" inputmode="numeric" placeholder="۰" oninput="handleTomanInput(this)">
             <span class="unit-badge">تومان</span>
           </div>
         </div>
@@ -2754,22 +3386,20 @@ function renderReport(data) {
       </div>
 
       <!-- Action Buttons for Invoice -->
-      <button type="button" class="btn btn-success" onclick="saveCurrentInvoice()">
-        ${ICONS.check} <span>ذخیره فاکتور در بایگانی</span>
-      </button>
-
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;">
+      <div class="invoice-actions-grid">
+        <button type="button" class="btn btn-success" onclick="saveCurrentInvoice()">
+          ${ICONS.check} <span>ذخیره در بایگانی</span>
+        </button>
+        <button type="button" class="btn btn-secondary" onclick="printInvoice()">
+          ${ICONS.print} <span>چاپ فاکتور رسمی</span>
+        </button>
         <button type="button" class="btn btn-secondary" onclick="generateAndShowInvoiceImage()">
           ${ICONS.camera} <span>تصویر فاکتور</span>
         </button>
-        <button type="button" class="btn btn-secondary" onclick="printInvoice()">
-          ${ICONS.print} <span>چاپ فاکتور</span>
+        <button type="button" class="btn btn-secondary" onclick="copyInvoiceText()">
+          ${ICONS.copy} <span>کپی متن فاکتور</span>
         </button>
       </div>
-
-      <button type="button" class="btn btn-secondary" style="margin-top:10px;" onclick="copyInvoiceText()">
-        ${ICONS.copy} <span>کپی متن پیش‌فاکتور (جهت ارسال)</span>
-      </button>
     </div>
   `;
 
@@ -2780,7 +3410,7 @@ function renderReport(data) {
         ${ICONS.copy} <span>کپی دستور کار</span>
       </button>
       <button type="button" class="btn btn-secondary" onclick="window.print()">
-        ${ICONS.print} <span>چاپ A4 کارگاه</span>
+        ${ICONS.print} <span>چاپ برگه برش کارگاه</span>
       </button>
     </div>
   `;
@@ -2898,12 +3528,12 @@ function closeInstallGuide() {
 }
 
 // ==========================================
-// 6. HIGH-RES NATIVE CANVAS IMAGE GENERATOR
+// 6. ULTRA-HD NATIVE CANVAS IMAGE GENERATOR
 // ==========================================
 function generateAndShowImage() {
   const btn = document.getElementById('btnSaveImg');
   const origText = btn.textContent;
-  btn.textContent = '⏳ ساخت تصویر...';
+  btn.textContent = '⏳ ساخت تصویر Ultra HD...';
   btn.disabled = true;
 
   setTimeout(() => {
@@ -2918,9 +3548,12 @@ function generateAndShowImage() {
         const modalBody = document.getElementById('modalImgBody');
         modalBody.innerHTML = `<img src="${url}" alt="برش-لوله">`;
 
+        const titleEl = document.getElementById('modalImgTitleText');
+        if (titleEl) titleEl.textContent = 'دستور کار کارگاهی برش لوله (کیفیت Ultra HD)';
+
         const downloadLink = document.getElementById('downloadImgLink');
         downloadLink.href = url;
-        downloadLink.download = `برش-لوله-${Date.now()}.png`;
+        downloadLink.download = `دستور-برش-کارگاه-${Date.now()}.png`;
 
         document.getElementById('imgModalOverlay').classList.add('open');
       });
@@ -2938,155 +3571,201 @@ function closeImgModal(e) {
 
 function shareNativeImage() {
   if (navigator.share && generatedImageBlob) {
-    const file = new File([generatedImageBlob], 'cutting-order.png', { type: 'image/png' });
+    const file = new File([generatedImageBlob], 'cutting-order-ultrahd.png', { type: 'image/png' });
     navigator.share({
       title: 'سفارش برش لوله',
-      text: 'دستور کار کارگاهی برش شاخه‌های لوله',
+      text: 'دستور کار کارگاهی بهینه‌ساز برش شاخه‌های لوله (کیفیت فوق‌العاده بالا)',
       files: [file]
     }).catch(() => {});
   } else {
-    showToast('لطفاً از دکمه دانلود عکس استفاده کنید.');
+    showToast('لطفاً از دکمه «دانلود تصویر» استفاده کنید.');
   }
 }
 
-// Drawing the complete order sheet directly on Canvas
+function copyImageToClipboard() {
+  if (!generatedImageBlob) {
+    showToast('خطا: تصویری یافت نشد');
+    return;
+  }
+  if (navigator.clipboard && window.ClipboardItem) {
+    navigator.clipboard.write([
+      new ClipboardItem({ 'image/png': generatedImageBlob })
+    ]).then(() => {
+      showToast('📋 تصویر با وضوح فوق‌العاده کپی شد! می‌توانید مستقیم در تلگرام یا واتساپ پیست (Paste) کنید.');
+    }).catch(() => {
+      showToast('امکان کپی مستقیم عکس در این مرورگر فعال نیست؛ لطفاً از دکمه «دانلود تصویر» استفاده کنید.');
+    });
+  } else {
+    showToast('امکان کپی مستقیم عکس در این مرورگر فعال نیست؛ لطفاً از دکمه «دانلود تصویر» استفاده کنید.');
+  }
+}
+
+// Drawing the complete order sheet directly on Canvas with 2X Ultra-HD resolution
 function createReportCanvas(data, callback) {
   const { outcome, projectName, projectDate, notes, stockLen, kerf, parts } = data;
   const { mode, result, bestN, maxBranches } = outcome;
   const usedBranches = result.bars;
-  const patterns = result.solution;
+  const patterns = consolidateAndSortSolution(result.solution);
+  result.solution = patterns;
 
-  const width = 1080;
-  // Dynamic height calculation
-  let estimatedHeight = 520 + (patterns.length * 150) + (parts.length * 45) + (notes ? 120 : 0);
+  const scale = 2; // Ultra-HD 2X super-sampling (2400 physical pixels wide)
+  const width = 1200;
+
+  // Accurate dynamic height based on number of unique cuts in each pattern
+  let totalPatternHeight = 0;
+  patterns.forEach(patItem => {
+    let uniqueCuts = 0;
+    for (let i = 0; i < parts.length; i++) {
+      if (patItem.pattern.counts[i] > 0) uniqueCuts++;
+    }
+    totalPatternHeight += 135 + (uniqueCuts * 50) + 20;
+  });
+
+  let estimatedHeight = 360 + totalPatternHeight + (parts.length * 50) + (notes ? 130 : 0) + 110;
   const canvas = document.createElement('canvas');
-  canvas.width = width;
-  canvas.height = estimatedHeight;
+  canvas.width = Math.round(width * scale);
+  canvas.height = Math.round(estimatedHeight * scale);
   const ctx = canvas.getContext('2d');
+  ctx.scale(scale, scale);
+
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
 
   // Background
   ctx.fillStyle = '#f8fafc';
   ctx.fillRect(0, 0, width, estimatedHeight);
 
   // Header Banner
-  ctx.fillStyle = '#154a86';
-  ctx.fillRect(0, 0, width, 140);
+  const grad = ctx.createLinearGradient(0, 0, width, 0);
+  grad.addColorStop(0, '#0f2b5c');
+  grad.addColorStop(1, '#1e40af');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, width, 145);
 
   // Header texts (RTL)
   ctx.direction = 'rtl';
   ctx.textAlign = 'right';
 
   ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 34px Vazirmatn, Tahoma, sans-serif';
-  ctx.fillText('دستور کار و بهینه‌سازی برش لوله', width - 95, 58);
+  ctx.font = '900 34px Vazirmatn, Tahoma, sans-serif';
+  ctx.fillText('دستور کار و بهینه‌سازی برش لوله (کارگاه)', width - 100, 60);
 
-  // Minimal vector tube badge on canvas
+  // Vector tube logo badge
   ctx.strokeStyle = '#ffffff';
   ctx.lineWidth = 2.5;
-  roundRect(ctx, width - 80, 26, 42, 38, 8, false, true);
+  roundRect(ctx, width - 80, 26, 44, 40, 8, false, true);
   ctx.fillStyle = '#f59e0b';
-  ctx.fillRect(width - 62, 26, 4, 38);
+  ctx.fillRect(width - 62, 26, 5, 40);
 
-  ctx.font = '500 20px Vazirmatn, Tahoma, sans-serif';
+  ctx.font = '700 19px Vazirmatn, Tahoma, sans-serif';
   ctx.fillStyle = '#e2e8f0';
-  ctx.fillText(`پروژه: ${projectName || 'سفارش کارگاهی'}  |  تاریخ: ${projectDate}`, width - 40, 105);
+  ctx.fillText(`پروژه: ${projectName || 'سفارش کارگاهی'}  |  تاریخ: ${projectDate}`, width - 40, 108);
 
   ctx.textAlign = 'left';
-  ctx.fillText(`شاخه: ${fmtEn(stockLen)}mm | تیغه: ${fmtEn(kerf)}mm`, 40, 105);
+  ctx.fillText(`شاخه: ${fmt(stockLen)} میلی‌متر (${toCm(stockLen)} سانت) | تیغه اره: ${fmt(kerf)} میلی‌متر`, 40, 108);
 
   let curY = 175;
 
   // KPI Metric Cards
   ctx.textAlign = 'right';
-  const cardW = 230;
-  const cardH = 95;
-  const gap = 20;
+  const cardW = 258;
+  const cardH = 96;
+  const gap = 16;
   const startX = width - 40;
 
   function drawMetricTile(x, y, val, label, isHero) {
     ctx.fillStyle = isHero ? '#059669' : '#ffffff';
-    ctx.strokeStyle = '#cbd5e1';
-    ctx.lineWidth = 1.5;
-    roundRect(ctx, x - cardW, y, cardW, cardH, 14, true, !isHero);
+    ctx.strokeStyle = isHero ? '#047857' : '#94a3b8';
+    ctx.lineWidth = 2;
+    roundRect(ctx, x - cardW, y, cardW, cardH, 14, true, true);
 
     ctx.textAlign = 'center';
-    ctx.fillStyle = isHero ? '#ffffff' : '#154a86';
-    ctx.font = 'bold 32px Vazirmatn, Tahoma, sans-serif';
-    ctx.fillText(val, x - (cardW / 2), y + 42);
+    ctx.fillStyle = isHero ? '#ffffff' : '#0f172a';
+    ctx.font = '900 32px Vazirmatn, Tahoma, sans-serif';
+    ctx.fillText(val, x - (cardW / 2), y + 44);
 
-    ctx.fillStyle = isHero ? '#e6fffa' : '#64748b';
-    ctx.font = '600 15px Vazirmatn, Tahoma, sans-serif';
-    ctx.fillText(label, x - (cardW / 2), y + 75);
+    ctx.fillStyle = isHero ? '#ecfdf5' : '#475569';
+    ctx.font = '800 15px Vazirmatn, Tahoma, sans-serif';
+    ctx.fillText(label, x - (cardW / 2), y + 77);
   }
 
   if (mode === 'branches') {
-    drawMetricTile(startX, curY, `${bestN} ست`, 'ست کامل تولیدی', true);
-    drawMetricTile(startX - (cardW + gap), curY, `${usedBranches} / ${maxBranches}`, 'شاخه مصرفی', false);
+    drawMetricTile(startX, curY, `${bestN.toLocaleString('fa-IR')} ست`, 'ست کامل تولیدی', true);
+    drawMetricTile(startX - (cardW + gap), curY, `${usedBranches.toLocaleString('fa-IR')} از ${maxBranches.toLocaleString('fa-IR')}`, 'شاخه مصرفی', false);
   } else {
-    drawMetricTile(startX, curY, `${usedBranches} شاخه`, 'شاخه لازم', true);
-    drawMetricTile(startX - (cardW + gap), curY, `${fmtEn(stockLen)} mm`, 'طول شاخه', false);
+    drawMetricTile(startX, curY, `${usedBranches.toLocaleString('fa-IR')} شاخه`, 'شاخه لازم', true);
+    drawMetricTile(startX - (cardW + gap), curY, `${fmt(stockLen)} میلی‌متر`, 'طول شاخه', false);
   }
 
   // Calculate waste
   let totalWasteLen = 0;
   patterns.forEach(item => totalWasteLen += item.pattern.waste * item.count);
-  drawMetricTile(startX - 2 * (cardW + gap), curY, `${(totalWasteLen / 10).toFixed(0)} cm`, 'ضایعات کل', false);
+  drawMetricTile(startX - 2 * (cardW + gap), curY, `${toCm(totalWasteLen)} سانت`, `ضایعات کل (${fmt(totalWasteLen)} میلی‌متر)`, false);
 
   const eff = ((usedBranches * stockLen - totalWasteLen) / (usedBranches * stockLen) * 100).toFixed(1);
-  drawMetricTile(startX - 3 * (cardW + gap), curY, `${eff}٪`, 'بازدهی مفید', false);
+  drawMetricTile(startX - 3 * (cardW + gap), curY, `${Number(eff).toLocaleString('fa-IR')}٪`, 'بازدهی مفید', false);
 
   curY += cardH + 40;
 
   // Patterns Section Title
   ctx.textAlign = 'right';
   ctx.fillStyle = '#0f172a';
-  ctx.font = 'bold 24px Vazirmatn, Tahoma, sans-serif';
-  ctx.fillText('الگوهای برش شاخه‌ها (دستور کار برشکار):', width - 40, curY);
+  ctx.font = '900 24px Vazirmatn, Tahoma, sans-serif';
+  ctx.fillText('الگوهای برش شاخه‌ها (دستور برشکار اره):', width - 40, curY);
 
-  curY += 20;
+  curY += 24;
 
-  // Draw each pattern
+  // Draw each pattern card
   patterns.forEach((patItem, idx) => {
     const pat = patItem.pattern;
-    const patH = 120;
     const pBoxW = width - 80;
     const pBoxX = 40;
 
+    let uniqueCuts = 0;
+    for (let i = 0; i < parts.length; i++) {
+      if (pat.counts[i] > 0) uniqueCuts++;
+    }
+
+    const patH = 130 + (uniqueCuts * 50);
+
     // Pattern background card
     ctx.fillStyle = '#ffffff';
-    ctx.strokeStyle = '#e2e8f0';
-    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = '#94a3b8';
+    ctx.lineWidth = 2;
     roundRect(ctx, pBoxX, curY, pBoxW, patH, 16, true, true);
 
-    // Badge
-    ctx.fillStyle = '#154a86';
-    roundRect(ctx, width - 180, curY + 12, 120, 32, 16, true, false);
+    // Badge - Repeat count
+    ctx.fillStyle = '#1e3a8a';
+    roundRect(ctx, width - 210, curY + 14, 150, 36, 18, true, false);
     ctx.textAlign = 'center';
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 16px Vazirmatn, Tahoma, sans-serif';
-    ctx.fillText(`${patItem.count} شاخه`, width - 120, curY + 34);
+    ctx.font = '900 17px Vazirmatn, Tahoma, sans-serif';
+    ctx.fillText(`${patItem.count.toLocaleString('fa-IR')} شاخه لوله`, width - 135, curY + 38);
 
+    // Title
     ctx.textAlign = 'right';
     ctx.fillStyle = '#0f172a';
-    ctx.font = 'bold 18px Vazirmatn, Tahoma, sans-serif';
-    ctx.fillText(`الگوی ${idx + 1}:`, width - 200, curY + 34);
+    ctx.font = '900 20px Vazirmatn, Tahoma, sans-serif';
+    ctx.fillText(`الگوی شماره ${(idx + 1).toLocaleString('fa-IR')}:`, width - 230, curY + 39);
 
+    // Waste label (highlighted in bold)
     ctx.textAlign = 'left';
-    ctx.fillStyle = '#c2410c';
-    ctx.font = 'bold 15px Vazirmatn, Tahoma, sans-serif';
-    ctx.fillText(`ضایعات این شاخه: ${fmtEn(pat.waste)}mm (${(pat.waste/10).toFixed(1)}cm)`, 60, curY + 34);
+    ctx.fillStyle = '#b45309';
+    ctx.font = '900 16px Vazirmatn, Tahoma, sans-serif';
+    ctx.fillText(`ضایعات این شاخه: ${toCm(pat.waste)} سانتی‌متر (${fmt(pat.waste)} میلی‌متر)`, 60, curY + 39);
 
     // Visual Pipe Bar inside canvas
-    const pipeBarY = curY + 54;
+    const pipeBarY = curY + 62;
     const pipeBarW = pBoxW - 40;
     const pipeBarX = pBoxX + 20;
-    const pipeBarH = 34;
+    const pipeBarH = 46;
 
     ctx.fillStyle = '#e2e8f0';
-    ctx.strokeStyle = '#94a3b8';
-    roundRect(ctx, pipeBarX, pipeBarY, pipeBarW, pipeBarH, 6, true, true);
+    ctx.strokeStyle = '#64748b';
+    ctx.lineWidth = 1.5;
+    roundRect(ctx, pipeBarX, pipeBarY, pipeBarW, pipeBarH, 8, true, true);
 
-    // Draw cut segments
+    // Draw cut segments with centimeters on bar
     let segX = pipeBarX;
     for (let i = 0; i < parts.length; i++) {
       const q = pat.counts[i] || 0;
@@ -3096,15 +3775,29 @@ function createReportCanvas(data, callback) {
           ctx.fillStyle = parts[i].color;
           ctx.fillRect(segX, pipeBarY, segW, pipeBarH);
           ctx.strokeStyle = '#ffffff';
-          ctx.lineWidth = 1;
+          ctx.lineWidth = 2;
           ctx.strokeRect(segX, pipeBarY, segW, pipeBarH);
 
-          if (segW > 45) {
+          // Render text with shadow for high contrast on any color
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+          ctx.shadowBlur = 4;
+          ctx.fillStyle = '#ffffff';
+
+          if (segW > 65) {
             ctx.textAlign = 'center';
-            ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 13px Vazirmatn, Tahoma, sans-serif';
-            ctx.fillText(`${fmtEn(parts[i].len)}`, segX + (segW / 2), pipeBarY + 22);
+            ctx.font = '900 15px Vazirmatn, Tahoma, sans-serif';
+            ctx.fillText(`${toCm(parts[i].len)} سانت`, segX + (segW / 2), pipeBarY + 24);
+
+            ctx.font = '800 11px Vazirmatn, Tahoma, sans-serif';
+            ctx.fillText(`(${fmt(parts[i].len)})`, segX + (segW / 2), pipeBarY + 39);
+          } else if (segW > 38) {
+            ctx.textAlign = 'center';
+            ctx.font = '900 13px Vazirmatn, Tahoma, sans-serif';
+            ctx.fillText(`${toCm(parts[i].len)}`, segX + (segW / 2), pipeBarY + 29);
           }
+
+          ctx.shadowColor = 'transparent';
+          ctx.shadowBlur = 0;
           segX += segW;
         }
       }
@@ -3113,29 +3806,71 @@ function createReportCanvas(data, callback) {
     // Waste segment
     const wasteW = (pat.waste / stockLen) * pipeBarW;
     if (wasteW > 2) {
-      ctx.fillStyle = '#cbd5e1';
+      ctx.fillStyle = '#94a3b8';
       ctx.fillRect(segX, pipeBarY, wasteW, pipeBarH);
-      if (wasteW > 50) {
+      if (wasteW > 45) {
         ctx.textAlign = 'center';
-        ctx.fillStyle = '#475569';
-        ctx.font = 'bold 11px Vazirmatn, Tahoma, sans-serif';
-        ctx.fillText('ضایعات', segX + (wasteW / 2), pipeBarY + 22);
+        ctx.fillStyle = '#0f172a';
+        ctx.font = '900 12px Vazirmatn, Tahoma, sans-serif';
+        ctx.fillText(`${toCm(pat.waste)} سانت`, segX + (wasteW / 2), pipeBarY + 23);
+        ctx.font = '800 10px Vazirmatn, Tahoma, sans-serif';
+        ctx.fillText('ضایعات', segX + (wasteW / 2), pipeBarY + 38);
       }
     }
 
-    // Subtext list of parts
-    let desc = [];
+    // Structured, bold cut items list for saw operator
+    let cutRowY = curY + 122;
     for (let i = 0; i < parts.length; i++) {
-      if (pat.counts[i] > 0) {
-        desc.push(`${pat.counts[i]} عدد ${parts[i].name} (${fmtEn(parts[i].len)}mm)`);
+      const q = pat.counts[i] || 0;
+      if (q > 0) {
+        const itemBoxW = pBoxW - 40;
+        const itemBoxX = pBoxX + 20;
+
+        ctx.fillStyle = '#f8fafc';
+        ctx.strokeStyle = '#cbd5e1';
+        ctx.lineWidth = 1.5;
+        roundRect(ctx, itemBoxX, cutRowY, itemBoxW, 42, 8, true, true);
+
+        // Color dot
+        ctx.fillStyle = parts[i].color;
+        ctx.beginPath();
+        ctx.arc(itemBoxX + itemBoxW - 22, cutRowY + 21, 8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        // Part name
+        ctx.textAlign = 'right';
+        ctx.fillStyle = '#0f172a';
+        ctx.font = '900 17px Vazirmatn, Tahoma, sans-serif';
+        ctx.fillText(parts[i].name, itemBoxX + itemBoxW - 42, cutRowY + 27);
+
+        // Quantity pill badge (fixed location for every row!)
+        const badgeX = itemBoxX + itemBoxW - 350;
+        ctx.fillStyle = '#0284c7';
+        roundRect(ctx, badgeX, cutRowY + 6, 95, 30, 8, true, false);
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '900 16px Vazirmatn, Tahoma, sans-serif';
+        ctx.fillText(`${q.toLocaleString('fa-IR')} عدد`, badgeX + 47, cutRowY + 27);
+
+        // Centimeters (VERY BOLD AND PROMINENT)
+        ctx.textAlign = 'left';
+        ctx.fillStyle = '#021d49';
+        ctx.font = '900 22px Vazirmatn, Tahoma, sans-serif';
+        ctx.fillText(`${toCm(parts[i].len)} سانتی‌متر`, itemBoxX + 200, cutRowY + 29);
+
+        // Millimeters
+        ctx.fillStyle = '#475569';
+        ctx.font = '800 15px Vazirmatn, Tahoma, sans-serif';
+        ctx.fillText(`(${fmt(parts[i].len)} میلی‌متر)`, itemBoxX + 24, cutRowY + 29);
+
+        cutRowY += 48;
       }
     }
-    ctx.textAlign = 'right';
-    ctx.fillStyle = '#475569';
-    ctx.font = '500 13px Vazirmatn, Tahoma, sans-serif';
-    ctx.fillText(desc.join('   |   '), width - 60, curY + 104);
 
-    curY += patH + 14;
+    curY += patH + 18;
   });
 
   // Footer notes & timestamp
@@ -3143,16 +3878,38 @@ function createReportCanvas(data, callback) {
     curY += 10;
     ctx.textAlign = 'right';
     ctx.fillStyle = '#713f12';
-    ctx.font = 'bold 16px Vazirmatn, Tahoma, sans-serif';
+    ctx.font = '800 18px Vazirmatn, Tahoma, sans-serif';
     ctx.fillText('یادداشت کارگاه: ' + notes, width - 40, curY);
-    curY += 25;
+    curY += 32;
   }
 
-  curY += 25;
+  // Workshop stamp & signature boxes at bottom of image
+  const sigBoxW = (width - 120) / 2;
+  const sigBoxH = 88;
+  ctx.strokeStyle = '#94a3b8';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([5, 5]);
+
+  ctx.fillStyle = '#ffffff';
+  roundRect(ctx, 40, curY + 10, sigBoxW, sigBoxH, 10, true, true);
+  ctx.fillStyle = '#1e293b';
+  ctx.font = '800 15px Vazirmatn, Tahoma, sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillStyle = '#94a3b8';
-  ctx.font = '13px Vazirmatn, Tahoma, sans-serif';
-  ctx.fillText('تولید شده توسط نرم‌افزار هوشمند محاسبه و بهینه‌سازی برش لوله', width / 2, curY);
+  ctx.fillText('تایید و مهر سرپرست کارگاه', 40 + (sigBoxW / 2), curY + 40);
+
+  ctx.fillStyle = '#ffffff';
+  roundRect(ctx, width - 40 - sigBoxW, curY + 10, sigBoxW, sigBoxH, 10, true, true);
+  ctx.fillStyle = '#1e293b';
+  ctx.fillText('امضای استادکار / برشکار', (width - 40 - sigBoxW) + (sigBoxW / 2), curY + 40);
+  ctx.setLineDash([]);
+
+  curY += sigBoxH + 35;
+
+  // Watermark
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#64748b';
+  ctx.font = '800 14px Vazirmatn, Tahoma, sans-serif';
+  ctx.fillText('نرم‌افزار هوشمند بهینه‌ساز برش لوله و پروفیل (خروجی فوق‌العاده Ultra HD مخصوص چاپ و کارگاه)', width / 2, curY);
 
   canvas.toBlob(callback, 'image/png');
 }
@@ -3182,7 +3939,8 @@ function copyWorkshopText() {
   const { outcome, projectName, projectDate, notes, stockLen, kerf, parts } = currentOptimResult;
   const { mode, result, bestN, maxBranches } = outcome;
   const usedBranches = result.bars;
-  const patterns = result.solution;
+  const patterns = consolidateAndSortSolution(result.solution);
+  result.solution = patterns;
 
   let text = `📐 *دستور برش لوله - ${projectName || 'سفارش کارگاهی'}*\n`;
   text += `📅 تاریخ: ${projectDate}\n`;
@@ -3207,10 +3965,10 @@ function copyWorkshopText() {
     text += `*الگوی ${idx + 1} (${patItem.count} شاخه):*\n`;
     for (let i = 0; i < parts.length; i++) {
       if (pat.counts[i] > 0) {
-        text += `  ▫️ ${pat.counts[i]} عدد × ${parts[i].name} (${fmtEn(parts[i].len)} mm)\n`;
+        text += `  ▫️ ${pat.counts[i]} عدد × ${parts[i].name} ➔ *${toCm(parts[i].len)} سانتی‌متر* (${fmt(parts[i].len)} میلی‌متر)\n`;
       }
     }
-    text += `  ⚠️ ضایعات: ${fmtEn(pat.waste)} میلی‌متر (${(pat.waste / 10).toFixed(1)} cm)\n\n`;
+    text += `  ⚠️ ضایعات: *${toCm(pat.waste)} سانتی‌متر* (${fmt(pat.waste)} میلی‌متر)\n\n`;
   });
 
   if (notes) {
@@ -3281,13 +4039,19 @@ if ('serviceWorker' in navigator) {
 }
 
 // Boot
-window.addEventListener('DOMContentLoaded', () => {
+function bootApp() {
   initPersianDate();
   loadSavedState();
   initTheme();
   enablePersistentStorage();
   updateArchiveBadge();
-});
+}
+
+if (document.readyState === 'loading') {
+  window.addEventListener('DOMContentLoaded', bootApp);
+} else {
+  bootApp();
+}
 
 // ==========================================
 // 10. SALES, INVOICING & PERSISTENT ARCHIVE
@@ -3416,7 +4180,8 @@ function getCurrentInvoiceObject() {
   const { outcome, projectName, projectDate, notes, stockLen, kerf, parts } = currentOptimResult;
   const { mode, result, bestN, maxBranches } = outcome;
   const usedBranches = result.bars;
-  const patterns = result.solution;
+  const patterns = consolidateAndSortSolution(result.solution);
+  result.solution = patterns;
 
   const customerName = (document.getElementById('invCustomerName') ? document.getElementById('invCustomerName').value.trim() : '') || projectName || 'مشتری محترم';
   const customerPhone = document.getElementById('invCustomerPhone') ? document.getElementById('invCustomerPhone').value.trim() : '';
@@ -3425,7 +4190,7 @@ function getCurrentInvoiceObject() {
 
   const pricePerStock = parseToman(document.getElementById('invPricePerStock') ? document.getElementById('invPricePerStock').value : 0);
   const wagePerCut = parseToman(document.getElementById('invWagePerCut') ? document.getElementById('invWagePerCut').value : 0);
-  const totalCuts = parseInt(document.getElementById('invTotalCuts') ? document.getElementById('invTotalCuts').value : 0) || 0;
+  const totalCuts = parseToman(document.getElementById('invTotalCuts') ? document.getElementById('invTotalCuts').value : 0);
   const extraFees = parseToman(document.getElementById('invExtraFees') ? document.getElementById('invExtraFees').value : 0);
   const extraNotes = document.getElementById('invExtraNotes') ? document.getElementById('invExtraNotes').value.trim() : '';
   const discount = parseToman(document.getElementById('invDiscount') ? document.getElementById('invDiscount').value : 0);
@@ -3712,7 +4477,7 @@ function viewInvoiceDetails(id) {
         </div>
         <div style="font-size:12px;color:var(--text-muted);display:flex;gap:14px;flex-wrap:wrap;line-height:1.6;">
           ${inv.customerPhone ? `<span>تلفن: ${inv.customerPhone}</span>` : ''}
-          <span>طول شاخه: ${fmt(inv.stockLen)} mm</span>
+          <span>طول شاخه: ${fmt(inv.stockLen)} میلی‌متر</span>
           <span>شاخه‌ها: ${inv.usedBranches}</span>
           <span>برش‌ها: ${inv.totalCuts}</span>
         </div>
@@ -3851,7 +4616,7 @@ function printInvoice(invData) {
         <tbody>
           <tr>
             <td style="padding:8px;border:1px solid #cbd5e1;">۱</td>
-            <td style="padding:8px;border:1px solid #cbd5e1;text-align:right;font-weight:600;">لوله خام استاندارد (${fmt(inv.stockLen)} mm)</td>
+            <td style="padding:8px;border:1px solid #cbd5e1;text-align:right;font-weight:600;">لوله خام استاندارد (${fmt(inv.stockLen)} میلی‌متر)</td>
             <td style="padding:8px;border:1px solid #cbd5e1;">${fmt(inv.usedBranches)}</td>
             <td style="padding:8px;border:1px solid #cbd5e1;">شاخه</td>
             <td style="padding:8px;border:1px solid #cbd5e1;">${fmt(inv.pricePerStock)}</td>
@@ -3931,6 +4696,9 @@ function generateAndShowInvoiceImage(invoiceData) {
     const modalBody = document.getElementById('modalImgBody');
     if (modalBody) modalBody.innerHTML = `<img src="${url}" alt="فاکتور-فروش">`;
 
+    const titleEl = document.getElementById('modalImgTitleText');
+    if (titleEl) titleEl.textContent = 'پیش‌فاکتور فروش مشتری (کیفیت Ultra HD)';
+
     const downloadLink = document.getElementById('downloadImgLink');
     if (downloadLink) {
       downloadLink.href = url;
@@ -3942,12 +4710,17 @@ function generateAndShowInvoiceImage(invoiceData) {
 }
 
 function createInvoiceCanvas(inv, callback) {
-  const width = 1080;
-  const height = 1450;
+  const scale = 2; // Ultra-HD 2X super-sampling (2400 physical pixels wide)
+  const width = 1200;
+  const height = 1580;
   const canvas = document.createElement('canvas');
-  canvas.width = width;
-  canvas.height = height;
+  canvas.width = Math.round(width * scale);
+  canvas.height = Math.round(height * scale);
   const ctx = canvas.getContext('2d');
+  ctx.scale(scale, scale);
+
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
 
   // Background
   ctx.fillStyle = '#ffffff';
@@ -3958,71 +4731,74 @@ function createInvoiceCanvas(inv, callback) {
   ctx.lineWidth = 6;
   ctx.strokeRect(20, 20, width - 40, height - 40);
 
-  ctx.strokeStyle = '#e2e8f0';
+  ctx.strokeStyle = '#cbd5e1';
   ctx.lineWidth = 1.5;
-  ctx.strokeRect(28, 28, width - 56, height - 56);
+  ctx.strokeRect(30, 30, width - 60, height - 60);
 
   // Header Banner
-  ctx.fillStyle = '#154a86';
-  ctx.fillRect(30, 30, width - 60, 130);
+  const grad = ctx.createLinearGradient(0, 0, width, 0);
+  grad.addColorStop(0, '#0f2b5c');
+  grad.addColorStop(1, '#1e40af');
+  ctx.fillStyle = grad;
+  ctx.fillRect(32, 32, width - 64, 136);
 
   ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 30px Vazirmatn, Tahoma, sans-serif';
+  ctx.font = '900 32px Vazirmatn, Tahoma, sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('پیش‌فاکتور / فاکتور فروش لوله و خدمات برش', width / 2, 85);
+  ctx.fillText('پیش‌فاکتور / فاکتور رسمی فروش لوله و خدمات برش', width / 2, 88);
 
   ctx.fillStyle = '#bfdbfe';
-  ctx.font = '16px Vazirmatn, Tahoma, sans-serif';
-  ctx.fillText('کارگاه تخصصی بهینه‌سازی برشکاری لوله و پروفیل', width / 2, 125);
+  ctx.font = '700 17px Vazirmatn, Tahoma, sans-serif';
+  ctx.fillText('کارگاه تخصصی بهینه‌سازی برشکاری لوله و پروفیل صنعتی', width / 2, 130);
 
   // Meta Box (Customer & Invoice)
-  const metaY = 180;
-  const metaH = 130;
+  const metaY = 188;
+  const metaH = 136;
   ctx.fillStyle = '#f8fafc';
   ctx.fillRect(50, metaY, width - 100, metaH);
-  ctx.strokeStyle = '#cbd5e1';
-  ctx.lineWidth = 1;
+  ctx.strokeStyle = '#94a3b8';
+  ctx.lineWidth = 1.5;
   ctx.strokeRect(50, metaY, width - 100, metaH);
 
   ctx.fillStyle = '#0f172a';
-  ctx.font = 'bold 17px Vazirmatn, Tahoma, sans-serif';
+  ctx.font = '900 18px Vazirmatn, Tahoma, sans-serif';
   ctx.textAlign = 'right';
-  ctx.fillText(`خریدار: ${inv.customerName || inv.projectName || 'مشتری محترم'}`, width - 80, metaY + 40);
-  ctx.font = '15px Vazirmatn, Tahoma, sans-serif';
-  ctx.fillStyle = '#475569';
-  ctx.fillText(`شماره تماس: ${inv.customerPhone || '---'}`, width - 80, metaY + 75);
-  ctx.fillText(`عنوان سفارش: ${inv.projectName || 'سفارش متفرقه'}`, width - 80, metaY + 105);
+  ctx.fillText(`خریدار / مشتری: ${inv.customerName || inv.projectName || 'مشتری محترم'}`, width - 80, metaY + 40);
+  ctx.font = '700 16px Vazirmatn, Tahoma, sans-serif';
+  ctx.fillStyle = '#334155';
+  ctx.fillText(`شماره تماس: ${inv.customerPhone || '---'}`, width - 80, metaY + 77);
+  ctx.fillText(`عنوان سفارش: ${inv.projectName || 'سفارش متفرقه'}`, width - 80, metaY + 110);
 
   ctx.fillStyle = '#0f172a';
-  ctx.font = 'bold 16px Vazirmatn, Tahoma, sans-serif';
-  ctx.fillText(`شماره فاکتور: ${inv.invoiceNo}`, 380, metaY + 40);
-  ctx.font = '15px Vazirmatn, Tahoma, sans-serif';
-  ctx.fillStyle = '#475569';
-  ctx.fillText(`تاریخ: ${inv.date}`, 380, metaY + 75);
-  ctx.fillText(`مشخصات شاخه: ${fmtEn(inv.stockLen)} mm | تیغه ${fmtEn(inv.kerf)} mm`, 380, metaY + 105);
+  ctx.font = '900 18px Vazirmatn, Tahoma, sans-serif';
+  ctx.fillText(`شماره فاکتور: ${inv.invoiceNo}`, 420, metaY + 40);
+  ctx.font = '700 16px Vazirmatn, Tahoma, sans-serif';
+  ctx.fillStyle = '#334155';
+  ctx.fillText(`تاریخ صدور: ${inv.date}`, 420, metaY + 77);
+  ctx.fillText(`مشخصات شاخه: ${fmt(inv.stockLen)} میلی‌متر | تیغه ${fmt(inv.kerf)} میلی‌متر`, 420, metaY + 110);
 
   // Table Headers
-  const tableY = 335;
-  const tableH = 46;
+  const tableY = 348;
+  const tableH = 50;
   ctx.fillStyle = '#1e3a8a';
   ctx.fillRect(50, tableY, width - 100, tableH);
 
   ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 15px Vazirmatn, Tahoma, sans-serif';
+  ctx.font = '900 16px Vazirmatn, Tahoma, sans-serif';
   ctx.textAlign = 'center';
 
-  ctx.fillText('ردیف', width - 85, tableY + 29);
-  ctx.fillText('شرح کالا و خدمات', width - 300, tableY + 29);
-  ctx.fillText('تعداد', width - 560, tableY + 29);
-  ctx.fillText('واحد', width - 660, tableY + 29);
-  ctx.fillText('نرخ واحد (تومان)', width - 780, tableY + 29);
-  ctx.fillText('مبلغ کل (تومان)', width - 930, tableY + 29);
+  ctx.fillText('ردیف', width - 85, tableY + 31);
+  ctx.fillText('شرح کالا و خدمات', width - 340, tableY + 31);
+  ctx.fillText('تعداد', width - 640, tableY + 31);
+  ctx.fillText('واحد', width - 740, tableY + 31);
+  ctx.fillText('نرخ واحد (تومان)', width - 880, tableY + 31);
+  ctx.fillText('مبلغ کل (تومان)', width - 1040, tableY + 31);
 
   let currentY = tableY + tableH;
   const rows = [
     {
       idx: '۱',
-      desc: `لوله خام ۶ متری (${fmt(inv.stockLen)} mm)`,
+      desc: `لوله خام ۶ متری (${fmt(inv.stockLen)} میلی‌متر)`,
       qty: `${fmt(inv.usedBranches)}`,
       unit: 'شاخه',
       unitPrice: fmt(inv.pricePerStock),
@@ -4030,7 +4806,7 @@ function createInvoiceCanvas(inv, callback) {
     },
     {
       idx: '۲',
-      desc: 'اجرت برشکاری دقیق با اره',
+      desc: 'اجرت برشکاری دقیق با اره آتشی/نواری',
       qty: `${fmt(inv.totalCuts)}`,
       unit: 'برش',
       unitPrice: fmt(inv.wagePerCut),
@@ -4060,64 +4836,65 @@ function createInvoiceCanvas(inv, callback) {
     });
   }
 
-  const rowH = 48;
+  const rowH = 52;
   rows.forEach((r, rIdx) => {
     ctx.fillStyle = (rIdx % 2 === 0) ? '#ffffff' : '#f8fafc';
     ctx.fillRect(50, currentY, width - 100, rowH);
-    ctx.strokeStyle = '#e2e8f0';
-    ctx.lineWidth = 1;
+    ctx.strokeStyle = '#cbd5e1';
+    ctx.lineWidth = 1.5;
     ctx.strokeRect(50, currentY, width - 100, rowH);
 
     ctx.fillStyle = r.idx === '-' ? '#b91c1c' : '#0f172a';
-    ctx.font = '15px Vazirmatn, Tahoma, sans-serif';
+    ctx.font = '800 16px Vazirmatn, Tahoma, sans-serif';
     ctx.textAlign = 'center';
 
-    ctx.fillText(r.idx, width - 85, currentY + 30);
+    ctx.fillText(r.idx, width - 85, currentY + 33);
     ctx.textAlign = 'right';
-    ctx.fillText(r.desc, width - 130, currentY + 30);
+    ctx.fillText(r.desc, width - 130, currentY + 33);
     ctx.textAlign = 'center';
-    ctx.fillText(r.qty, width - 560, currentY + 30);
-    ctx.fillText(r.unit, width - 660, currentY + 30);
-    ctx.fillText(r.unitPrice, width - 780, currentY + 30);
-    ctx.font = 'bold 15px Vazirmatn, Tahoma, sans-serif';
-    ctx.fillText(r.total, width - 930, currentY + 30);
+    ctx.fillText(r.qty, width - 640, currentY + 33);
+    ctx.fillText(r.unit, width - 740, currentY + 33);
+    ctx.fillText(r.unitPrice, width - 880, currentY + 33);
+    ctx.font = '900 17px Vazirmatn, Tahoma, sans-serif';
+    ctx.fillText(r.total, width - 1040, currentY + 33);
 
     currentY += rowH;
   });
 
   // Financial Grand Total Box
-  currentY += 24;
-  const sumBoxH = 135;
+  currentY += 26;
+  const sumBoxH = 140;
   ctx.fillStyle = '#f0fdf4';
   ctx.fillRect(50, currentY, width - 100, sumBoxH);
-  ctx.strokeStyle = '#86efac';
-  ctx.lineWidth = 2;
+  ctx.strokeStyle = '#059669';
+  ctx.lineWidth = 2.5;
   ctx.strokeRect(50, currentY, width - 100, sumBoxH);
 
   ctx.fillStyle = '#047857';
-  ctx.font = 'bold 26px Vazirmatn, Tahoma, sans-serif';
+  ctx.font = '900 28px Vazirmatn, Tahoma, sans-serif';
   ctx.textAlign = 'right';
-  ctx.fillText(`مبلغ کل قابل پرداخت: ${fmt(inv.finalTotal)} تومان`, width - 80, currentY + 50);
+  ctx.fillText(`مبلغ کل قابل پرداخت: ${fmt(inv.finalTotal)} تومان`, width - 80, currentY + 52);
 
-  ctx.fillStyle = '#1e293b';
-  ctx.font = '16px Vazirmatn, Tahoma, sans-serif';
-  ctx.fillText(`مبلغ به حروف: ${inv.totalWords}`, width - 80, currentY + 95);
+  ctx.fillStyle = '#0f172a';
+  ctx.font = '800 17px Vazirmatn, Tahoma, sans-serif';
+  ctx.fillText(`مبلغ به حروف: ${inv.totalWords}`, width - 80, currentY + 100);
 
   // Technical Breakdown Summary
   currentY += sumBoxH + 24;
-  const techH = 75;
+  const techH = 80;
   ctx.fillStyle = '#f1f5f9';
   ctx.fillRect(50, currentY, width - 100, techH);
-  ctx.strokeStyle = '#cbd5e1';
+  ctx.strokeStyle = '#94a3b8';
+  ctx.lineWidth = 1.5;
   ctx.strokeRect(50, currentY, width - 100, techH);
 
-  ctx.fillStyle = '#334155';
-  ctx.font = '14px Vazirmatn, Tahoma, sans-serif';
+  ctx.fillStyle = '#0f172a';
+  ctx.font = '800 16px Vazirmatn, Tahoma, sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText(`شاخه مصرفی: ${fmt(inv.usedBranches)} شاخه | کل قطعات خروجی: ${inv.totalPiecesCut ? fmt(inv.totalPiecesCut) : '---'} قطعه | ست کامل: ${inv.bestN ? fmt(inv.bestN) : '---'} ست`, width / 2, currentY + 32);
-  ctx.font = '12.5px Vazirmatn, Tahoma, sans-serif';
-  ctx.fillStyle = '#64748b';
-  ctx.fillText('کلیه قطعات طبق نقشه‌های بهینه‌سازی برش داده شده و ابعاد آن کنترل گردیده است.', width / 2, currentY + 58);
+  ctx.fillText(`شاخه مصرفی: ${fmt(inv.usedBranches)} شاخه | کل قطعات خروجی: ${inv.totalPiecesCut ? fmt(inv.totalPiecesCut) : '---'} قطعه | ست کامل: ${inv.bestN ? fmt(inv.bestN) : '---'} ست`, width / 2, currentY + 34);
+  ctx.font = '700 14px Vazirmatn, Tahoma, sans-serif';
+  ctx.fillStyle = '#475569';
+  ctx.fillText('کلیه قطعات طبق نقشه‌های بهینه‌سازی برش داده شده و ابعاد آن کنترل گردیده است.', width / 2, currentY + 62);
 
   // Signatures
   currentY += techH + 35;
@@ -4127,27 +4904,30 @@ function createInvoiceCanvas(inv, callback) {
   // Workshop Sig
   ctx.fillStyle = '#ffffff';
   ctx.fillRect(50, currentY, sigW, sigH);
-  ctx.strokeStyle = '#cbd5e1';
+  ctx.strokeStyle = '#94a3b8';
+  ctx.lineWidth = 1.5;
   ctx.setLineDash([5, 5]);
   ctx.strokeRect(50, currentY, sigW, sigH);
 
-  ctx.fillStyle = '#475569';
-  ctx.font = '14px Vazirmatn, Tahoma, sans-serif';
+  ctx.fillStyle = '#1e293b';
+  ctx.font = '800 15px Vazirmatn, Tahoma, sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('مهر و امضای فروشگاه / کارگاه', 50 + (sigW / 2), currentY + 35);
+  ctx.fillText('مهر و امضای فروشگاه / کارگاه', 50 + (sigW / 2), currentY + 38);
 
-  // Customer Sig
+  // Customer Sig (FIXED WHITE FILL!)
+  ctx.fillStyle = '#ffffff';
   ctx.fillRect(width - 50 - sigW, currentY, sigW, sigH);
   ctx.strokeRect(width - 50 - sigW, currentY, sigW, sigH);
   ctx.setLineDash([]);
 
-  ctx.fillText('امضای خریدار و تایید تحویل', (width - 50 - sigW) + (sigW / 2), currentY + 35);
+  ctx.fillStyle = '#1e293b';
+  ctx.fillText('امضای خریدار و تایید تحویل', (width - 50 - sigW) + (sigW / 2), currentY + 38);
 
   // Footer Watermark
-  ctx.fillStyle = '#94a3b8';
-  ctx.font = '12px Vazirmatn, Tahoma, sans-serif';
+  ctx.fillStyle = '#64748b';
+  ctx.font = '800 13px Vazirmatn, Tahoma, sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('صادر شده توسط نرم‌افزار بهینه‌ساز برش لوله - ۱۰۰٪ آفلاین و دائمی', width / 2, height - 35);
+  ctx.fillText('صادر شده توسط نرم‌افزار بهینه‌ساز برش لوله و پروفیل - ۱۰۰٪ آفلاین و دائمی (کیفیت Ultra HD)', width / 2, height - 35);
 
   canvas.toBlob(callback, 'image/png');
 }
@@ -4161,7 +4941,7 @@ function copyInvoiceText(invoiceData) {
   text += `👤 خریدار: ${inv.customerName || inv.projectName}\n`;
   if (inv.customerPhone) text += `📞 شماره تماس: ${inv.customerPhone}\n`;
   text += `────────────────────\n`;
-  text += `1️⃣ لوله خام (${fmt(inv.stockLen)} mm): *${fmt(inv.usedBranches)} شاخه* × ${fmt(inv.pricePerStock)} = *${fmt(inv.subtotalPipes)} تومان*\n`;
+  text += `1️⃣ لوله خام (${fmt(inv.stockLen)} میلی‌متر): *${fmt(inv.usedBranches)} شاخه* × ${fmt(inv.pricePerStock)} = *${fmt(inv.subtotalPipes)} تومان*\n`;
   text += `2️⃣ اجرت برشکاری اره: *${fmt(inv.totalCuts)} برش* × ${fmt(inv.wagePerCut)} = *${fmt(inv.subtotalCuts)} تومان*\n`;
   if (inv.extraFees > 0) {
     text += `3️⃣ خدمات جانبی (${inv.extraNotes || 'متفرقه'}): *${fmt(inv.extraFees)} تومان*\n`;
